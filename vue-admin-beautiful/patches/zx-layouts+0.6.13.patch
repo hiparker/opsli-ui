@@ -1,0 +1,72 @@
+diff --git a/node_modules/zx-layouts/Avatar/index.vue b/node_modules/zx-layouts/Avatar/index.vue
+index f63a135..86e25a8 100644
+--- a/node_modules/zx-layouts/Avatar/index.vue
++++ b/node_modules/zx-layouts/Avatar/index.vue
+@@ -1,8 +1,9 @@
+ <template>
+   <el-dropdown @command="handleCommand">
+     <span class="avatar-dropdown">
+-      <!--<el-avatar class="user-avatar" :src="avatar"></el-avatar>-->
+-      <img class="user-avatar" :src="avatar" alt="" />
++      <el-avatar :size="40" :src="avatar" >
++        <el-avatar icon="el-icon-user-solid" :size="40"></el-avatar>
++      </el-avatar>
+       <div class="user-name">
+         {{ username }}
+         <i class="el-icon-arrow-down el-icon--right"></i>
+@@ -46,7 +47,7 @@
+         }
+       },
+       personalCenter() {
+-        this.$router.push("/personalCenter/personalCenter");
++        this.$router.push("/personal/center");
+       },
+       logout() {
+         this.$baseConfirm(
+diff --git a/node_modules/zx-layouts/ErrorLog/index.vue b/node_modules/zx-layouts/ErrorLog/index.vue
+index 485d504..791c607 100644
+--- a/node_modules/zx-layouts/ErrorLog/index.vue
++++ b/node_modules/zx-layouts/ErrorLog/index.vue
+@@ -13,7 +13,7 @@
+       :visible.sync="dialogTableVisible"
+       append-to-body
+       width="70%"
+-      title="vue-admin-beautiful异常捕获(温馨提示：错误必须解决)"
++      title="OPSLI 异常捕获(温馨提示：错误必须解决)"
+     >
+       <el-table :data="errorLogs">
+         <el-table-column label="报错路由">
+diff --git a/node_modules/zx-layouts/ThemeBar/index.vue b/node_modules/zx-layouts/ThemeBar/index.vue
+index af37a89..371908e 100644
+--- a/node_modules/zx-layouts/ThemeBar/index.vue
++++ b/node_modules/zx-layouts/ThemeBar/index.vue
+@@ -154,27 +154,8 @@
+       },
+       handleGetCode() {
+         const url =
+-          "https://github.com/chuzhixin/vue-admin-beautiful/tree/master/src/views";
+-        let path = this.$route.path + "/index.vue";
+-        if (path === "/vab/menu1/menu1-1/menu1-1-1/index.vue") {
+-          path = "/vab/nested/menu1/menu1-1/menu1-1-1/index.vue";
+-        }
+-        if (path === "/vab/icon/awesomeIcon/index.vue") {
+-          path = "/vab/icon/index.vue";
+-        }
+-        if (path === "/vab/icon/remixIcon/index.vue") {
+-          path = "/vab/icon/remixIcon.vue";
+-        }
+-        if (path === "/vab/icon/colorfulIcon/index.vue") {
+-          path = "/vab/icon/colorfulIcon.vue";
+-        }
+-        if (path === "/vab/table/comprehensiveTable/index.vue") {
+-          path = "/vab/table/index.vue";
+-        }
+-        if (path === "/vab/table/inlineEditTable/index.vue") {
+-          path = "/vab/table/inlineEditTable.vue";
+-        }
+-        window.open(url + path);
++          "https://github.com/hiparker/opsli-boot";
++        window.open(url);
+       },
+     },
+   };
