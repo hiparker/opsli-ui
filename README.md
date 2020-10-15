@@ -1,6 +1,6 @@
 # OPSLI 快速开发平台 抢版演示,暂未开源
 <div align="center">
-<img width="500" src="http://wiki.opsli.arcinbj.com/uploads/opsli/images/m_21d8d8b0065fa3f21ea2bbfad4da8040_r.png"/>
+<img width="500" src="https://gitee.com/hiparker/opsli-ui/raw/master/repository-images/logo.png"/>
 </div>
 
 ## 关于
@@ -73,6 +73,6 @@
 
 > 谢谢您愿意支持开源
 <div align="center">
-<img width="200" src="http://wiki.opsli.arcinbj.com/uploads/opsli/images/m_56379f6cb1b8888c94af62b9ac99dfdc_r.png"/>
-<img width="200" src="http://wiki.opsli.arcinbj.com/uploads/opsli/images/m_9070e478ea9cc52eea1a5da067f882aa_r.png"/>
+<img width="200" src="https://gitee.com/hiparker/opsli-ui/raw/master/repository-images/vx.png"/>
+<img width="200" src="https://gitee.com/hiparker/opsli-ui/raw/master/repository-images/zfb.png"/>
 </div>
