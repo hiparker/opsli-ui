@@ -128,11 +128,11 @@
         this.dialogVisible = true;
       },
       close() {
+        this.dialogVisible = false;
         this.userId = "";
         this.list = [];
         this.defaultCheckedKeys = [];
         this.tmpCheckedKeys = {};
-        this.dialogVisible = false;
       },
       async save(){
         // 合并数据 - 当前操作数据 + 默认数据

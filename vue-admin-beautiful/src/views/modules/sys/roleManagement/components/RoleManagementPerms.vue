@@ -79,10 +79,10 @@
         this.dialogVisible = true;
       },
       close() {
+        this.dialogVisible = false;
         this.roleId = "";
         this.permsData = [];
         this.defaultCheckedKeys = [];
-        this.dialogVisible = false;
       },
       // 保存权限
       async save() {

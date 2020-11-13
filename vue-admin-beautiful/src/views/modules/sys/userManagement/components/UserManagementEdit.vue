@@ -271,10 +271,10 @@
         this.dialogFormVisible = true;
       },
       close() {
+        this.dialogFormVisible = false;
         this.$refs["form"].resetFields();
         this.formStatus = true;
         this.form = this.$options.data().form;
-        this.dialogFormVisible = false;
         this.$emit("fetchData");
       },
       save() {

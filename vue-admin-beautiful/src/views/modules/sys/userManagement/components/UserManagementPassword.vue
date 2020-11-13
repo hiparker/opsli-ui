@@ -114,6 +114,7 @@
         this.dialogFormVisible = true;
       },
       close() {
+        this.dialogFormVisible = false;
         this.form.userId = "";
         this.form.oldPassword = "";
         this.form.newPassword = "";
@@ -121,7 +122,6 @@
         this.formPasswordShow.old = false;
         this.formPasswordShow.new = false;
         this.formPasswordShow.verify = false;
-        this.dialogFormVisible = false;
       },
       save() {
         this.$refs["form"].validate(async (valid) => {
