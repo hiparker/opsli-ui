@@ -109,7 +109,7 @@ export default {
       let dictList = cache[typeCode];
 
       // 如果本地缓存没有 则去远端缓存中获取
-      if (isNull(dictList)) {
+      if (isNull(dictList) || dictList.length === 0) {
         const ret = getDictListByCode({ typeCode: typeCode });
         ret.then((v) => {
           const { success, data } = v;
