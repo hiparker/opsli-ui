@@ -98,6 +98,7 @@
       return {
         userInfo: null,
         form: {
+          tenantId:"",
           izLock: '0',
           // 设置默认值
           version: 0

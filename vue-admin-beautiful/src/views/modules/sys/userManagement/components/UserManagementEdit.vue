@@ -212,6 +212,7 @@
           verify: false,
         },
         form: {
+          tenantId:"",
           locked: '0',
           // 设置默认值
           version: 0

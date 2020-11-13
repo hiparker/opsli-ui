@@ -165,6 +165,7 @@
           parentCode: ""
         },
         form: {
+          icon:"",
           // 设置默认值
           type: "1",
           hidden: "0",
