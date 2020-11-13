@@ -79,14 +79,12 @@
     created() {
 
     },
+    mounted() {
+      // 如果不是每次开启时查询 在created中 有可能会短暂查不到
+      this.dict.test_type = this.$getDictList("test_type");
+    },
     methods: {
       showEdit(row) {
-        // 建议每次开启时 都重新获取 在本地缓存性能损耗不是很大
-        // 如果不是每次开启时查询 在created中 有可能会短暂查不到
-        this.dict = {
-          test_type: this.$getDictList("test_type"),
-        };
-
         if (!row) {
           this.title = "添加";
         } else {

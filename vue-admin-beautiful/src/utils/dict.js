@@ -98,10 +98,10 @@ export default {
      * @param typeCode
      * @returns [字典数组]
      */
-    Vue.prototype.$getDictList = function (typeCode) {
+    Vue.prototype.$getDictList = async function (typeCode) {
 
       let cache = getCache();
-      if(cache == null){
+      if (cache == null) {
         cache = {};
       }
 
@@ -110,16 +110,14 @@ export default {
 
       // 如果本地缓存没有 则去远端缓存中获取
       if (isNull(dictList) || dictList.length === 0) {
-        const ret = getDictListByCode({ typeCode: typeCode });
-        ret.then((v) => {
-          const { success, data } = v;
-          if(success){
-            setDictList(typeCode, data);
-            return isNull(data)?[]:data;
-          }
-        });
+        const ret = await getDictListByCode({typeCode: typeCode});
+        const {success, data} = ret;
+        if (success) {
+          setDictList(typeCode, data);
+          return isNull(data) ? [] : data;
+        }
       }
-      return isNull(dictList)?[]:dictList;
+      return isNull(dictList) ? [] : dictList;
     }
 
     /**
