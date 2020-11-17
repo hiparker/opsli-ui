@@ -40,6 +40,13 @@ export function doDeleteAll(data) {
   });
 }
 
+export function getDictListByCodeParams(data) {
+  return{
+    url: "/api/v1/sys/dict/getDictListByCode",
+    method: "get",
+    params: data,
+  };
+}
 
 export function getDictListByCode(data) {
   return request({

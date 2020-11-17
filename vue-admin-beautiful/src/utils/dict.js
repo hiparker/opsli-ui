@@ -1,10 +1,12 @@
-import { storage } from "@/config/settings";
+import {storage, tokenName, baseURL} from "@/config/settings";
 import { isNull } from "@/utils/validate"
 import cookie from "js-cookie";
-import { getDictListByCode } from "@/api/dictManagement"
+import { getDictListByCode, getDictListByCodeParams } from "@/api/dictManagement"
+import store from "@/store";
 
 // 缓存前缀 方便统一删除处理
 const cachePrefix = "opsli:dict";
+
 
 /**
  * 获得前端本地缓存
@@ -82,6 +84,7 @@ function setDictList(typeCode, dictList) {
 }
 
 
+
 /**
  * 验证是否有按钮权限
  * @param perms
@@ -108,14 +111,26 @@ export default {
 
       // 如果本地缓存没有 则去远端缓存中获取
       if (isNull(dictList) || dictList.length === 0) {
-        const ret = getDictListByCode({typeCode: typeCode});
-        ret.then((v) => {
-          const {success, data} = v;
+
+        // TODO 可能还不是很好， 毕竟针对字典表需要 同步型数据， 目前只能这么搞了
+        const params = getDictListByCodeParams({typeCode: typeCode});
+        let ret = null;
+        ajax({
+          url: baseURL + params.url,
+          method: params.method,
+          async: false,
+          data: params.params,
+          success: function (res) {
+            ret = JSON.parse(res);
+          }
+        })
+        // ret.then((v) => {
+          const {success, data} = ret;
           if (success) {
             setDictList(typeCode, data);
             return isNull(data) ? [] : data;
           }
-        });
+        // });
       }
       return isNull(dictList) ? [] : dictList;
     }
@@ -174,7 +189,60 @@ export default {
   }
 }
 
+// ==================================
 
+function ajax(obj){
+  //指定提交方式的默认值
+  obj.type = obj.type || "get";
+  //设置是否异步，默认为true(异步)
+  if(obj.async === null || obj.async === undefined){
+    obj.async = true;
+  }
+  //设置数据的默认值
+  obj.data = obj.data || null;
+  let params=_params(obj.data);
+  //在路径后面添加时间戳加随机数防止浏览器缓存。
+  obj.url+=(obj.url.indexOf("?")>-1?"&":"?")+"t="+((new Date()).getTime()+Math.random());
+  if(obj.type.toLowerCase() === "get" && params.length>0){//将转换后的data.与url进行拼接。
+    obj.url+="&"+params;
+  }
+  let xhr=new XMLHttpRequest();
+
+  xhr.open(obj.type,obj.url,obj.async);
+
+  xhr.setRequestHeader( tokenName, store.getters["user/accessToken"]);
+
+  if(obj.type.toLowerCase() === "post"){
+    xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+    xhr.send(params)
+  }else
+    xhr.send(null);
+  if(obj.async){//异步调用
+    //监听响应状态。
+    xhr.onreadystatechange=function(){
+      if(xhr.readyState === 4)//响应状态为4，数据加载完毕。
+        callback();
+    }
+  }else//同步
+    callback();
+  function callback(){
+    if(xhr.status === 200){
+      obj.success(xhr.responseText);
+    }else{
+      obj.error(xhr.status);
+    }
+  }
+  //将对象序列化，将对象拼接成url字符串
+  function _params(data){
+    if(obj==null)
+      return obj;
+    let arr = [];
+    for(let i in data){
+      arr.push(encodeURIComponent(i) + '=' + encodeURIComponent(data[i]));
+    }
+    return arr.join("&");
+  }
+}
 
 
 
