@@ -1,0 +1,749 @@
+<template>
+  <el-dialog
+    :title="title"
+    :visible.sync="dialogFormVisible"
+    width="75%"
+    @close="close"
+  >
+    <el-form ref="form" :model="form" :rules="rules" label-width="105px">
+      <el-row>
+        <el-col :span="8">
+          <el-form-item label="表名称" prop="tableName">
+            <el-input v-model="form.tableName" autocomplete="off"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="表类型" prop="tableType">
+            <el-select v-model="form.tableType" placeholder="请选择"
+                       @change="tableTypeChange" :disabled="formState.tableType"
+                       style="width: 100%">
+              <el-option
+                v-for="item in dict.table_type"
+                :key="item.dictValue"
+                :label="item.dictName"
+                :value="item.dictValue"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+
+        <el-col :span="8">
+          <el-form-item label="描述" prop="comments">
+            <el-input v-model="form.comments"
+                      autocomplete="off"
+                      maxlength="100"
+                      show-word-limit
+            ></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+
+      <el-row>
+        <el-col :span="8">
+          <el-form-item label="数据库类型" prop="jdbcType">
+            <el-select v-model="form.jdbcType" placeholder="请选择" :disabled="formState.jdbcType"
+                       @change="jdbcTypeChange" ref="jdbcType"
+                       style="width: 100%">
+              <el-option
+                v-for="item in dict.jdbc_type"
+                :key="item.dictValue"
+                :label="item.dictName"
+                :value="item.dictValue"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="备注" prop="remark">
+            <el-input v-model="form.remark"
+                      autocomplete="off"
+                      maxlength="120"
+                      show-word-limit
+            ></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+
+    </el-form>
+
+    <el-tabs ref="table-column" v-model="activeName" @tab-click="tagsClick">
+      <el-tab-pane label="字段结构" name="column" >
+
+        <vab-query-form>
+          <vab-query-form-left-panel>
+            <el-button icon="el-icon-plus" type="primary" @click="columnHandleAdd">
+              添加
+            </el-button>
+
+            <el-button
+              :disabled="!selectRows.length > 0"
+              icon="el-icon-delete"
+              type="danger"
+              @click="columnHandleDelete"
+            > 删除 </el-button>
+
+          </vab-query-form-left-panel>
+        </vab-query-form>
+
+        <el-table
+          v-loading="columnListLoading"
+          :data="list"
+          :element-loading-text="elementLoadingText"
+          @selection-change="setSelectRows"
+          border
+        >
+
+          <el-table-column show-overflow-tooltip type="selection"></el-table-column>
+
+          <el-table-column
+            show-overflow-tooltip
+            prop="filedName"
+            label="字段名称"
+            width="240"
+          >
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.filedName"
+                        :disabled="scope.row.disabled"
+                        style="width: 100%" />
+            </template>
+          </el-table-column>
+
+          <el-table-column
+            show-overflow-tooltip
+            prop="filedType"
+            label="字段类型"
+          >
+            <template slot-scope="scope">
+                <el-select v-model="scope.row.filedType" placeholder="请选择"
+                           default-first-option="" filterable
+                           :disabled="scope.row.disabled"
+                           style="width: 100%" >
+                  <el-option
+                    v-for="item in dict.filed_type"
+                    :key="item.dictValue"
+                    :label="item.dictName"
+                    :value="item.dictValue"
+                  ></el-option>
+                </el-select>
+            </template>
+          </el-table-column>
+
+          <el-table-column
+            show-overflow-tooltip
+            prop="filedLength"
+            label="字段长度"
+          >
+            <template slot-scope="scope">
+              <el-input-number v-model="scope.row.filedLength"
+                               controls-position="right"
+                               :disabled="scope.row.disabled"
+                               :min="1" :max="20000"
+                               style="width: 100%"
+              ></el-input-number>
+            </template>
+          </el-table-column>
+
+          <el-table-column
+            show-overflow-tooltip
+            prop="filedPrecision"
+            label="字段精度"
+          >
+            <template slot-scope="scope">
+              <el-input-number v-model="scope.row.filedPrecision"
+                               controls-position="right"
+                               :disabled="scope.row.disabled"
+                               :min="0" :max="100"
+                               style="width: 100%"
+              ></el-input-number>
+            </template>
+          </el-table-column>
+
+
+          <el-table-column
+            show-overflow-tooltip
+            prop="filedComments"
+            label="字段描述"
+          >
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.filedComments"
+                        maxlength="100"
+                        show-word-limit
+                        :disabled="scope.row.disabled"
+                        style="width: 100%"/>
+            </template>
+          </el-table-column>
+
+          <el-table-column
+            show-overflow-tooltip
+            prop="izPk"
+            label="主键"
+            width="80"
+          >
+            <template slot-scope="scope">
+              <el-switch
+                v-model="scope.row.izPk"
+                :active-value="1"
+                :inactive-value="0"
+                :disabled="scope.row.disabled"
+                @change="pKChange(scope.row)"
+                >
+              </el-switch>
+            </template>
+          </el-table-column>
+
+          <el-table-column
+            show-overflow-tooltip
+            prop="izNull"
+            label="非空"
+            width="80"
+          >
+            <template slot-scope="scope">
+              <el-switch
+                v-model="scope.row.izNull"
+                :active-value="1"
+                :inactive-value="0"
+                :disabled="scope.row.disabled"
+              >
+              </el-switch>
+            </template>
+          </el-table-column>
+
+        </el-table>
+      </el-tab-pane>
+      <el-tab-pane label="字段配置" name="column_setting">
+        <el-table
+          v-loading="columnListLoading"
+          :data="list"
+          :element-loading-text="elementLoadingText"
+          @selection-change="setSelectRows"
+          border
+        >
+
+          <el-table-column show-overflow-tooltip type="selection"></el-table-column>
+
+          <el-table-column
+            show-overflow-tooltip
+            prop="filedName"
+            label="字段名称"
+            width="240"
+          >
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.filedName"
+                        :disabled="true"
+                        style="width: 100%" />
+            </template>
+          </el-table-column>
+
+          <el-table-column
+            show-overflow-tooltip
+            prop="showType"
+            label="生成方案"
+          >
+            <template slot-scope="scope">
+              <el-select v-model="scope.row.showType" placeholder="请选择"
+                         default-first-option="" filterable clearable
+                         :disabled="scope.row.disabled"
+                         style="width: 100%" >
+                <el-option
+                  v-for="item in dict.show_type"
+                  :key="item.dictValue"
+                  :label="item.dictName"
+                  :value="item.dictValue"
+                ></el-option>
+              </el-select>
+            </template>
+          </el-table-column>
+
+          <el-table-column
+            show-overflow-tooltip
+            prop="dictTypeCode"
+            label="字典类型编号"
+          >
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.dictTypeCode"
+                        :disabled="scope.row.disabled"
+                        style="width: 100%" />
+            </template>
+          </el-table-column>
+
+          <el-table-column
+            show-overflow-tooltip
+            prop="validateType"
+            label="验证类别"
+          >
+            <template slot-scope="scope">
+              <el-select v-model="scope.row.validateType" placeholder="请选择"
+                         default-first-option="" filterable
+                         multiple
+                         collapse-tags
+                         :disabled="scope.row.disabled"
+                         style="width: 100%" >
+                <el-option
+                  v-for="item in dict.validate_type"
+                  :key="item.dictValue"
+                  :label="item.dictName"
+                  :value="item.dictValue"
+                ></el-option>
+              </el-select>
+            </template>
+          </el-table-column>
+
+          <el-table-column
+            show-overflow-tooltip
+            prop="izShowList"
+            label="列表显示"
+            width="100"
+          >
+            <template slot-scope="scope">
+              <el-switch
+                v-model="scope.row.izShowList"
+                :active-value="1"
+                :inactive-value="0"
+                :disabled="scope.row.disabled"
+              >
+              </el-switch>
+            </template>
+          </el-table-column>
+
+          <el-table-column
+            show-overflow-tooltip
+            prop="izShowForm"
+            label="表单显示"
+            width="100"
+          >
+            <template slot-scope="scope">
+              <el-switch
+                v-model="scope.row.izShowForm"
+                :active-value="1"
+                :inactive-value="0"
+                :disabled="scope.row.disabled"
+              >
+              </el-switch>
+            </template>
+          </el-table-column>
+
+        </el-table>
+
+      </el-tab-pane>
+
+    </el-tabs>
+
+    <div slot="footer" class="dialog-footer">
+      <el-button @click="close">取 消</el-button>
+      <el-button type="primary" @click="save">确 定</el-button>
+    </div>
+
+  </el-dialog>
+</template>
+
+<script>
+  import Sortable from 'sortablejs'
+  import { deepClone } from "@/utils/clone";
+  import {doDelete, doDeleteAll, doInsert, doUpdate, getSubList} from "@/api/creater/tableManagement";
+  import {isCode, isNull} from "@/utils/validate";
+
+  export default {
+    name: "CreateTableManagementEdit",
+    components: { Sortable },
+    data() {
+
+      const validateTableName = (rule, value, callback) => {
+        if (isNull(value)) {
+          callback(new Error("请输入表名"));
+        } if (!isCode(value)) {
+          callback(new Error("表名只能为字母、数字或下划线"));
+        } else {
+          callback();
+        }
+      };
+
+      return {
+        treeName: "parent_id",
+        activeName: 'column',
+        formState:{
+          jdbcType: false,
+          tableType: false,
+        },
+        form: {
+          tableType: '0',
+          jdbcType: 'mysql',
+          // 设置默认值
+          version: 0,
+          // 字表
+          columnList:[]
+        },
+        // 新增字段模版
+        columnFormTemp:{
+          id: "",
+          sort: 0,
+          izPk: 0,
+          izNull: 0,
+          izShowList: 0,
+          izShowForm: 0,
+          filedName: "",
+          filedType: "",
+          filedLength: 1,
+          filedPrecision: 0,
+          filedComments: "",
+          validateType: "",
+          showType: "",
+          dictTypeCode: "",
+          disabled: false,
+        },
+        dict: {},
+        rules: {
+          tableName: [
+            { required: true, trigger: "blur", validator: validateTableName },
+          ],
+          tableType: [
+            { required: true, trigger: "blur", message: "请选择类型" },
+          ],
+          comments: [
+            { required: true, trigger: "blur", message: "请输入描述" },
+          ],
+        },
+        title: "",
+        dialogFormVisible: false,
+        queryForm:{
+          id:""
+        },
+
+        list: [],
+        columnListLoading: true,
+        columnSettingListLoading: true,
+        layout: "total, sizes, prev, pager, next, jumper",
+        selectRows: "",
+        elementLoadingText: "正在加载...",
+      };
+    },
+    created() {
+    },
+    mounted() {
+      // 如果不是每次开启时查询 在created中 有可能会短暂查不到
+      this.dict.table_type =  this.$getDictList("table_type")
+      this.dict.jdbc_type =  this.$getDictList("jdbc_type")
+      this.dict.show_type =  this.$getDictList("show_type")
+      this.dict.validate_type =  this.$getDictList("validate_type")
+
+    },
+    methods: {
+      showEdit(row) {
+        if (!row) {
+          this.title = "添加";
+        } else {
+          this.title = "编辑";
+          this.form = Object.assign({}, row);
+          this.formState.jdbcType = true;
+          this.formState.tableType = true;
+          this.queryForm.id = this.form.id;
+        }
+
+        // 初始化 表结构
+        this.initColumn();
+
+        this.dialogFormVisible = true;
+      },
+      close() {
+        this.dialogFormVisible = false;
+        this.$refs["form"].resetFields();
+        this.form = this.$options.data().form;
+        this.formState.jdbcType = false;
+        this.formState.tableType = false;
+        this.queryForm.id = "";
+        this.dict.filed_type = null;
+        this.list = [];
+        this.$emit("fetchData");
+      },
+      save() {
+        this.$refs["form"].validate(async (valid) => {
+          if (valid) {
+
+            // 字段数据
+            let tmpForm = deepClone(this.form);
+            // 字段数据
+            let columnList = deepClone(this.list);
+            // 处理数据
+            for (let i = 0; i < columnList.length; i++) {
+              delete columnList[i].disabled;
+              if(!isNull(columnList[i].izPk)){
+                columnList[i].izPk = columnList[i].izPk+"";
+              }
+              if(!isNull(this.list[i].izNull)){
+                columnList[i].izNull = columnList[i].izNull+"";
+              }
+              if(!isNull(this.list[i].izShowList)){
+                columnList[i].izShowList = columnList[i].izShowList+"";
+              }
+              if(!isNull(this.list[i].izShowForm)){
+                columnList[i].izShowForm = columnList[i].izShowForm+"";
+              }
+              if(!isNull(this.list[i].validateType)){
+                columnList[i].validateType = columnList[i].validateType.join(",");
+              }
+            }
+            tmpForm.columnList = columnList;
+
+            // 修改
+            if (!isNull(this.form.id)) {
+              const { success, msg } = await doUpdate(tmpForm);
+              if(success){
+                this.$baseMessage(msg, "success");
+              }
+            } else {
+              const { success, msg } = await doInsert(tmpForm);
+              if(success){
+                this.$baseMessage(msg, "success");
+              }
+            }
+
+            await this.$emit("fetchData");
+            this.close();
+          } else {
+            return false;
+          }
+        });
+      },
+
+
+
+      // =========================================================
+      /** 字段行处理 */
+
+      // 初始化
+      initColumn(){
+        // 加载字典
+        this.dict.filed_type =  this.$getDictList(this.form.jdbcType+"_data_type");
+
+        // 加载数据
+        this.fetchData();
+      },
+
+      // 数据库类型发生改动
+      jdbcTypeChange(newValue){
+        let oldValue = this.$refs.jdbcType.value;
+        this.form.jdbcType = oldValue;
+        this.$baseConfirm("更换数据库类型将会清空当前已设字段，你确定要更换吗", null, () => {
+          // 改为新值
+          this.form.jdbcType = newValue;
+          // 加载字典
+          this.dict.filed_type =  this.$getDictList(this.form.jdbcType+"_data_type");
+          // 清空已有字段数据
+          this.list = [];
+        });
+      },
+
+      // 数据库类型发生改动
+      tableTypeChange(newValue){
+        if(newValue === '0'){
+          // 删除 parent_id 字段
+          for (let i = this.list.length - 1; i >= 0; i--) {
+            let item = this.list[i];
+            if(item.filedName === this.treeName) {
+              this.list.splice(i, 1);
+              break;
+            }
+          }
+        } else if(newValue === '1'){
+          // 删除 parent_id 字段
+          for (let i = this.list.length - 1; i >= 0; i--) {
+            let item = this.list[i];
+            if(item.filedName === this.treeName) {
+              this.list.splice(i, 1);
+              break;
+            }
+          }
+
+          // 增加 parent_id 字段
+          let tmp = deepClone(this.columnFormTemp);
+          tmp.disabled = true;
+          tmp.filedName = this.treeName;
+          tmp.filedType = "bigint";
+          tmp.filedLength = 20;
+          tmp.filedComments = "上级ID";
+          tmp.izNull = 1;
+          this.columnHandleAdd(tmp);
+        }
+      },
+
+      // 主键改动
+      pKChange(el){
+        if(!isNull(el)){
+          // 如果主键选中 则默认选中不可为空
+          if(el.izPk === 1){
+            el.izNull = 1;
+          } else {
+            el.izNull = 0;
+          }
+        }
+      },
+
+      // 行添加
+      columnHandleAdd(params){
+        let temp;
+        if(!isNull(params) && !(params instanceof MouseEvent)){
+          temp = params;
+        } else {
+          temp = deepClone(this.columnFormTemp);
+        }
+
+        temp.id = "temp_" + this.uuid()
+        if(this.list == null || this.list.length === 0){
+          temp.sort = 0;
+        } else {
+          temp.sort = this.list.length;
+        }
+        this.list.push(temp);
+      },
+
+      // 行删除
+      columnHandleDelete(row){
+        if (row.id) {
+          this.$baseConfirm("你确定要删除当前字段吗", null, () => {
+            for (let i = this.list.length - 1; i >= 0; i--) {
+              let item = this.list[i];
+              if(item.id === row.id) {
+                // 树装接口 不允许删除 parent_id 字段
+                if(this.form.tableType === '1'){
+                  if(item.filedName !== this.treeName){
+                    this.list.splice(i, 1);
+                  }
+                } else {
+                  this.list.splice(i, 1);
+                }
+                break;
+              }
+            }
+          });
+        } else if (this.selectRows.length > 0) {
+            const ids = this.selectRows.map((item) => item.id);
+            this.$baseConfirm("你确定要删除当前字段吗", null, () => {
+              for (let i = this.list.length - 1; i >= 0; i--) {
+                let item = this.list[i];
+                if(ids.indexOf(item.id) !== -1) {
+                  // 树装接口 不允许删除 parent_id 字段
+                  if(this.form.tableType === '1'){
+                    if(item.filedName !== this.treeName){
+                      this.list.splice(i, 1);
+                    }
+                  } else {
+                    this.list.splice(i, 1);
+                  }
+                }
+              }
+            });
+        } else {
+            this.$baseMessage("未选中任何行", "error");
+            return false;
+        }
+      },
+
+      // 行选中
+      setSelectRows(val) {
+        this.selectRows = val;
+      },
+
+
+      // tag 切换，短暂的做了一个延时，可以有效保持 table顺序
+      tagsClick({paneName}, event){
+        if(paneName === 'column'){
+          let tmp = this.list;
+          this.columnListLoading = true;
+          this.list = [];
+          setTimeout(() => {
+            this.columnListLoading = false;
+            this.list = tmp;
+          }, 150);
+        }else if(paneName === 'column_setting'){
+          let tmp = this.list;
+          this.columnSettingListLoading = true;
+          this.list = [];
+          setTimeout(() => {
+            this.columnSettingListLoading = false;
+            this.list = tmp;
+          }, 150);
+        }
+      },
+
+      //行拖拽
+      rowDrop() {
+        const tbody = this.$refs["table-column"].$el
+          .querySelector('.el-table__body-wrapper tbody');
+        const _this = this
+        Sortable.create(tbody, {
+          onEnd({ newIndex, oldIndex }) {
+            let oldObj = _this.list[oldIndex];
+            let newObj = _this.list[newIndex];
+            _this.list[newIndex] =  oldObj;
+            _this.list[oldIndex] =  newObj;
+            _this.list[newIndex].sort = newIndex;
+            _this.list[oldIndex].sort = oldIndex;
+          }
+        })
+      },
+
+      // 获取uuid
+      uuid() {
+        const s = [];
+        const hexDigits = "0123456789abcdef";
+        for (let i = 0; i < 36; i++) {
+          s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
+        }
+        s[14] = "4";
+        s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1);
+        s[8] = s[13] = s[18] = s[23];
+        this.uuidA = s.join("");
+        return this.uuidA;
+      },
+
+      // 请求数据
+      async fetchData() {
+        this.columnListLoading = true;
+        const { data } = await getSubList(this.queryForm);
+        let flag = false;
+        if(!isNull(data)){
+          if(!isNull(data.columnList)){
+            flag = true;
+            this.list = data.columnList;
+
+            // 处理数据
+            // 设置禁止修改字段 （如果有树表 则 parent_id 字段不允许任何修改）
+            for (let i = 0; i < this.list.length; i++) {
+              if(this.list[i].filedName !== this.treeName){
+                this.list[i].disabled = false;
+              }else{
+                this.list[i].disabled = true;
+              }
+
+              if(!isNull(this.list[i].izPk)){
+                this.list[i].izPk = parseInt(this.list[i].izPk);
+              }
+              if(!isNull(this.list[i].izNull)){
+                this.list[i].izNull = parseInt(this.list[i].izNull);
+              }
+              if(!isNull(this.list[i].izShowList)){
+                this.list[i].izShowList = parseInt(this.list[i].izShowList);
+              }
+              if(!isNull(this.list[i].izShowForm)){
+                this.list[i].izShowForm = parseInt(this.list[i].izShowForm);
+              }
+              if(!isNull(this.list[i].validateType)){
+                this.list[i].validateType = this.list[i].validateType.split(",");
+              }
+            }
+
+            setTimeout(() => {
+              this.columnListLoading = false;
+              this.rowDrop();
+            }, 300);
+          }
+        }
+        if(!flag){
+          setTimeout(() => {
+            this.columnListLoading = false;
+            this.rowDrop();
+          }, 300);
+        }
+      },
+    },
+  }
+</script>

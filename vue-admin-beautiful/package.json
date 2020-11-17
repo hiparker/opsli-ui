@@ -62,6 +62,7 @@
     "nprogress": "^0.2.0",
     "qs": "^6.9.4",
     "screenfull": "^5.0.2",
+    "sortablejs": "^1.12.0",
     "vue": "^2.6.12",
     "vue-amap": "^0.5.10",
     "vue-echarts": "^5.0.0-beta.0",
