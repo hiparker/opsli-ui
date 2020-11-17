@@ -63,7 +63,7 @@ export function isNumber(value) {
  * @returns {boolean}
  */
 export function isName(value) {
-  const reg = /^[\u4e00-\u9fa5a-zA-Z0-9]+$/;
+  const reg = /^[\u4E00-\u9FA5a-zA-Z0-9_]+$/;
   return reg.test(value);
 }
 
