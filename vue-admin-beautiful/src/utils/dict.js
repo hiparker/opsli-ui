@@ -46,7 +46,9 @@ function removeCache() {
       return localStorage.removeItem(cachePrefix);
     }
   } else {
-    return localStorage.removeItem(cachePrefix);
+    localStorage.removeItem(cachePrefix);
+    cookie.remove(cachePrefix);
+    sessionStorage.clear();
   }
 }
 
@@ -106,12 +108,10 @@ export default {
         cache = {};
       }
 
-
       let dictList = cache[typeCode];
 
       // 如果本地缓存没有 则去远端缓存中获取
       if (isNull(dictList) || dictList.length === 0) {
-
         // TODO 可能还不是很好， 毕竟针对字典表需要 同步型数据， 目前只能这么搞了
         const params = getDictListByCodeParams({typeCode: typeCode});
         let ret = null;

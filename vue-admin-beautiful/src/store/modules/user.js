@@ -107,7 +107,7 @@ const actions = {
     setTimeout(function (){
       // 清除字典数据
       Vue.prototype.$clearDictList();
-    },3000);
+    },500);
   },
 };
 export default { state, getters, mutations, actions };

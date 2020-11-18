@@ -54,6 +54,10 @@ const handleCode = (code, msg) => {
       if (loginInterception) {
         location.reload();
       }
+
+      // 清除字典数据
+      Vue.prototype.$clearDictList();
+
       router.push({ path: "/401" }).catch(() => {});
       break;
     default:
