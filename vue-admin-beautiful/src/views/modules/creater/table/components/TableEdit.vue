@@ -97,12 +97,12 @@
 
           <el-table-column
             show-overflow-tooltip
-            prop="filedName"
+            prop="fieldName"
             label="字段名称"
             width="240"
           >
             <template slot-scope="scope">
-              <el-input v-model="scope.row.filedName"
+              <el-input v-model="scope.row.fieldName"
                         :disabled="scope.row.disabled"
                         style="width: 100%" />
             </template>
@@ -110,16 +110,16 @@
 
           <el-table-column
             show-overflow-tooltip
-            prop="filedType"
+            prop="fieldType"
             label="字段类型"
           >
             <template slot-scope="scope">
-                <el-select v-model="scope.row.filedType" placeholder="请选择"
+                <el-select v-model="scope.row.fieldType" placeholder="请选择"
                            default-first-option="" filterable
                            :disabled="scope.row.disabled"
                            style="width: 100%" >
                   <el-option
-                    v-for="item in dict.filed_type"
+                    v-for="item in dict.field_type"
                     :key="item.dictValue"
                     :label="item.dictName"
                     :value="item.dictValue"
@@ -130,14 +130,14 @@
 
           <el-table-column
             show-overflow-tooltip
-            prop="filedLength"
+            prop="fieldLength"
             label="字段长度"
           >
             <template slot-scope="scope">
-              <el-input-number v-model="scope.row.filedLength"
+              <el-input-number v-model="scope.row.fieldLength"
                                controls-position="right"
                                :disabled="scope.row.disabled"
-                               :min="1" :max="20000"
+                               :min="0" :max="20000"
                                style="width: 100%"
               ></el-input-number>
             </template>
@@ -145,11 +145,11 @@
 
           <el-table-column
             show-overflow-tooltip
-            prop="filedPrecision"
+            prop="fieldPrecision"
             label="字段精度"
           >
             <template slot-scope="scope">
-              <el-input-number v-model="scope.row.filedPrecision"
+              <el-input-number v-model="scope.row.fieldPrecision"
                                controls-position="right"
                                :disabled="scope.row.disabled"
                                :min="0" :max="100"
@@ -161,11 +161,11 @@
 
           <el-table-column
             show-overflow-tooltip
-            prop="filedComments"
+            prop="fieldComments"
             label="字段描述"
           >
             <template slot-scope="scope">
-              <el-input v-model="scope.row.filedComments"
+              <el-input v-model="scope.row.fieldComments"
                         maxlength="100"
                         show-word-limit
                         :disabled="scope.row.disabled"
@@ -223,14 +223,34 @@
 
           <el-table-column
             show-overflow-tooltip
-            prop="filedName"
+            prop="fieldName"
             label="字段名称"
             width="240"
           >
             <template slot-scope="scope">
-              <el-input v-model="scope.row.filedName"
+              <el-input v-model="scope.row.fieldName"
                         :disabled="true"
                         style="width: 100%" />
+            </template>
+          </el-table-column>
+
+          <el-table-column
+            show-overflow-tooltip
+            prop="javaType"
+            label="Java类型"
+          >
+            <template slot-scope="scope">
+              <el-select v-model="scope.row.javaType" placeholder="请选择"
+                         default-first-option="" filterable
+                         :disabled="scope.row.disabled"
+                         style="width: 100%" >
+                <el-option
+                  v-for="item in dict.java_data_type"
+                  :key="item.dictValue"
+                  :label="item.dictName"
+                  :value="item.dictValue"
+                ></el-option>
+              </el-select>
             </template>
           </el-table-column>
 
@@ -380,11 +400,12 @@
           izNull: 0,
           izShowList: 0,
           izShowForm: 0,
-          filedName: "",
-          filedType: "",
-          filedLength: 1,
-          filedPrecision: 0,
-          filedComments: "",
+          fieldName: "",
+          fieldType: "",
+          fieldLength: 0,
+          fieldPrecision: 0,
+          fieldComments: "",
+          javaType: "String",
           validateType: "",
           showType: "",
           dictTypeCode: "",
@@ -405,7 +426,7 @@
         title: "",
         dialogFormVisible: false,
         queryForm:{
-          id:""
+          id:"",
         },
 
         list: [],
@@ -422,6 +443,7 @@
       // 如果不是每次开启时查询 在created中 有可能会短暂查不到
       this.dict.table_type =  this.$getDictList("table_type")
       this.dict.jdbc_type =  this.$getDictList("jdbc_type")
+      this.dict.java_data_type =  this.$getDictList("java_data_type")
       this.dict.show_type =  this.$getDictList("show_type")
       this.dict.validate_type =  this.$getDictList("validate_type")
 
@@ -450,7 +472,7 @@
         this.formState.jdbcType = false;
         this.formState.tableType = false;
         this.queryForm.id = "";
-        this.dict.filed_type = null;
+        this.dict.field_type = null;
         this.list = [];
         this.$emit("fetchData");
       },
@@ -483,6 +505,10 @@
             }
             tmpForm.columnList = columnList;
 
+            //console.log(tmpForm)
+
+            //return ;
+
             // 修改
             if (!isNull(this.form.id)) {
               const { success, msg } = await doUpdate(tmpForm);
@@ -512,7 +538,7 @@
       // 初始化
       initColumn(){
         // 加载字典
-        this.dict.filed_type =  this.$getDictList(this.form.jdbcType+"_data_type");
+        this.dict.field_type =  this.$getDictList(this.form.jdbcType+"_data_type");
 
         // 加载数据
         this.fetchData();
@@ -526,7 +552,8 @@
           // 改为新值
           this.form.jdbcType = newValue;
           // 加载字典
-          this.dict.filed_type =  this.$getDictList(this.form.jdbcType+"_data_type");
+          this.dict.field_type =  this.$getDictList(this.form.jdbcType+"_data_type");
+          console.log(this.dict.field_type)
           // 清空已有字段数据
           this.list = [];
         });
@@ -538,7 +565,7 @@
           // 删除 parent_id 字段
           for (let i = this.list.length - 1; i >= 0; i--) {
             let item = this.list[i];
-            if(item.filedName === this.treeName) {
+            if(item.fieldName === this.treeName) {
               this.list.splice(i, 1);
               break;
             }
@@ -547,7 +574,7 @@
           // 删除 parent_id 字段
           for (let i = this.list.length - 1; i >= 0; i--) {
             let item = this.list[i];
-            if(item.filedName === this.treeName) {
+            if(item.fieldName === this.treeName) {
               this.list.splice(i, 1);
               break;
             }
@@ -556,10 +583,11 @@
           // 增加 parent_id 字段
           let tmp = deepClone(this.columnFormTemp);
           tmp.disabled = true;
-          tmp.filedName = this.treeName;
-          tmp.filedType = "bigint";
-          tmp.filedLength = 20;
-          tmp.filedComments = "上级ID";
+          tmp.fieldName = this.treeName;
+          tmp.fieldType = "bigint";
+          tmp.fieldLength = 20;
+          tmp.fieldComments = "上级ID";
+          tmp.javaType = "Integer";
           tmp.izNull = 1;
           this.columnHandleAdd(tmp);
         }
@@ -593,6 +621,8 @@
           temp.sort = this.list.length;
         }
         this.list.push(temp);
+        // 添加数据事 刷新一下缓存
+        this.tagsClick({paneName: "column"});
       },
 
       // 行删除
@@ -604,7 +634,7 @@
               if(item.id === row.id) {
                 // 树装接口 不允许删除 parent_id 字段
                 if(this.form.tableType === '1'){
-                  if(item.filedName !== this.treeName){
+                  if(item.fieldName !== this.treeName){
                     this.list.splice(i, 1);
                   }
                 } else {
@@ -622,7 +652,7 @@
                 if(ids.indexOf(item.id) !== -1) {
                   // 树装接口 不允许删除 parent_id 字段
                   if(this.form.tableType === '1'){
-                    if(item.filedName !== this.treeName){
+                    if(item.fieldName !== this.treeName){
                       this.list.splice(i, 1);
                     }
                   } else {
@@ -652,7 +682,7 @@
           setTimeout(() => {
             this.columnListLoading = false;
             this.list = tmp;
-          }, 150);
+          }, 20);
         }else if(paneName === 'column_setting'){
           let tmp = this.list;
           this.columnSettingListLoading = true;
@@ -660,7 +690,7 @@
           setTimeout(() => {
             this.columnSettingListLoading = false;
             this.list = tmp;
-          }, 150);
+          }, 20);
         }
       },
 
@@ -673,10 +703,23 @@
           onEnd({ newIndex, oldIndex }) {
             let oldObj = _this.list[oldIndex];
             let newObj = _this.list[newIndex];
-            _this.list[newIndex] =  oldObj;
-            _this.list[oldIndex] =  newObj;
-            _this.list[newIndex].sort = newIndex;
-            _this.list[oldIndex].sort = oldIndex;
+            // 如果是 从后往前 移动 则 当前项改为newIndex 而 原newIndex 往后的所有内容全部向后顺产移动
+            if(oldIndex > newIndex){
+              for (let i = oldIndex; i > newIndex; i--) {
+                _this.list[i] = _this.list[i-1];
+                _this.list[i].sort = i;
+              }
+
+            }
+            // 如果是 从前往后 移动 则 当前项改为newIndex 而 原newIndex 往后的所有内容全部向前顺产移动
+            else{
+              for (let i = oldIndex; i < newIndex; i++) {
+                _this.list[i] = _this.list[i+1];
+                _this.list[i].sort = i;
+              }
+            }
+            oldObj.sort = newIndex;
+            _this.list[newIndex] = oldObj;
           }
         })
       },
@@ -708,7 +751,7 @@
             // 处理数据
             // 设置禁止修改字段 （如果有树表 则 parent_id 字段不允许任何修改）
             for (let i = 0; i < this.list.length; i++) {
-              if(this.list[i].filedName !== this.treeName){
+              if(this.list[i].fieldName !== this.treeName){
                 this.list[i].disabled = false;
               }else{
                 this.list[i].disabled = true;

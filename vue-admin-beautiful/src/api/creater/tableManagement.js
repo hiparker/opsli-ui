@@ -49,3 +49,11 @@ export function getSubList(data) {
     params: data,
   });
 }
+
+export function doSync(data) {
+  return request({
+    url: "/api/v1/creater/table/sync",
+    method: "post",
+    params: data,
+  });
+}

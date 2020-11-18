@@ -144,7 +144,7 @@
           <el-button
             v-if="$perms('deve_creater_sync')"
             type="text"
-            @click="handleDelete(scope.row)"
+            @click="handleSync(scope.row)"
           > 同步 </el-button>
 
         </template>
@@ -168,7 +168,7 @@
 </template>
 
 <script>
-  import { getList, doDelete, doDeleteAll } from "@/api/creater/tableManagement";
+  import { getList, doDelete, doDeleteAll, doSync } from "@/api/creater/tableManagement";
   import { isNull } from "@/utils/validate";
   import Edit from "./components/TableEdit";
 
@@ -225,6 +225,15 @@
             this.$baseMessage("未选中任何行", "error");
             return false;
           }
+        }
+      },
+      handleSync(row) {
+        if (row.id) {
+          this.$baseConfirm("同步后将清除当前表中所有数据，你确定要同步吗", null, async () => {
+            const { msg } = await doSync({ id: row.id });
+            this.$baseMessage(msg, "success");
+            await this.fetchData();
+          });
         }
       },
       handleSizeChange(val) {
