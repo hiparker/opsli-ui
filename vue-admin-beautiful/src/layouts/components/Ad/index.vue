@@ -23,7 +23,7 @@
         nodeEnv: process.env.NODE_ENV,
         adList: [
           {
-            title: "opsli-boot beta版本已发布，点我提前体验 (暂未全部开源，尽情期待)",
+            title: "opsli-boot beta版本已发布，点我提前体验",
             url: "https://www.github.com/hiparker/opsli-boot",
           },
         ],
