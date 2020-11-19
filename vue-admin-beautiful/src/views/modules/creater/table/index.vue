@@ -15,7 +15,7 @@
           icon="el-icon-plus"
           type="primary"
           @click="handleInsert"
-        > 导入 </el-button>
+        > 从数据库导入 </el-button>
 
         <el-button
           v-if="$perms('deve_creater_delete')"

@@ -253,6 +253,16 @@
 
       </el-tab-pane>
       <el-tab-pane label="字段配置" name="column_setting">
+
+        <vab-query-form>
+          <vab-query-form-left-panel>
+            <el-button icon="el-icon-plus" type="primary" @click="columnHandleAdd">
+              添加
+            </el-button>
+
+          </vab-query-form-left-panel>
+        </vab-query-form>
+
         <el-form ref="columnSettingForm" :model="{'list':list}" >
         <el-table
           v-loading="columnListLoading"
@@ -730,6 +740,8 @@
 
       // 行添加
       columnHandleAdd(params){
+        this.activeName = "column";
+
         let temp;
         if(!isNull(params) && !(params instanceof MouseEvent)){
           temp = params;
