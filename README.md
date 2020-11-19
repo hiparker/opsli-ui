@@ -1,4 +1,4 @@
-# OPSLI 快速开发平台 抢版演示,暂未开源
+# OPSLI 快速开发平台 (已开源)
 <div align="center">
 <img width="500" src="https://gitee.com/hiparker/opsli-ui/raw/master/repository-images/logo.png"/>
 </div>
