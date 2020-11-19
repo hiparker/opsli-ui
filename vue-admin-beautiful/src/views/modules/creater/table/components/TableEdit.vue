@@ -279,9 +279,14 @@
             width="240"
           >
             <template slot-scope="scope">
-              <el-input v-model="scope.row.fieldName"
-                        :disabled="true"
-                        style="width: 100%" />
+              <el-form-item
+                :prop="'list.'+scope.$index+'.fieldName'"
+                class="el-form-item-table"
+              >
+                <el-input v-model="scope.row.fieldName"
+                          :disabled="true"
+                          style="width: 100%" />
+              </el-form-item>
             </template>
           </el-table-column>
 
@@ -293,6 +298,7 @@
             <template slot-scope="scope">
               <el-form-item
                 :prop="'list.'+scope.$index+'.javaType'"
+                :rules="columnSettingRules.javaType"
                 class="el-form-item-table"
               >
                 <el-select v-model="scope.row.javaType" placeholder="请选择"
@@ -316,18 +322,23 @@
             label="生成方案"
           >
             <template slot-scope="scope">
-              <el-select v-model="scope.row.showType" placeholder="请选择"
-                         default-first-option="" filterable clearable
-                         :disabled="scope.row.disabled"
-                         @change="showTypeChange(scope.row)"
-                         style="width: 100%" >
-                <el-option
-                  v-for="item in dict.show_type"
-                  :key="item.dictValue"
-                  :label="item.dictName"
-                  :value="item.dictValue"
-                ></el-option>
-              </el-select>
+              <el-form-item
+                :prop="'list.'+scope.$index+'.showType'"
+                class="el-form-item-table"
+              >
+                  <el-select v-model="scope.row.showType" placeholder="请选择"
+                             default-first-option="" filterable clearable
+                             :disabled="scope.row.disabled"
+                             @change="showTypeChange(scope.row)"
+                             style="width: 100%" >
+                    <el-option
+                      v-for="item in dict.show_type"
+                      :key="item.dictValue"
+                      :label="item.dictName"
+                      :value="item.dictValue"
+                    ></el-option>
+                  </el-select>
+              </el-form-item>
             </template>
           </el-table-column>
 
@@ -339,6 +350,7 @@
             <template slot-scope="scope">
               <el-form-item
                 :prop="'list.'+scope.$index+'.dictTypeCode'"
+                :rules="columnSettingRules.dictTypeCode"
                 class="el-form-item-table"
               >
                 <el-input v-model="scope.row.dictTypeCode"
@@ -462,6 +474,27 @@
         }
       };
 
+      const validateDictCode = (rule, value, callback) => {
+        let index = parseInt(rule.field.split(".")[1]);
+        if(index !== null && index !== undefined){
+          let listTmp = this.list[index];
+          if(listTmp !== null && listTmp !== undefined){
+            let showType = listTmp.showType;
+            // 如果同行是字典 那么 字典编号就必须非空
+            if(showType === "2"){
+              if (isNull(value)) {
+                callback(new Error("请输入字典编号"));
+              } if (!isCode(value)) {
+                callback(new Error("编号只能为字母、数字或下划线"));
+              } else {
+                callback();
+              }
+            }
+          }
+        }
+        callback();
+      };
+
       return {
         treeName: "parent_id",
         activeName: 'column',
@@ -523,6 +556,9 @@
         columnSettingRules: {
           javaType: [
             { required: true, message: "请选择Java类型", trigger: "blur" },
+          ],
+          dictTypeCode: [
+            { required: true, validator: validateDictCode, trigger: "blur" },
           ]
         },
         title: "",

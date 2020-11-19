@@ -57,3 +57,18 @@ export function doSync(data) {
     params: data,
   });
 }
+
+export function getTables() {
+  return request({
+    url: "/api/v1/creater/table/getTables",
+    method: "get"
+  });
+}
+
+export function doImportTables(data) {
+  return request({
+    url: "/api/v1/creater/table/importTables",
+    method: "post",
+    params: data,
+  });
+}

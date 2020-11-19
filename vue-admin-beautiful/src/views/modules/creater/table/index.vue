@@ -1,7 +1,7 @@
 <template>
   <div class="logsManagement-container">
     <vab-query-form>
-      <vab-query-form-left-panel :span="6">
+      <vab-query-form-left-panel :span="10">
 
         <el-button
           v-if="$perms('deve_creater_insert')"
@@ -11,10 +11,10 @@
         > 添加 </el-button>
 
         <el-button
-          v-if="$perms('deve_creater_insert')"
+          v-if="$perms('deve_creater_import')"
           icon="el-icon-plus"
           type="primary"
-          @click="handleInsert"
+          @click="handleImport"
         > 从数据库导入 </el-button>
 
         <el-button
@@ -26,7 +26,7 @@
         > 批量删除 </el-button>
 
       </vab-query-form-left-panel>
-      <vab-query-form-right-panel :span="18">
+      <vab-query-form-right-panel :span="14">
         <el-form :inline="true" :model="queryForm" @submit.native.prevent>
 
           <el-form-item>
@@ -163,19 +163,20 @@
     ></el-pagination>
 
     <edit ref="edit" @fetchData="fetchData"></edit>
+    <show-database-tables ref="show-database-tables" @fetchData="fetchData"></show-database-tables>
 
   </div>
 </template>
 
 <script>
-  import { getList, doDelete, doDeleteAll, doSync } from "@/api/creater/tableManagement";
+  import { getList, doDelete, doDeleteAll, doSync, doImportTables } from "@/api/creater/tableManagement";
   import { isNull } from "@/utils/validate";
   import Edit from "./components/TableEdit";
-
+  import ShowDatabaseTables from "./components/showDatabaseTables";
 
   export default {
     name: "CreateTableManagement",
-    components: { Edit },
+    components: { Edit,ShowDatabaseTables },
     data() {
       return {
         list: null,
@@ -205,6 +206,9 @@
         if (row.id) {
           this.$refs["edit"].showEdit(row);
         }
+      },
+      handleImport() {
+        this.$refs["show-database-tables"].show();
       },
       handleDelete(row) {
         if (row.id) {
