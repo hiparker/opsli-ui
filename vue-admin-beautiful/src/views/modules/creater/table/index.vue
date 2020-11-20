@@ -25,6 +25,21 @@
           @click="handleDelete"
         > 批量删除 </el-button>
 
+        <el-button
+          v-if="$perms('deve_creater_create')"
+          :disabled="selectRows.length !== 1"
+          icon="el-icon-plus"
+          type="warning"
+          @click="handleCreate"
+        > 生成代码 </el-button>
+
+        <el-button
+          v-if="$perms('deve_creater_createmenu')"
+          icon="el-icon-plus"
+          type="warning"
+          @click="handleImport"
+        > 生成菜单 </el-button>
+
       </vab-query-form-left-panel>
       <vab-query-form-right-panel :span="14">
         <el-form :inline="true" :model="queryForm" @submit.native.prevent>
@@ -164,7 +179,7 @@
 
     <edit ref="edit" @fetchData="fetchData"></edit>
     <show-database-tables ref="show-database-tables" @fetchData="fetchData"></show-database-tables>
-
+    <gen-create ref="gen-create"></gen-create>
   </div>
 </template>
 
@@ -173,10 +188,11 @@
   import { isNull } from "@/utils/validate";
   import Edit from "./components/TableEdit";
   import ShowDatabaseTables from "./components/showDatabaseTables";
+  import GenCreate from "./components/GenCreate";
 
   export default {
     name: "CreateTableManagement",
-    components: { Edit,ShowDatabaseTables },
+    components: {GenCreate, Edit,ShowDatabaseTables },
     data() {
       return {
         list: null,
@@ -209,6 +225,13 @@
       },
       handleImport() {
         this.$refs["show-database-tables"].show();
+      },
+      handleCreate() {
+        const ids = this.selectRows.map((item) => item.id);
+        if(ids === null || ids === undefined || ids.length === 0){
+          return ;
+        }
+        this.$refs["gen-create"].showEdit(ids[0]);
       },
       handleDelete(row) {
         if (row.id) {

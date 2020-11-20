@@ -72,3 +72,21 @@ export function doImportTables(data) {
     params: data,
   });
 }
+
+// ===========================================
+
+export function getCreaterLogs(data) {
+  return request({
+    url: "/api/v1/creater/logs/getByTableId",
+    method: "get",
+    params: data,
+  });
+}
+
+export function doCreate(data) {
+  return request({
+    url: "/api/v1/creater/logs/create",
+    method: "post",
+    data,
+  });
+}
