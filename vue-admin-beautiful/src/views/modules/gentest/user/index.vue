@@ -311,7 +311,6 @@
           this.queryForm.birth_BEGIN = "";
           this.queryForm.birth_END = "";
         }
-        console.log(this.queryForm)
         this.queryForm.pageNo = 1;
         this.fetchData();
       },
