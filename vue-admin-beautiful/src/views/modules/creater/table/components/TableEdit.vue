@@ -227,17 +227,17 @@
 
           <el-table-column
             show-overflow-tooltip
-            prop="izNull"
+            prop="izNotNull"
             label="非空"
             width="80"
           >
             <template slot-scope="scope">
               <el-form-item
-                :prop="'list.'+scope.$index+'.izNull'"
+                :prop="'list.'+scope.$index+'.izNotNull'"
                 class="el-form-item-table"
               >
                 <el-switch
-                  v-model="scope.row.izNull"
+                  v-model="scope.row.izNotNull"
                   :active-value="1"
                   :inactive-value="0"
                   :disabled="scope.row.disabled"
@@ -403,6 +403,7 @@
                   :active-value="1"
                   :inactive-value="0"
                   :disabled="scope.row.disabled || scope.row.showType === null || scope.row.showType === ''"
+                  @change="izShowListChange(scope.row)"
                 >
                 </el-switch>
               </el-form-item>
@@ -430,6 +431,37 @@
               </el-form-item>
             </template>
           </el-table-column>
+
+          <el-table-column
+            show-overflow-tooltip
+            prop="queryType"
+            label="检索类别"
+          >
+            <template slot-scope="scope">
+              <el-form-item
+                :prop="'list.'+scope.$index+'.queryType'"
+                class="el-form-item-table"
+              >
+                <!-- 如果为 2 3 字典和日期, 或者 不在列表显示 的话 禁止手动选择 -->
+                <el-select v-model="scope.row.queryType" placeholder="请选择(可空)"
+                           default-first-option="" clearable
+                           collapse-tags
+
+                           :disabled="scope.row.disabled || scope.row.showType === '2' || scope.row.showType === '3'
+                                      || scope.row.izShowList === null || scope.row.izShowList === 0
+                                      "
+                           style="width: 100%" >
+                  <el-option
+                    v-for="item in dict.query_type"
+                    :key="item.dictValue"
+                    :label="item.dictName"
+                    :value="item.dictValue"
+                  ></el-option>
+                </el-select>
+              </el-form-item>
+            </template>
+          </el-table-column>
+
 
         </el-table>
         </el-form>
@@ -495,6 +527,24 @@
         callback();
       };
 
+      const validateQueryType = (rule, value, callback) => {
+        let index = parseInt(rule.field.split(".")[1]);
+        if(index !== null && index !== undefined){
+          let listTmp = this.list[index];
+          if(listTmp !== null && listTmp !== undefined){
+            let showListFlag = listTmp.izShowList;
+            if(showListFlag === 1){
+              if (isNull(value)) {
+                callback(new Error("请选择检索类型"));
+              } else {
+                callback();
+              }
+            }
+          }
+        }
+        callback();
+      };
+
       return {
         treeName: "parent_id",
         activeName: 'column',
@@ -515,9 +565,10 @@
           id: "",
           sort: 0,
           izPk: 0,
-          izNull: 0,
+          izNotNull: 0,
           izShowList: 0,
           izShowForm: 0,
+          queryType: "",
           fieldName: "",
           fieldType: "",
           fieldLength: 0,
@@ -559,6 +610,9 @@
           ],
           dictTypeCode: [
             { required: true, validator: validateDictCode, trigger: "blur" },
+          ],
+          queryType: [
+            { required: true, validator: validateQueryType, trigger: "blur" },
           ]
         },
         title: "",
@@ -579,11 +633,12 @@
     },
     mounted() {
       // 如果不是每次开启时查询 在created中 有可能会短暂查不到
-      this.dict.table_type =  this.$getDictList("table_type")
-      this.dict.jdbc_type =  this.$getDictList("jdbc_type")
-      this.dict.java_data_type =  this.$getDictList("java_data_type")
-      this.dict.show_type =  this.$getDictList("show_type")
-      this.dict.validate_type =  this.$getDictList("validate_type")
+      this.dict.table_type =  this.$getDictList("table_type");
+      this.dict.jdbc_type =  this.$getDictList("jdbc_type");
+      this.dict.java_data_type =  this.$getDictList("java_data_type");
+      this.dict.show_type =  this.$getDictList("show_type");
+      this.dict.validate_type =  this.$getDictList("validate_type");
+      this.dict.query_type =  this.$getDictList("query_type");
 
     },
     methods: {
@@ -637,8 +692,8 @@
                         if(!isNull(columnList[i].izPk)){
                           columnList[i].izPk = columnList[i].izPk+"";
                         }
-                        if(!isNull(this.list[i].izNull)){
-                          columnList[i].izNull = columnList[i].izNull+"";
+                        if(!isNull(this.list[i].izNotNull)){
+                          columnList[i].izNotNull = columnList[i].izNotNull+"";
                         }
                         if(!isNull(this.list[i].izShowList)){
                           columnList[i].izShowList = columnList[i].izShowList+"";
@@ -747,7 +802,7 @@
           tmp.fieldLength = 20;
           tmp.fieldComments = "上级ID";
           tmp.javaType = "Integer";
-          tmp.izNull = 1;
+          tmp.izNotNull = 1;
           this.columnHandleAdd(tmp);
         }
       },
@@ -757,9 +812,9 @@
         if(!isNull(el)){
           // 如果主键选中 则默认选中不可为空
           if(el.izPk === 1){
-            el.izNull = 1;
+            el.izNotNull = 1;
           } else {
-            el.izNull = 0;
+            el.izNotNull = 0;
           }
         }
       },
@@ -770,6 +825,26 @@
           if(isNull(el.showType)){
             el.izShowForm = 0;
             el.izShowList = 0;
+            el.queryType = "";
+          }
+          this.izShowListChange(el);
+        }
+      },
+
+      izShowListChange(el){
+        if(!isNull(el)){
+          // 在列表显示
+          if(el.izShowList === 1){
+            // 字典
+            if(el.showType === "2"){
+              el.queryType = "EQ";
+            }
+            // 日期
+            else if(el.showType === "3"){
+              el.queryType = "RANGE";
+            }
+          }else{
+            el.queryType = "";
           }
         }
       },
@@ -931,8 +1006,8 @@
               if(!isNull(this.list[i].izPk)){
                 this.list[i].izPk = parseInt(this.list[i].izPk);
               }
-              if(!isNull(this.list[i].izNull)){
-                this.list[i].izNull = parseInt(this.list[i].izNull);
+              if(!isNull(this.list[i].izNotNull)){
+                this.list[i].izNotNull = parseInt(this.list[i].izNotNull);
               }
               if(!isNull(this.list[i].izShowList)){
                 this.list[i].izShowList = parseInt(this.list[i].izShowList);

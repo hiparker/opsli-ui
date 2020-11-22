@@ -22,7 +22,7 @@
 
       <el-row>
         <el-col :span="12">
-          <el-form-item label="生成包路径" prop="packageName">
+          <el-form-item label="包路径" prop="packageName">
             <el-autocomplete
               class="inline-input"
               v-model="form.packageName"
@@ -39,13 +39,19 @@
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="生成模块名" prop="moduleName">
+          <el-form-item label="模块名" prop="moduleName">
             <el-input v-model="form.moduleName" autocomplete="off"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
 
       <el-row>
+        <el-col :span="12">
+          <el-form-item label="子模块名" prop="subModuleName">
+            <el-input v-model="form.subModuleName" autocomplete="off"></el-input>
+          </el-form-item>
+        </el-col>
+
         <el-col :span="12">
           <el-form-item label="作者信息" prop="authorName">
             <el-input v-model="form.authorName" autocomplete="off"></el-input>
@@ -62,8 +68,12 @@
 </template>
 
 <script>
-import {getCreaterLogs, doCreate} from "@/api/creater/tableManagement";
+  import {getCreaterLogs, doCreate, doCreateJson} from "@/api/creater/tableManagement";
   import { isGeneralWithChinese, isLetter, isNotNull} from "@/utils/valiargs";
+  import {title} from "@/config/settings";
+  import { getAccessToken } from "@/utils/accessToken";
+  const { baseURL, tokenName } = require("@/config/settings");
+
 
   export default {
     name: "GenCreate",
@@ -79,6 +89,14 @@ import {getCreaterLogs, doCreate} from "@/api/creater/tableManagement";
 
       const validateModule = (rule, value, callback) => {
         if (!isLetter(value)) {
+          callback(new Error("只能是纯字母"));
+        } else {
+          callback();
+        }
+      };
+
+      const validateSubModule = (rule, value, callback) => {
+        if (isNotNull(value) && !isLetter(value)) {
           callback(new Error("只能是纯字母"));
         } else {
           callback();
@@ -103,9 +121,8 @@ import {getCreaterLogs, doCreate} from "@/api/creater/tableManagement";
           codeTitleBrief: '',
           packageName: '',
           moduleName: '',
-          authorName: '',
-          // 设置默认值
-          version: 0
+          subModuleName: '',
+          authorName: ''
         },
         dict: {},
         rules: {
@@ -124,6 +141,9 @@ import {getCreaterLogs, doCreate} from "@/api/creater/tableManagement";
           moduleName: [
             { required: true, trigger: "blur", message: "请输入模块名" },
             { required: true, trigger: "blur", validator: validateModule },
+          ],
+          subModuleName: [
+            { required: false, trigger: "blur", validator: validateSubModule },
           ],
           authorName: [
             { required: true, trigger: "blur", message: "请输入作者信息" },
@@ -161,16 +181,75 @@ import {getCreaterLogs, doCreate} from "@/api/creater/tableManagement";
       save() {
         this.$refs["form"].validate(async (valid) => {
           if (valid) {
-            const { success, msg } = await doCreate(this.form);
-            if(success){
-              this.$baseMessage(msg, "success");
-            }
+            this.$baseNotify(`正在生成，请耐心等待...`, `代码生成`);
 
-            this.close();
-          } else {
-            return false;
+            const paramsData = doCreateJson(this.form);
+            paramsData.params[tokenName] = getAccessToken();
+
+            //let url = window.URL.createObjectURL("https://www.baidu.com")
+            let link = document.createElement('a');
+            link.style.display = 'none';
+            link.href = this.urlAddParams(baseURL+paramsData.url, paramsData.params);
+            link.setAttribute('target', '_blank');
+
+            document.body.appendChild(link);
+            link.click();
+            //释放URL对象所占资源
+            //window.URL.revokeObjectURL(url)
+            //用完即删
+            document.body.removeChild(link);
+            return;
+
+            doCreate(this.form).then(data => {
+                if (!data) {
+                  this.$baseMessage(`下载内容为空`,'error');
+                  return
+                }
+
+                let url = window.URL.createObjectURL(new Blob([data]))
+                let link = document.createElement('a')
+                link.style.display = 'none'
+                link.href = url
+                link.setAttribute('target', '_blank');
+
+                document.body.appendChild(link)
+                link.click()
+                //释放URL对象所占资源
+                window.URL.revokeObjectURL(url)
+                //用完即删
+                document.body.removeChild(link)
+
+                this.close();
+            }).catch(err => {
+              console.log('err: ', err)
+            });
           }
         });
+      },
+      /**
+       * 给URL追加参数
+       * url
+       * parameter 参数名
+       * value  参数值
+       */
+      urlAddParams(url, params){
+        if(isNotNull(url)) {
+          let buf = url;
+          for (let key in params) {
+            let val = params[key];
+
+            if (buf.indexOf("?") > -1) {  //已经有参数
+              buf += "&";
+            } else {
+              buf += "?";
+            }
+            buf += key;
+            buf += '=';
+            buf += val;
+          }
+          return buf.toString();
+        }
+        return '';
       },
       async fetchData() {
         const { data } = await getCreaterLogs({tableId: this.form.tableId});

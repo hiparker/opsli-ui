@@ -87,6 +87,16 @@ export function doCreate(data) {
   return request({
     url: "/api/v1/creater/logs/create",
     method: "post",
+    // 重要
+    responseType: 'blob',
     data,
   });
+}
+
+export function doCreateJson(data) {
+  return {
+    url: "/api/v1/creater/logs/create",
+    method: "get",
+    params: data,
+  };
 }

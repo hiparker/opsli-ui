@@ -1,5 +1,22 @@
 /** 针对后端验证 统一前后端封装为一致验证结果 */
 
+const msgMap = {
+  isNotNull: "不能为空",
+  isGeneral: "只能为字母、数字或下划线",
+  isNumber: "只能为纯数字",
+  isLetter: "只能纯字母",
+  isUpperCase: "只能为大写字母",
+  isLowerCase: "只能为小写字母",
+  isIpv4: "IP地址不正确",
+  isMoney: "金额格式不正确",
+  isEmail: "邮箱格式不正确",
+  isMobile: "手机号格式不正确",
+  isCitizenid: "身份证格式不正确",
+  isMac: "MAC地址不正确",
+  isPlateNumber: "中国车牌号不正确",
+
+};
+
 /**
  * @description 不能为空
  * @returns {boolean}
@@ -189,4 +206,13 @@ export function isPlateNumber(str) {
   str = str + "";
   const reg = /^(([京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领][A-Z](([0-9]{5}[ABCDEFGHJK])|([ABCDEFGHJK]([A-HJ-NP-Z0-9])[0-9]{4})))|([京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领]\d{3}\d{1,3}[领])|([京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领][A-Z][A-HJ-NP-Z0-9]{4}[A-HJ-NP-Z0-9挂学警港澳使领]))$/;
   return reg.test(str);
+}
+
+/**
+ * 获得Msg
+ * @param str
+ * @returns {boolean}
+ */
+export function getMsg(key) {
+  return msgMap[key];
 }
