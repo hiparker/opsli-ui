@@ -102,7 +102,7 @@
       <el-row>
         <el-col :span="12">
           <el-form-item label="图标" prop="icon">
-            <el-input v-model="form.icon" autocomplete="off" readonly ></el-input>
+            <el-input v-model="form.icon" autocomplete="off" ></el-input>
             <el-button type="primary" icon="el-icon-search"
                        class="input-btn-choose" @click="showIcon"></el-button>
           </el-form-item>

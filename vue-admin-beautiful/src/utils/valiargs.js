@@ -3,6 +3,7 @@
 const msgMap = {
   isNotNull: "不能为空",
   isGeneral: "只能为字母、数字或下划线",
+  isGeneralWithChinese: "只能为汉字、字母、数字和下划线",
   isNumber: "只能为纯数字",
   isLetter: "只能纯字母",
   isUpperCase: "只能为大写字母",
