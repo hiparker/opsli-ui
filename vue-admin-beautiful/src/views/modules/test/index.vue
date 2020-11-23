@@ -20,14 +20,14 @@
     <vab-query-form>
       <vab-query-form-left-panel :span="12">
         <el-button
-          v-if="$perms('modules_test_insert')"
+          v-if="$perms('gentest_test_insert')"
           icon="el-icon-plus"
           type="primary"
           @click="handleInsert"
         > 添加 </el-button>
 
         <el-button
-          v-if="$perms('modules_test_delete')"
+          v-if="$perms('gentest_test_delete')"
           :disabled="!selectRows.length > 0"
           icon="el-icon-delete"
           type="danger"
@@ -119,12 +119,12 @@
       >
         <template v-slot="scope">
           <el-button
-            v-if="$perms('modules_test_update')"
+            v-if="$perms('gentest_test_update')"
             type="text"
             @click="handleUpdate(scope.row)"
           > 编辑 </el-button>
           <el-button
-            v-if="$perms('modules_test_delete')"
+            v-if="$perms('gentest_test_delete')"
             type="text"
             @click="handleDelete(scope.row)"
           > 删除 </el-button>
