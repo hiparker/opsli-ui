@@ -448,7 +448,7 @@
                            collapse-tags
 
                            :disabled="scope.row.disabled || scope.row.showType === '2' || scope.row.showType === '3'
-                                      || scope.row.izShowList === null || scope.row.izShowList === 0
+                                      || scope.row.showType === '4' || scope.row.izShowList === null || scope.row.izShowList === 0
                                       "
                            style="width: 100%" >
                   <el-option
@@ -840,7 +840,7 @@
               el.queryType = "EQ";
             }
             // 日期
-            else if(el.showType === "3"){
+            else if(el.showType === "3" || el.showType === "4"){
               el.queryType = "RANGE";
             }
           }else{

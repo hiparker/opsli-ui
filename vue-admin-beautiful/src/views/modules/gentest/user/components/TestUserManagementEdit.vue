@@ -12,11 +12,13 @@
             <el-input v-model="form.name" autocomplete="off"></el-input>
           </el-form-item>
         </el-col>
+
         <el-col :span="12">
           <el-form-item label="金钱" prop="money">
             <el-input v-model="form.money" autocomplete="off"></el-input>
           </el-form-item>
         </el-col>
+
       </el-row>
       <el-row>
         <el-col :span="12">
@@ -24,16 +26,18 @@
             <el-input v-model="form.age" autocomplete="off"></el-input>
           </el-form-item>
         </el-col>
+
         <el-col :span="12">
-        <el-form-item label="生日" prop="birth">
-          <el-date-picker
-                  v-model="form.birth"
-                  type="datetime"
-                  placeholder="选择生日时间"
-                  style="width: 100%"
-          ></el-date-picker>
-        </el-form-item>
+          <el-form-item label="生日" prop="birth">
+            <el-date-picker
+                    v-model="form.birth"
+                    type="date"
+                    placeholder="选择生日日期"
+                    style="width: 100%"
+            ></el-date-picker>
+          </el-form-item>
         </el-col>
+
       </el-row>
       <el-row>
         <el-col :span="12">
@@ -49,6 +53,8 @@
           </el-select>
         </el-form-item>
         </el-col>
+
+
       </el-row>
 
     </el-form>
@@ -62,7 +68,7 @@
 <script>
   import { doInsert, doUpdate } from "@/api/gentest/user/TestUserManagement";
   import { formateDate } from "@/utils/format";
-  import { isNull} from "@/utils/validate";
+  import { isNull } from "@/utils/validate";
   import { isNotNull, isNumber, isMoney, isGeneralWithChinese,  getMsg} from "@/utils/valiargs";
 
   export default {

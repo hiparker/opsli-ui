@@ -11,13 +11,12 @@
             <el-form-item>
               <el-date-picker
                       v-model="birthDatePicker"
-                      type="datetimerange"
-                      :picker-options="pickerOptions"
+                      type="daterange"
+                      align="right"
                       range-separator="至"
                       start-placeholder="开始生日"
                       end-placeholder="结束生日"
-                      align="right">
-              </el-date-picker>
+              ></el-date-picker>
             </el-form-item>
 
             <el-form-item>
@@ -302,6 +301,7 @@
       },
       queryData() {
 
+
         if(isNotNull(this.birthDatePicker) && this.birthDatePicker.length === 2){
           this.queryForm.birth_BEGIN =
                   this.birthDatePicker.length === 0 ? "" : formateDate(this.birthDatePicker[0], 'yyyy-MM-dd hh:mm:ss');
@@ -311,6 +311,7 @@
           this.queryForm.birth_BEGIN = "";
           this.queryForm.birth_END = "";
         }
+
         this.queryForm.pageNo = 1;
         this.fetchData();
       },
