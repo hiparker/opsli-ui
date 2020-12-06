@@ -45,17 +45,8 @@
               tabindex="2"
               placeholder="请输入密码"
               @keyup.enter.native="handleLogin"
+              show-password
             />
-            <span
-              v-if="passwordType === 'password'"
-              class="show-password"
-              @click="handlePassword"
-            >
-              <vab-icon :icon="['fas', 'eye-slash']"></vab-icon>
-            </span>
-            <span v-else class="show-password" @click="handlePassword">
-              <vab-icon :icon="['fas', 'eye']"></vab-icon>
-            </span>
           </el-form-item>
 
           <el-form-item prop="captcha" v-if="captchaFlag">
@@ -223,14 +214,6 @@
         s[8] = s[13] = s[18] = s[23];
         this.uuidA = s.join("");
         return this.uuidA;
-      },
-      handlePassword() {
-        this.passwordType === "password"
-          ? (this.passwordType = "")
-          : (this.passwordType = "password");
-        this.$nextTick(() => {
-          this.$refs.password.focus();
-        });
       },
       handleLogin() {
         this.$refs.form.validate((valid) => {
