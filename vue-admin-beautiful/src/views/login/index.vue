@@ -58,7 +58,7 @@
             </span>
           </el-form-item>
 
-          <el-form-item prop="captcha">
+          <el-form-item prop="captcha" v-if="captchaFlag">
             <span class="svg-container">
               <i class="el-icon-warning" />
             </span>
@@ -173,6 +173,7 @@
             },
           ],
         },
+        captchaFlag: false,
         loading: false,
         passwordType: "password",
         redirect: undefined,
@@ -246,7 +247,19 @@
                 this.loading = false;
               })
               .catch(() => {
-                this.loading = false;
+                // 获取当前失败次数
+                this.$store
+                  .dispatch("user/getSlipCount", this.form)
+                  .then((ret) => {
+                    this.loading = false;
+                    const {data} = ret;
+                    if(!isNull(data) && data.curr >= data.base ){
+                      // 失败次数大于系统规定阈值 开启验证码校验
+                      this.captchaFlag = true;
+                    }
+                  }).catch(() => {
+                    this.loading = false;
+                  });
               });
           } else {
             return false;

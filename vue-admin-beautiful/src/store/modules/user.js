@@ -4,7 +4,7 @@
  */
 
 import Vue from "vue";
-import { getUserInfo, login, logout } from "@/api/user";
+import { getSlipCount, getUserInfo, login, logout } from "@/api/user";
 import {
   getAccessToken,
   removeAccessToken,
@@ -98,6 +98,9 @@ const actions = {
     await logout(state.accessToken);
     await dispatch("resetAccessToken");
     await resetRouter();
+  },
+  async getSlipCount({ commit }, {username}) {
+    return getSlipCount({username: username});
   },
   resetAccessToken({ commit }) {
     commit("setPermissions", []);

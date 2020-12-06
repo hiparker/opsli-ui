@@ -13,6 +13,14 @@ export async function login(data) {
   });
 }
 
+export function getSlipCount(data) {
+  return request({
+    url: "/sys/slipCount",
+    method: "get",
+    params: data,
+  });
+}
+
 export function getUserInfo(accessToken) {
   return request({
     url: "/api/v1/sys/user/getInfo",
