@@ -1,5 +1,37 @@
 <template>
   <div class="userManagement-container">
+
+    <el-collapse-transition>
+      <div class="more-query" v-show="this.moreQueryFlag">
+        <!-- 更多查找 -->
+        <vab-query-form>
+          <vab-query-form-left-panel :span="24">
+            <el-form :inline="true" :model="queryForm" @submit.native.prevent>
+
+              <el-form-item>
+                <el-input
+                  v-model.trim="queryForm.username_EQ"
+                  placeholder="请输入用户名"
+                  clearable
+                />
+              </el-form-item>
+
+              <el-form-item>
+                <el-input
+                  v-model.trim="queryForm.no_EQ"
+                  placeholder="请输入工号"
+                  clearable
+                />
+              </el-form-item>
+
+            </el-form>
+          </vab-query-form-left-panel>
+
+        </vab-query-form>
+        <el-divider></el-divider>
+      </div>
+    </el-collapse-transition>
+
     <vab-query-form>
       <vab-query-form-left-panel :span="12">
         <el-button
@@ -36,13 +68,7 @@
       </vab-query-form-left-panel>
       <vab-query-form-right-panel :span="12">
         <el-form :inline="true" :model="queryForm" @submit.native.prevent>
-          <el-form-item>
-            <el-input
-              v-model.trim="queryForm.username_EQ"
-              placeholder="请输入用户名"
-              clearable
-            />
-          </el-form-item>
+
           <el-form-item>
             <el-input
               v-model.trim="queryForm.realName_LIKE"
@@ -50,17 +76,16 @@
               clearable
             />
           </el-form-item>
-          <el-form-item>
-            <el-input
-              v-model.trim="queryForm.no_EQ"
-              placeholder="请输入工号"
-              clearable
-            />
-          </el-form-item>
+
           <el-form-item>
             <el-button icon="el-icon-search" type="primary" @click="queryData">
               查询
             </el-button>
+
+            <el-button icon="el-icon-search" @click="moreQuery">
+              更多
+            </el-button>
+
           </el-form-item>
         </el-form>
       </vab-query-form-right-panel>
@@ -84,12 +109,14 @@
         show-overflow-tooltip
         prop="username"
         label="用户名"
+        width="95"
       ></el-table-column>
 
       <el-table-column
         show-overflow-tooltip
         prop="realName"
         label="用户真实名"
+        width="95"
       ></el-table-column>
 
       <el-table-column
@@ -114,6 +141,7 @@
         show-overflow-tooltip
         prop="locked"
         label="是否锁定"
+        width="95"
       >
         <template slot-scope="scope">
             <span>
@@ -131,6 +159,7 @@
         show-overflow-tooltip
         prop="loginIp"
         label="最后登录IP"
+        width="95"
       ></el-table-column>
 
       <el-table-column
@@ -200,6 +229,7 @@
         total: 0,
         selectRows: "",
         elementLoadingText: "正在加载...",
+        moreQueryFlag: false,
         queryForm: {
           pageNo: 1,
           pageSize: 10,
@@ -259,6 +289,9 @@
       handleCurrentChange(val) {
         this.queryForm.pageNo = val;
         this.fetchData();
+      },
+      moreQuery(){
+        this.moreQueryFlag = !this.moreQueryFlag;
       },
       queryData() {
         this.queryForm.pageNo = 1;

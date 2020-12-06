@@ -125,27 +125,24 @@
 <script>
   import {doInsert, doUpdate} from "@/api/menuManagement";
   import Icon from "@/components/opsli/icon/icon";
-
-  import { isNull, isCode , isName } from "@/utils/validate";
+  import { deepClone } from "@/utils/clone";
+  import { isNull} from "@/utils/validate";
+  import { isNotNull, isGeneral , isGeneralWithChinese, getMsg} from "@/utils/valiargs";
 
   export default {
     name: "MenuManagementEdit",
     components: { Icon },
     data() {
       const validateCode = (rule, value, callback) => {
-        if (isNull(value)) {
-          callback(new Error("请输入编号"));
-        } else if (!isCode(value)) {
-          callback(new Error("编号只能为字母、数字或下划线"));
+        if (!isGeneral(value)) {
+          callback(new Error(getMsg("isGeneral")));
         } else {
           callback();
         }
       };
       const validateName = (rule, value, callback) => {
-        if (isNull(value)) {
-          callback(new Error("请输入名称"));
-        } if (!isName(value)) {
-          callback(new Error("名称格式不正确"));
+        if (!isGeneralWithChinese(value)) {
+          callback(new Error(getMsg("isGeneralWithChinese")));
         } else {
           callback();
         }
@@ -175,10 +172,12 @@
         dict: {},
         rules: {
           menuCode: [
-            { required: true, trigger: "blur", validator: validateCode },
+            { required: true, trigger: "blur", message: "请输入编号" },
+            { required: false, trigger: "blur", validator: validateCode },
           ],
           menuName: [
-            { required: true, trigger: "blur", validator: validateName },
+            { required: true, trigger: "blur", message: "请输入名称" },
+            { required: false, trigger: "blur", validator: validateName },
           ],
           sortNo: [{ required: true, trigger: "blur", message: "请输入排序" }],
         },
@@ -227,18 +226,21 @@
       save() {
         this.$refs["form"].validate(async (valid) => {
           if (valid) {
+            // 字段数据
+            let tmpForm = deepClone(this.form);
+
             // 修改
-            if (!isNull(this.form.id)) {
-              const { success, msg } = await doUpdate(this.form);
+            if (!isNull(tmpForm.id)) {
+              const { success, msg } = await doUpdate(tmpForm);
               if(success){
                 this.$baseMessage(msg, "success");
               }
             } else {
               // 如果上级code不为空 则在新增是 拼上上级code
               if(!isNull(this.base.parentCode)){
-                this.form.menuCode = this.base.parentCode + "_" + this.form.menuCode;
+                tmpForm.menuCode = this.base.parentCode + "_" + tmpForm.menuCode;
               }
-              const { success, msg } = await doInsert(this.form);
+              const { success, msg } = await doInsert(tmpForm);
               if(success){
                 this.$baseMessage(msg, "success");
               }

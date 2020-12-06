@@ -66,7 +66,9 @@
 
 <script>
   import { doInsert, doUpdate } from "@/api/roleManagement";
-  import {isCode, isName, isNull} from "@/utils/validate";
+  import { isNull} from "@/utils/validate";
+  import {isGeneral, isGeneralWithChinese, isNotNull, getMsg} from "@/utils/valiargs";
+
   import { getAccessToken } from "@/utils/accessToken";
   import { getUserInfo } from "@/api/user";
   import Tenant from "@/components/opsli/tenant/tenant";
@@ -77,19 +79,15 @@
     data() {
 
       const validateCode = (rule, value, callback) => {
-        if (isNull(value)) {
-          callback(new Error("请输入编号"));
-        } if (!isCode(value)) {
-          callback(new Error("编号只能为字母、数字或下划线"));
+        if (!isGeneral(value)) {
+          callback(new Error(getMsg("isGeneral")));
         } else {
           callback();
         }
       };
       const validateName = (rule, value, callback) => {
-        if (isNull(value)) {
-          callback(new Error("请输入名称"));
-        } if (!isName(value)) {
-          callback(new Error("名称格式不正确"));
+        if (!isGeneralWithChinese(value)) {
+          callback(new Error(getMsg("isGeneralWithChinese")));
         } else {
           callback();
         }
@@ -106,10 +104,12 @@
         dict: {},
         rules: {
           roleCode: [
-            { required: true, trigger: "blur", validator: validateCode },
+            { required: true, trigger: "blur", message: "请输入编号" },
+            { required: false, trigger: "blur", validator: validateCode },
           ],
           roleName: [
-            { required: true, trigger: "blur", validator: validateName },
+            { required: true, trigger: "blur", message: "请输入名称" },
+            { required: false, trigger: "blur", validator: validateName },
           ],
         },
         title: "",

@@ -12,6 +12,12 @@
               @click="handleInsert"
             > 添加 </el-button>
 
+            <el-button
+              icon="el-icon-sort"
+              type="primary"
+              @click="handleExpand"
+            > 展开数据 </el-button>
+
           </vab-query-form-left-panel>
           <vab-query-form-right-panel :span="12">
             <el-form :inline="true" :model="queryForm" @submit.native.prevent>
@@ -39,12 +45,13 @@
         </vab-query-form>
 
         <el-table
+          ref="tableTreeData"
           v-loading="listLoading"
           :data="data"
           :element-loading-text="elementLoadingText"
           row-key="menuCode"
           border
-          default-expand-all
+          :default-expand-all="false"
           :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
         >
           <el-table-column
@@ -171,6 +178,7 @@
           menuCode_EQ: "",
           menuName_LIKE: "",
         },
+        isExpand: false,
         listLoading: true,
         elementLoadingText: "正在加载...",
       };
@@ -180,6 +188,7 @@
       await this.fetchData();
     },
     methods: {
+
       handleInsert(row) {
         this.$refs["edit"].showEdit();
       },
@@ -221,6 +230,26 @@
         setTimeout(() => {
           this.listLoading = false;
         }, 300);
+      },
+
+
+
+      // 是否展开table(展开与折叠切换)
+      handleExpand() {
+        this.isExpand = !this.isExpand
+        this.$nextTick(() => {
+          this.forArr(this.data, this.isExpand)
+        })
+      },
+      // 遍历
+      forArr(arr, isExpand) {
+        arr.forEach(i => {
+          // toggleRowExpansion(i, isExpand)用于多选表格，切换某一行的选中状态，如果使用了第二个参数，则是设置这一行选中与否（selected 为 true 则选中）
+          this.$refs["tableTreeData"].toggleRowExpansion(i, isExpand)
+          if (i.children) {
+            this.forArr(i.children, isExpand)
+          }
+        })
       },
       handleNodeClick(data) {
         this.fetchData();

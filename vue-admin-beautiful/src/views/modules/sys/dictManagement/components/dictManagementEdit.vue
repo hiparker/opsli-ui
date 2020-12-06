@@ -49,27 +49,22 @@
 
 <script>
   import { doInsert, doUpdate } from "@/api/dictManagement";
-  import {isCode, isName, isNull} from "@/utils/validate";
-  import {getDictList} from "@/utils/dict";
+  import {isGeneral, isGeneralWithChinese, isNotNull, getMsg} from "@/utils/valiargs";
 
   export default {
     name: "DictManagementEdit",
     data() {
 
       const validateCode = (rule, value, callback) => {
-        if (isNull(value)) {
-          callback(new Error("请输入编号"));
-        } if (!isCode(value)) {
-          callback(new Error("编号只能为字母、数字或下划线"));
+        if (!isGeneral(value)) {
+          callback(new Error(getMsg("isGeneral")));
         } else {
           callback();
         }
       };
       const validateName = (rule, value, callback) => {
-        if (isNull(value)) {
-          callback(new Error("请输入名称"));
-        } if (!isName(value)) {
-          callback(new Error("名称格式不正确"));
+        if (!isGeneralWithChinese(value)) {
+          callback(new Error(getMsg("isGeneralWithChinese")));
         } else {
           callback();
         }
@@ -84,10 +79,12 @@
         dict: {},
         rules: {
           typeCode: [
-            { required: true, trigger: "blur", validator: validateCode },
+            { required: true, trigger: "blur", message: "请输入编号" },
+            { required: false, trigger: "blur", validator: validateCode },
           ],
           typeName: [
-            { required: true, trigger: "blur", validator: validateName },
+            { required: true, trigger: "blur", message: "请输入名称" },
+            { required: false, trigger: "blur", validator: validateName },
           ],
         },
         title: "",
@@ -121,7 +118,7 @@
         this.$refs["form"].validate(async (valid) => {
           if (valid) {
             // 修改
-            if (!isNull(this.form.id)) {
+            if (isNotNull(this.form.id)) {
               const { success, msg } = await doUpdate(this.form);
               if(success){
                 this.$baseMessage(msg, "success");

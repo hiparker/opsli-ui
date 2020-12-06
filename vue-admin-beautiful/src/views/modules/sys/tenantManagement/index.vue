@@ -22,6 +22,13 @@
         <el-form :inline="true" :model="queryForm" @submit.native.prevent>
           <el-form-item>
             <el-input
+              v-model.trim="queryForm.id_EQ"
+              placeholder="请输入租户ID"
+              clearable
+            />
+          </el-form-item>
+          <el-form-item>
+            <el-input
               v-model.trim="queryForm.tenantName_LIKE"
               placeholder="请输入租户名称"
               clearable
@@ -50,6 +57,11 @@
         </template>
       </el-table-column>
 
+      <el-table-column
+        show-overflow-tooltip
+        prop="id"
+        label="租户ID"
+      ></el-table-column>
 
       <el-table-column
         show-overflow-tooltip
@@ -136,6 +148,7 @@
         queryForm: {
           pageNo: 1,
           pageSize: 10,
+          id_EQ:"",
           tenantName_LIKE: "",
         },
       };

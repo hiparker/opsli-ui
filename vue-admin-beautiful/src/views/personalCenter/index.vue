@@ -63,7 +63,7 @@
                          :size="180" style="font-size: 80px"
               ></el-avatar>
               <div v-else :style="{ minHeight: '180px' }">
-                <img :src="options.img" alt="图片去火星了">
+                <img :src="options.img" alt="头像去火星了">
               </div>
             </div>
           </el-col>

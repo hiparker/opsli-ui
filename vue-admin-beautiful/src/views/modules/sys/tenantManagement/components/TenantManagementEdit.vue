@@ -53,7 +53,7 @@
       const validateName = (rule, value, callback) => {
         if (isNull(value)) {
           callback(new Error("请输入名称"));
-        } if (!isName(value)) {
+        } else if (!isName(value)) {
           callback(new Error("名称格式不正确"));
         } else {
           callback();

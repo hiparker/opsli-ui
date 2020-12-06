@@ -129,6 +129,7 @@
               >
                 <el-select v-model="scope.row.fieldType" placeholder="请选择"
                            default-first-option="" filterable
+                           :disabled="scope.row.disabled"
                            style="width: 100%" >
                   <el-option
                     v-for="item in dict.field_type"
@@ -516,7 +517,7 @@
             if(showType === "2"){
               if (isNull(value)) {
                 callback(new Error("请输入字典编号"));
-              } if (!isCode(value)) {
+              } else if (!isCode(value)) {
                 callback(new Error("编号只能为字母、数字或下划线"));
               } else {
                 callback();
