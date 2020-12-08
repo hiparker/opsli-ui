@@ -327,7 +327,7 @@
           </div>
           <div style="text-align: center">
             <vab-colorful-icon style="font-size: 140px" icon-class="vab" />
-            <h1 style="font-size: 30px">vue-admin-beautiful</h1>
+            <h1 style="font-size: 30px">opsli-boot</h1>
           </div>
           <div v-for="(item, index) in noticeList" :key="index">
             <el-alert
@@ -346,7 +346,7 @@
             <span>关于开发者</span>
           </div>
           <img
-            src="https://github-readme-stats.vercel.app/api?username=chuzhixin"
+            src="https://github-readme-stats.vercel.app/api?username=hiparker"
             alt=""
           />
         </el-card>
