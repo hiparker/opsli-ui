@@ -31,6 +31,16 @@ export function getUserInfo(accessToken) {
   });
 }
 
+export function getUserOrg(accessToken) {
+  return request({
+    url: "/api/v1/sys/user/getOrg",
+    method: "get",
+    headers: {
+      [tokenName]: accessToken
+    }
+  });
+}
+
 export function logout() {
   return request({
     url: "/sys/logout",

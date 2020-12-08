@@ -9,6 +9,19 @@
         <el-row>
           <el-form ref="baseForm" :model="baseForm" :rules="baseRules" label-width="100px">
 
+            <el-col :xs="4" :sm="6" :md="8" :lg="9" :xl="11" class="line"
+              v-if="baseFormOrgInput !== '' "
+            >
+              <el-form-item label="组织机构：" prop="username" style="font-weight: bold">
+                <el-input
+                  v-model.trim="baseFormOrgInput"
+                  autocomplete="off"
+                  disabled
+                  title="组织机构"
+                ></el-input>
+              </el-form-item>
+            </el-col>
+
             <el-col :xs="4" :sm="6" :md="8" :lg="9" :xl="11" class="line">
               <el-form-item label="用户名：" prop="username" style="font-weight: bold">
                 <el-input
@@ -92,7 +105,7 @@
 
 <script>
   import { getAccessToken } from "@/utils/accessToken";
-  import { getUserInfo } from "@/api/user";
+  import { getUserInfo,getUserOrg } from "@/api/user";
   import { isEmail, isName, isNull, isPhone} from "@/utils/validate";
   import { doUpdate } from "@/api/userManagement";
   import UpdatePassword from "./components/UserManagementPassword";
@@ -133,6 +146,8 @@
 
       return {
         proFileLoading: true,
+        baseFormOrg: {},
+        baseFormOrgInput: '',
         baseFormInfo: {},
         baseForm: {
           locked: "0"
@@ -157,7 +172,10 @@
       };
     },
     created() {
+      // 加载用户信息
       this.fetchData();
+      // 加载用户组织机构
+      this.fetchOrgData();
     },
     methods: {
       showAvatarEdit(){
@@ -203,6 +221,33 @@
           }, 300);
         }
       },
+
+      // 获取数据
+      async fetchOrgData() {
+        let accessToken = getAccessToken();
+        this.proFileLoading = true;
+        const { data } = await getUserOrg(accessToken);
+        if(!isNull(data)){
+          this.baseFormOrg = Object.assign({}, data);
+          // 展示字段
+          if(!isNull(this.baseFormOrg)){
+            if(!isNull(this.baseFormOrg.companyName)){
+              this.baseFormOrgInput += this.baseFormOrg.companyName+'(公司)';
+            }
+            if(!isNull(this.baseFormOrg.departmentName)){
+              this.baseFormOrgInput += ' - '+this.baseFormOrg.departmentName+'(部门)';
+            }
+            if(!isNull(this.baseFormOrg.postName)){
+              this.baseFormOrgInput += ' - '+this.baseFormOrg.postName+'(岗位)';
+            }
+          }
+
+          setTimeout(() => {
+            this.proFileLoading = false;
+          }, 300);
+        }
+      },
+
     },
   };
 </script>

@@ -66,6 +66,22 @@ export function doSetRoles(data) {
   });
 }
 
+export function getOrgByUserId(data) {
+  return request({
+    url: "/api/v1/sys/user/getOrgByUserId",
+    method: "get",
+    params: data,
+  });
+}
+
+export function doSetOrg(data) {
+  return request({
+    url: "/api/v1/sys/user/org/setOrg",
+    method: "post",
+    data,
+  });
+}
+
 export function doUpdatePasswordById(data) {
   return request({
     url: "/api/v1/sys/user/updatePasswordById",

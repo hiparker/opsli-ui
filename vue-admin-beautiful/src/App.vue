@@ -32,4 +32,14 @@
   .inline-input-container .highlighted .inline-input-describe {
     color: #ddd;
   }
+  /* input clear */
+  .input-clear {
+    position: absolute;
+    top: 1px;
+    right: 50px;
+    font-size: 16px;
+    color: #909399;
+    cursor: pointer;
+    user-select: none;
+  }
 </style>

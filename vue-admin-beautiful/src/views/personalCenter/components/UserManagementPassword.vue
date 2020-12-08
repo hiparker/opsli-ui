@@ -9,7 +9,7 @@
 
       <el-form-item label="旧密码" prop="oldPassword">
         <el-input
-          :type="formPasswordShow.old?'text':'password'"
+          type="password"
           v-model.trim="form.oldPassword"
           autocomplete="off"
           show-password
@@ -18,7 +18,7 @@
 
       <el-form-item label="新密码" prop="newPassword">
         <el-input
-          :type="formPasswordShow.new?'text':'password'"
+          type="password"
           v-model.trim="form.newPassword"
           autocomplete="off"
           show-password
@@ -27,7 +27,7 @@
 
       <el-form-item label="确认密码" prop="verifyPassword">
         <el-input
-          :type="formPasswordShow.verify?'text':'password'"
+          type="password"
           v-model.trim="form.verifyPassword"
           autocomplete="off"
           show-password
@@ -71,11 +71,6 @@
       };
 
       return {
-        formPasswordShow: {
-          old: false,
-          new: false,
-          verify: false,
-        },
         form: {
           oldPassword: "",
           newPassword: "",
@@ -106,9 +101,6 @@
         this.form.oldPassword = "";
         this.form.newPassword = "";
         this.form.verifyPassword = "";
-        this.formPasswordShow.old = false;
-        this.formPasswordShow.new = false;
-        this.formPasswordShow.verify = false;
         this.dialogFormVisible = false;
       },
       save() {

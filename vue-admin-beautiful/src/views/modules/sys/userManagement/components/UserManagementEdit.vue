@@ -29,27 +29,21 @@
         <el-col :span="12">
           <el-form-item label="密码" prop="password">
             <el-input
-                :type="formPasswordShow.pass?'text':'password'"
+                type="password"
                 v-model.trim="form.password"
                 autocomplete="off"
+                show-password
             ></el-input>
-            <span class="show-password" @click="formPasswordShow.pass = !formPasswordShow.pass">
-              <vab-icon v-if="formPasswordShow.pass" :icon="['fas', 'eye-slash']"></vab-icon>
-              <vab-icon v-else :icon="['fas', 'eye']"></vab-icon>
-            </span>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item label="确认密码" prop="verifyPassword">
             <el-input
-              :type="formPasswordShow.verify?'text':'password'"
+              type="password"
               v-model.trim="form.verifyPassword"
               autocomplete="off"
+              show-password
             ></el-input>
-            <span class="show-password" @click="formPasswordShow.verify = !formPasswordShow.verify">
-              <vab-icon v-if="formPasswordShow.verify" :icon="['fas', 'eye-slash']"></vab-icon>
-              <vab-icon v-else :icon="['fas', 'eye']"></vab-icon>
-            </span>
           </el-form-item>
         </el-col>
       </el-row>
@@ -207,10 +201,6 @@
         userInfo: null,
         dict: {},
         formStatus: true,
-        formPasswordShow: {
-          pass: false,
-          verify: false,
-        },
         form: {
           tenantId:"",
           locked: '0',
