@@ -21,7 +21,7 @@
     >
       <i class="el-icon-upload"></i>
       <div class="el-upload__text">将文件拖到此处，或<em>点击导入</em></div>
-      <div class="el-upload__tip" slot="tip">只能上传xls/xlsx文件，且不超过10MB</div>
+      <div class="el-upload__tip" slot="tip">只能上传xls/xlsx文件，且不超过5MB</div>
     </el-upload>
     <!-- 进度条 -->
     <el-progress v-if="progressFlag" :percentage="loadProgress"></el-progress>
@@ -88,12 +88,12 @@
         let testMsg = file.name.substring(file.name.lastIndexOf('.')+1)
         const extension = testMsg === 'xls'
         const extension2 = testMsg === 'xlsx'
-        const isLt2M = file.size / 1024 / 1024 < 10
+        const isLt2M = file.size / 1024 / 1024 < 5
         if(!extension && !extension2) {
           this.$baseMessage('上传文件只能是 xls、xlsx格式!', "warning");
         }
         if(!isLt2M) {
-          this.$baseMessage('上传文件大小不能超过 10MB!', "warning");
+          this.$baseMessage('上传文件大小不能超过 5MB!', "warning");
         }
         return (extension || extension2) && isLt2M
       },

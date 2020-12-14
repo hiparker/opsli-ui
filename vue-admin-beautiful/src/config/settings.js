@@ -67,7 +67,7 @@ module.exports = {
   //消息框消失时间
   messageDuration: 3000,
   //最长请求时间 可能会有导入 会有较长时间损耗 这里暂时设定失效时间为20秒
-  requestTimeout: 20000,
+  requestTimeout: 5000,
   //操作正常code，支持String、Array、int多种类型
   successCode: [200, 0],
   //登录失效code

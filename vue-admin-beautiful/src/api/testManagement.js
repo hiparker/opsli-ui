@@ -76,6 +76,8 @@ export function doImportExcel(data) {
   return request({
     url: "/api/v1/test/importExcel",
     method: "post",
+    // 最长超时时间 50秒
+    timeout: 50000,
     headers: {
       'Content-Type': 'multipart/form-data'
     },
