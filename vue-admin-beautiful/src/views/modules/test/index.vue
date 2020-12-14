@@ -27,6 +27,20 @@
         > 添加 </el-button>
 
         <el-button
+          v-if="$perms('gentest_test_import')"
+          icon="el-icon-upload2"
+          type="warning"
+          @click="handleImportExcel"
+        > 导入 </el-button>
+
+        <el-button
+          v-if="$perms('gentest_test_export')"
+          icon="el-icon-download"
+          type="warning"
+          @click="handleExportExcel"
+        > 导出 </el-button>
+
+        <el-button
           v-if="$perms('gentest_test_delete')"
           :disabled="!selectRows.length > 0"
           icon="el-icon-delete"
@@ -143,17 +157,20 @@
     ></el-pagination>
 
     <edit ref="edit" @fetchData="fetchData"></edit>
+    <import ref="import" @fetchData="fetchData" ></import>
   </div>
 </template>
 
 <script>
-  import { getList, doDelete, doDeleteAll } from "@/api/testManagement";
+  import { getList, doDelete, doDeleteAll, doExportExcel } from "@/api/testManagement";
   import Edit from "./components/TestManagementEdit";
+  import Import from "./components/TestManagementImport";
+
   import {isNull} from "@/utils/validate";
 
   export default {
     name: "TestManagement",
-    components: { Edit },
+    components: { Edit, Import},
     data() {
       return {
         list: null,
@@ -211,6 +228,16 @@
           }
         }
       },
+      // 导出excel
+      handleExportExcel(){
+        // 执行导出
+        doExportExcel(this.queryForm);
+      },
+      // 导入excel
+      handleImportExcel(){
+        this.$refs["import"].show();
+      },
+
       handleSizeChange(val) {
         this.queryForm.pageSize = val;
         this.fetchData();

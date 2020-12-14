@@ -50,6 +50,20 @@
         > 添加 </el-button>
 
         <el-button
+            v-if="$perms('gentest_user_import')"
+            icon="el-icon-upload2"
+            type="warning"
+            @click="handleImportExcel"
+        > 导入 </el-button>
+
+        <el-button
+            v-if="$perms('gentest_user_export')"
+            icon="el-icon-download"
+            type="warning"
+            @click="handleExportExcel"
+        > 导出 </el-button>
+
+        <el-button
             v-if="$perms('gentest_user_delete')"
             :disabled="!selectRows.length > 0"
             icon="el-icon-delete"
@@ -187,18 +201,21 @@
     ></el-pagination>
 
     <edit ref="edit" @fetchData="fetchData"></edit>
+    <import ref="import" @fetchData="fetchData" ></import>
   </div>
 </template>
 
 <script>
-  import { getList, doDelete, doDeleteAll } from "@/api/gentest/user/TestUserManagement";
+  import { getList, doDelete, doDeleteAll, doExportExcel } from "@/api/gentest/user/TestUserManagement";
   import Edit from "./components/TestUserManagementEdit";
+  import Import from "./components/TestUserManagementImport";
+
   import { isNotNull } from "@/utils/valiargs";
   import { formateDate } from "@/utils/format";
 
   export default {
     name: "TestUserManagement",
-    components: { Edit },
+    components: { Edit,Import },
     data() {
       return {
         list: null,
@@ -288,6 +305,26 @@
           }
         }
       },
+      // 导出excel
+      handleExportExcel(){
+        if(isNotNull(this.birthDatePicker) && this.birthDatePicker.length === 2){
+          this.queryForm.birth_BEGIN =
+            this.birthDatePicker.length === 0 ? "" : formateDate(this.birthDatePicker[0], 'yyyy-MM-dd hh:mm:ss');
+          this.queryForm.birth_END =
+            this.birthDatePicker.length === 0 ? "" : formateDate(this.birthDatePicker[1], 'yyyy-MM-dd hh:mm:ss');
+        }else{
+          this.queryForm.birth_BEGIN = "";
+          this.queryForm.birth_END = "";
+        }
+        // 执行导出
+        doExportExcel(this.queryForm);
+      },
+      // 导入excel
+      handleImportExcel(){
+        this.$refs["import"].show();
+      },
+
+
       handleSizeChange(val) {
         this.queryForm.pageSize = val;
         this.fetchData();
@@ -315,6 +352,7 @@
         this.queryForm.pageNo = 1;
         this.fetchData();
       },
+
       async fetchData() {
         this.listLoading = true;
         const { data } = await getList(this.queryForm);

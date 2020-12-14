@@ -1,0 +1,26 @@
+diff --git a/node_modules/element-ui/lib/element-ui.common.js b/node_modules/element-ui/lib/element-ui.common.js
+index 0c04345..4d4e156 100644
+--- a/node_modules/element-ui/lib/element-ui.common.js
++++ b/node_modules/element-ui/lib/element-ui.common.js
+@@ -29644,7 +29644,7 @@ function srcvue_type_script_lang_js_noop() {}
+       var file = this.getFile(rawFile);
+       this.onProgress(ev, file, this.uploadFiles);
+       file.status = 'uploading';
+-      file.percentage = ev.percent || 0;
++      file.percentage = (ev === undefined || ev.percent === undefined)?0:ev.percent;
+     },
+     handleSuccess: function handleSuccess(res, rawFile) {
+       var file = this.getFile(rawFile);
+diff --git a/node_modules/element-ui/packages/upload/src/index.vue b/node_modules/element-ui/packages/upload/src/index.vue
+index e735653..e9873ae 100644
+--- a/node_modules/element-ui/packages/upload/src/index.vue
++++ b/node_modules/element-ui/packages/upload/src/index.vue
+@@ -176,7 +176,7 @@ export default {
+       const file = this.getFile(rawFile);
+       this.onProgress(ev, file, this.uploadFiles);
+       file.status = 'uploading';
+-      file.percentage = ev.percent || 0;
++      file.percentage = (ev === undefined || ev.percent === undefined)?0:ev.percent;
+     },
+     handleSuccess(res, rawFile) {
+       const file = this.getFile(rawFile);

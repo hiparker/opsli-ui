@@ -1,4 +1,6 @@
 import request from "@/utils/request";
+import {downloadFileByData} from "@/utils/download";
+
 
 export function getList(data) {
   return request({
@@ -41,3 +43,41 @@ export function doDeleteAll(data) {
   });
 }
 
+
+/**
+ * 导出Excel 目前只支持一层参数传递
+ * @param data
+ * @returns file
+ */
+export function doExportExcel(data) {
+  let requestURL = "/api/v1/gentest/user/exportExcel";
+  // 下载文件
+  downloadFileByData(requestURL, data);
+}
+
+
+/**
+ * 下载模版
+ * @returns file
+ */
+export function doDownloadTemplate() {
+  let data = {};
+  let requestURL = "/api/v1/gentest/user/importExcel/template";
+  // 下载文件
+  downloadFileByData(requestURL, data);
+}
+
+/**
+ * 导入Excel
+ * @returns file
+ */
+export function doImportExcel(data) {
+  return request({
+    url: "/api/v1/gentest/user/importExcel",
+    method: "post",
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    },
+    data,
+  });
+}

@@ -42,4 +42,12 @@
     cursor: pointer;
     user-select: none;
   }
+
+  /* 导入Excel */
+  .import-excel .el-upload{
+    width: 100%;
+  }
+  .import-excel .el-upload .el-upload-dragger{
+    width: 100%;
+  }
 </style>
