@@ -2,7 +2,7 @@
   <el-dialog
     :title="title"
     :visible.sync="dialogFormVisible"
-    width="75%"
+    width="80%"
     @close="close"
   >
     <el-form ref="form" :model="form" :rules="rules" label-width="105px">
@@ -365,6 +365,7 @@
             show-overflow-tooltip
             prop="validateType"
             label="验证类别"
+            width="240"
           >
             <template slot-scope="scope">
               <el-form-item
