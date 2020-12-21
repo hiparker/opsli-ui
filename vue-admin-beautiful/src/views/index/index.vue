@@ -832,7 +832,64 @@
           {
             content: "发布1.1.0版",
             timestamp: "2020-12-08",
-          }
+          },
+          {
+            content: "固定线程池, 更换为自定义线程池, 防止线程队列爆炸",
+            timestamp: "2020-12-11",
+          },
+          {
+            content: "增加自定义Shiro排除URL",
+            timestamp: "2020-12-11",
+          },
+          {
+            content: "修复用户多角色菜单重复BUG",
+            timestamp: "2020-12-11",
+          },
+          {
+            content: "ReView优化 符合阿里规范",
+            timestamp: "2020-12-11",
+          },
+          {
+            content: "发布1.1.1-beta版",
+            timestamp: "2020-12-08",
+          },
+          {
+            content: "新增导入导出Excel功能",
+            timestamp: "2020-12-15",
+          },
+          {
+            content: "修复代码生成器多个验证类别无法选择问题",
+            timestamp: "2020-12-17",
+          },
+          {
+            content: "修复删除用户后无法新增相同用户BUG",
+            timestamp: "2020-12-19",
+          },
+          {
+            content: "修复Redis分布式锁可能解除失败问题",
+            timestamp: "2020-12-20",
+          },
+          {
+            content: "优化字典排序问题",
+            timestamp: "2020-12-20",
+          },
+          {
+            content: "优化Mybatis-plus 自动填充",
+            timestamp: "2020-12-20",
+          },
+          {
+            content: "增加导出按钮防抖处理",
+            timestamp: "2020-12-20",
+          },
+          {
+            content: "优化代码结构",
+            timestamp: "2020-12-20",
+          },
+          {
+            content: "发布1.1.2-beta版",
+            timestamp: "2020-12-21",
+          },
+
         ];
         data.map((item, index) => {
           if (index === data.length - 1) {
