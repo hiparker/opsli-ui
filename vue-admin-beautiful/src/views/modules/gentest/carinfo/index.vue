@@ -208,6 +208,8 @@
   import { getList, doDelete, doDeleteAll, doExportExcel } from "@/api/gentest/carinfo/TestCarManagement";
   import Edit from "./components/TestCarManagementEdit";
   import Import from "./components/TestCarManagementImport";
+
+  import { vueButtonClickBan } from "@/utils";
   import { isNotNull } from "@/utils/valiargs";
   import { formateDate } from "@/utils/format";
 
@@ -304,7 +306,10 @@
         }
       },
       // 导出excel
-      handleExportExcel(){
+      handleExportExcel(el){
+        // 导出按钮防抖处理 默认限制为10秒
+        vueButtonClickBan(el, 10);
+
         // 执行导出
         doExportExcel(this.queryForm);
       },

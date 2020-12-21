@@ -166,6 +166,7 @@
   import Edit from "./components/TestManagementEdit";
   import Import from "./components/TestManagementImport";
 
+  import { vueButtonClickBan } from "@/utils";
   import {isNull} from "@/utils/validate";
 
   export default {
@@ -229,7 +230,10 @@
         }
       },
       // 导出excel
-      handleExportExcel(){
+      handleExportExcel(el){
+        // 导出按钮防抖处理 默认限制为10秒
+        vueButtonClickBan(el, 10);
+
         // 执行导出
         doExportExcel(this.queryForm);
       },

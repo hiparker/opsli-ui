@@ -239,6 +239,57 @@ export function random(m, n) {
   return Math.floor(Math.random() * (m - n) + n);
 }
 
+
+// 按钮倒计时锁定
+export function vueButtonClickBan(el, second) {
+  if(el !== null && el !== undefined && el.path !== null && el.path !== undefined){
+    let btnEl = null;
+    for (let i = 0; i < el.path.length; i++) {
+      if("BUTTON" === el.path[i].nodeName){
+        btnEl = el.path[i];
+        break;
+      }
+    }
+
+    // 如果按钮对象不为空 则 进行处理
+    if(btnEl !== null && btnEl !== undefined){
+      buttonClickBan(btnEl, second);
+    }
+  }
+}
+
+// 按钮倒计时锁定
+export function buttonClickBan(el, second) {
+  if(el === null || el === undefined){
+    return;
+  }
+
+  // 设置当前按钮禁用
+  el.classList.add("is-disabled");
+
+  // 获得当前按钮文字
+  let textSpan = el.querySelector("span");
+  const btnText = textSpan.innerText;
+
+  // 设置按钮倒计时
+  textSpan.innerText= btnText + " ("+(second)+")";
+
+  for(let i=second; i>0; i--){
+    setTimeout((function(i){
+      return function(){
+        // 设置按钮倒计时
+        textSpan.innerText= btnText + " ("+(second - i)+")";
+        if(i === second){
+          // 解除按钮
+          el.classList.remove("is-disabled");
+          // 设置按钮倒计时
+          textSpan.innerText= btnText;
+        }
+      }
+    })(i),i*1000);
+  }
+}
+
 /**
  * @copyright chuzhixin 1204505056@qq.com
  * @description addEventListener
@@ -264,3 +315,5 @@ export const off = (function () {
     }
   };
 })();
+
+

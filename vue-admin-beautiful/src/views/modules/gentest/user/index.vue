@@ -210,6 +210,7 @@
   import Edit from "./components/TestUserManagementEdit";
   import Import from "./components/TestUserManagementImport";
 
+  import { vueButtonClickBan } from "@/utils";
   import { isNotNull } from "@/utils/valiargs";
   import { formateDate } from "@/utils/format";
 
@@ -306,7 +307,7 @@
         }
       },
       // 导出excel
-      handleExportExcel(){
+      handleExportExcel(el){
         if(isNotNull(this.birthDatePicker) && this.birthDatePicker.length === 2){
           this.queryForm.birth_BEGIN =
             this.birthDatePicker.length === 0 ? "" : formateDate(this.birthDatePicker[0], 'yyyy-MM-dd hh:mm:ss');
@@ -316,6 +317,10 @@
           this.queryForm.birth_BEGIN = "";
           this.queryForm.birth_END = "";
         }
+
+        // 导出按钮防抖处理 默认限制为10秒
+        vueButtonClickBan(el, 10);
+
         // 执行导出
         doExportExcel(this.queryForm);
       },
