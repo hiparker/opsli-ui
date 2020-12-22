@@ -186,11 +186,12 @@
       document.body.style.overflow = "auto";
     },
     mounted() {
+      // 自动登录，
       this.form.username = "demo";
       this.form.password = "Aa123456";
-      // setTimeout(() => {
-      //   this.handleLogin();
-      // }, 3000);
+      setTimeout(() => {
+        this.handleLogin();
+      }, 3000);
     },
     methods: {
       // 获得新验证码
