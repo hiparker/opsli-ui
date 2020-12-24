@@ -100,6 +100,16 @@
             > 修改密码 </el-button>
 
             <el-button
+              v-if="$perms('system_user_resetPassword')"
+              :disabled="selectRows.length !== 1"
+              icon="el-icon-refresh"
+              type="warning"
+              @click="resetPassword"
+            >
+              重置密码
+            </el-button>
+
+            <el-button
               v-if="$perms('system_user_delete')"
               :disabled="!selectRows.length > 0"
               icon="el-icon-delete"
@@ -257,7 +267,7 @@
 
 <script>
 
-  import { getList, doDelete, doDeleteAll } from "@/api/userManagement";
+  import { getList, doDelete, doDeleteAll, doResetPasswordById } from "@/api/userManagement";
   import { getTreeLazyByUser } from "@/api/orgManagement";
   import Edit from "./components/UserManagementEdit";
   import Roles from "./components/UserManagementRoles";
@@ -322,6 +332,28 @@
       updatePassword() {
         let row = this.selectRows[0];
         this.$refs["update-password"].showUpdatePassword(row);
+      },
+      // 重置密码
+      resetPassword(){
+        let userId;
+        try {
+          userId = this.selectRows[0].id;
+        }catch (e){}
+
+        if(isNull(userId)){
+          this.$baseMessage('未选择用户', "error");
+          return;
+        }
+
+        this.$baseConfirm("你确定要重置当前用户密码吗", null, async () => {
+          doResetPasswordById({ userId : userId}).then(ret => {
+            // 重置密码
+            const { success, msg } = ret;
+            if(success){
+              this.$baseMessage(msg, "success");
+            }
+          });
+        });
       },
       setSelectRows(val) {
         this.selectRows = val;

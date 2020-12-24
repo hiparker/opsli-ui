@@ -90,6 +90,14 @@ export function doUpdatePasswordById(data) {
   });
 }
 
+export function doResetPasswordById(data) {
+  return request({
+    url: "/api/v1/sys/user/resetPasswordById",
+    method: "post",
+    params: data,
+  });
+}
+
 export function doUpdatePassword(data) {
   return request({
     url: "/api/v1/sys/user/updatePassword",
