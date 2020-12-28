@@ -261,10 +261,10 @@
               <td>^29.0-jre</td>
             </tr>
             <tr>
-              <td>comm...lang3版本</td>
-              <td>^3.11</td>
+              <td>enjoy版本</td>
+              <td>^4.9.03</td>
               <td>hutool版本</td>
-              <td>^5.4.2</td>
+              <td>^5.5.5</td>
             </tr>
           </table>
         </el-card>
