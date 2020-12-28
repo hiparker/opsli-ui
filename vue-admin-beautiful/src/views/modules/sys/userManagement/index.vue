@@ -67,7 +67,7 @@
         </el-collapse-transition>
 
         <vab-query-form>
-          <vab-query-form-left-panel :span="12" style="float: left">
+          <vab-query-form-left-panel :span="14" style="float: left">
             <el-button
               v-if="$perms('system_user_insert')"
               icon="el-icon-plus"
@@ -118,7 +118,7 @@
             > 批量删除 </el-button>
 
           </vab-query-form-left-panel>
-          <vab-query-form-right-panel :span="8" style="float: right">
+          <vab-query-form-right-panel :span="10" style="float: right">
             <el-form :inline="true" :model="queryForm" @submit.native.prevent>
 
               <el-form-item>
