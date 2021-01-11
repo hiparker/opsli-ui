@@ -51,7 +51,11 @@
         </el-col>
       </el-row>
       <el-row>
-        <el-col :span="12" v-if="userInfo != null && userInfo.izSuperAdmin">
+        <!-- 如果是最顶级类型 切是超级管理员的话 可以设置当前机构对应租户 -->
+        <el-col :span="12" v-if="
+        ((form.id != null && form.id !== '' && form.orgType === '1') ||
+        base.parentType === 0) &&
+        userInfo != null && userInfo.izSuperAdmin">
           <el-form-item label="租户ID" prop="icon">
             <el-input v-model="form.tenantId" autocomplete="off" readonly ></el-input>
             <el-button type="primary" icon="el-icon-search"
