@@ -1,176 +1,194 @@
 <template>
-  <div v-loading="loadingData">
+  <div class="card-container monitor-ui" v-loading="loadingData">
+
     <el-row :gutter="12">
-      <el-col :xs="72" :sm="72" :md="36" :lg="36" :xl="24">
-        <el-card
-          shadow="hover"
-          :body-style="{ padding: '0px' }"
-          class="backColor"
-        >
-          <div slot="header">服务器信息</div>
-          <el-row :gutter="12" class="col-font el-col whitebackColor">
-            <el-col :xs="36" :sm="36" :md="18" :lg="18" :xl="12">
-              <div class="el-col_cell">服务器名称</div>
-            </el-col>
-            <el-col :xs="36" :sm="36" :md="18" :lg="18" :xl="12">
-              <div class="el-col_cell">{{ systemInfo.computerName }}</div>
-            </el-col>
-            <el-col :xs="36" :sm="36" :md="18" :lg="18" :xl="12">
-              <div class="el-col_cell">操作系统</div>
-            </el-col>
-            <el-col :xs="36" :sm="36" :md="18" :lg="18" :xl="12">
-              <div class="el-col_cell">{{ systemInfo.osName }}</div>
-            </el-col>
-            <el-col :xs="36" :sm="36" :md="18" :lg="18" :xl="12">
-              <div class="el-col_cell">服务器IP</div>
-            </el-col>
-            <el-col :xs="36" :sm="36" :md="18" :lg="18" :xl="12">
-              <div class="el-col_cell">{{ systemInfo.computerIp }}</div>
-            </el-col>
-            <el-col :xs="36" :sm="36" :md="18" :lg="18" :xl="12">
-              <div class="el-col_cell">系统架构</div>
-            </el-col>
-            <el-col :xs="36" :sm="36" :md="18" :lg="18" :xl="12">
-              <div class="el-col_cell">{{ systemInfo.osArch }}</div>
-            </el-col>
-          </el-row>
-        </el-card>
-      </el-col>
-    </el-row>
-    <el-row :gutter="12">
-      <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="8">
+      <el-col :xs="24" :sm="24" :md="12" :lg="8" :xl="8">
         <el-card shadow="hover" :body-style="{ padding: '0px' }">
-          <div slot="header">CPU使用率（检测10秒）</div>
+          <div slot="header">CPU使用率（检测{{speed}}秒）</div>
           <div>
             <vab-chart
               ref="myCircle"
-              class="chart_box"
+              class="chart-box"
               theme="vab-echarts-theme"
               :options="chartCpu"
             />
           </div>
-          <el-row :gutter="12" class="col-font el-col">
-            <el-col :xs="18" :sm="18" :md="9" :lg="9" :xl="6">
-              <div class="el-col_cell">CPU主频</div>
-            </el-col>
-            <el-col :xs="54" :sm="54" :md="27" :lg="27" :xl="18">
-              <div class="el-col_cell">{{ cpuInfo.cpuName }}</div>
-            </el-col>
-            <el-col :xs="18" :sm="18" :md="9" :lg="9" :xl="6">
-              <div class="el-col_cell">核心数</div>
-            </el-col>
-            <el-col :xs="54" :sm="54" :md="27" :lg="27" :xl="18">
-              <div class="el-col_cell">{{ cpuInfo.cpuNum }}</div>
-            </el-col>
-          </el-row>
+          <el-form class="orgManagement-edit-container" label-width="115px">
+            <el-row>
+              <el-col>
+                <el-form-item label="CPU主频" class="grid-content">
+                  {{ cpuInfo.cpuName }}
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col>
+                <el-form-item label="核心数">
+                  {{ cpuInfo.cpuNum }}
+                </el-form-item>
+              </el-col>
+            </el-row>
+          </el-form>
         </el-card>
       </el-col>
-      <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="8">
+      <el-col :xs="24" :sm="24" :md="12" :lg="8" :xl="8">
         <el-card shadow="hover" :body-style="{ padding: '0px' }">
-          <div slot="header">内存使用率（检测10秒）</div>
+          <div slot="header">内存使用率（检测{{speed}}秒）</div>
           <vab-chart
             ref="myCircle"
-            class="chart_box"
+            class="chart-box"
             theme="vab-echarts-theme"
             :options="chartMem"
           />
-          <el-row :gutter="12" class="col-font el-col">
-            <el-col :xs="36" :sm="36" :md="18" :lg="18" :xl="12">
-              <div class="el-col_cell" style="text-align: center">总内存</div>
-            </el-col>
-            <el-col :xs="36" :sm="36" :md="18" :lg="18" :xl="12">
-              <div class="el-col_cell" style="text-align: center">
-                {{ memInfo.total }}G
-              </div>
-            </el-col>
-            <el-col :xs="36" :sm="36" :md="18" :lg="18" :xl="12">
-              <div class="el-col_cell" style="text-align: center">已用内存</div>
-            </el-col>
-            <el-col :xs="36" :sm="36" :md="18" :lg="18" :xl="12">
-              <div class="el-col_cell" style="text-align: center">
-                {{ memInfo.used }}G
-              </div>
-            </el-col>
-          </el-row>
+          <el-form class="orgManagement-edit-container" label-width="115px">
+            <el-row>
+              <el-col>
+                <el-form-item label="总内存">
+                  {{ memInfo.total }}G
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col>
+                <el-form-item label="已用内存">
+                  {{ memInfo.used }}G
+                </el-form-item>
+              </el-col>
+            </el-row>
+          </el-form>
         </el-card>
       </el-col>
-      <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="8">
+
+      <el-col :xs="24" :sm="24" :md="12" :lg="8" :xl="8">
         <el-card shadow="hover" :body-style="{ padding: '0px' }">
-          <div slot="header">JVM使用率（检测10秒）</div>
+          <div slot="header">JVM使用率（检测{{speed}}秒）</div>
           <vab-chart
             ref="myCircle"
-            class="chart_box"
+            class="chart-box"
             theme="vab-echarts-theme"
             :options="chartJVM"
           />
-          <el-row :gutter="12" class="col-font el-col whitebackColor">
-            <el-col :xs="36" :sm="36" :md="18" :lg="18" :xl="12">
-              <div class="el-col_cell" style="text-align: center">JMV大小</div>
-            </el-col>
-            <el-col :xs="36" :sm="36" :md="18" :lg="18" :xl="12">
-              <div class="el-col_cell" style="text-align: center">
-                {{ JVMInfo.total }}M
-              </div>
-            </el-col>
-            <el-col :xs="36" :sm="36" :md="18" :lg="18" :xl="12">
-              <div class="el-col_cell" style="text-align: center">已用JVM</div>
-            </el-col>
-            <el-col :xs="36" :sm="36" :md="18" :lg="18" :xl="12">
-              <div class="el-col_cell" style="text-align: center">
-                {{ JVMInfo.used }}M
-              </div>
-            </el-col>
-          </el-row>
+          <el-form class="orgManagement-edit-container" label-width="115px">
+            <el-row>
+              <el-col>
+                <el-form-item label="JMV大小">
+                  {{ JVMInfo.total}}M
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col>
+                <el-form-item label="已用JVM">
+                  {{ JVMInfo.used }}M
+                </el-form-item>
+              </el-col>
+            </el-row>
+          </el-form>
         </el-card>
       </el-col>
     </el-row>
+
     <el-row :gutter="12">
-      <el-col el-col :xs="72" :sm="72" :md="36" :lg="36" :xl="24">
+      <el-col>
+        <el-card shadow="hover" :body-style="{ padding: '0px' }">
+          <div slot="header">服务器信息</div>
+          <el-form class="orgManagement-edit-container" label-width="115px">
+            <el-row>
+              <el-col :span="12">
+                <el-form-item label="服务器名称">
+                  {{ systemInfo.computerName }}
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="操作系统">
+                  {{ systemInfo.osName }}
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="12">
+                <el-form-item label="服务器IP">
+                  {{ systemInfo.computerIp }}
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="系统架构">
+                  {{ systemInfo.osArch }}
+                </el-form-item>
+              </el-col>
+            </el-row>
+          </el-form>
+        </el-card>
+      </el-col>
+
+      <el-col>
         <el-card shadow="hover" :body-style="{ padding: '0px' }">
           <div slot="header">JAVA虚拟机信息</div>
-          <el-row :gutter="12" class="col-font el-col whitebackColor">
-            <el-col :xs="36" :sm="36" :md="18" :lg="18" :xl="12">
-              <div class="el-col_cell">JAVA名称</div>
-            </el-col>
-            <el-col :xs="36" :sm="36" :md="18" :lg="18" :xl="12">
-              <div class="el-col_cell">{{ JVMInfo.name }}</div>
-            </el-col>
-            <el-col :xs="36" :sm="36" :md="18" :lg="18" :xl="12">
-              <div class="el-col_cell">JAVA版本</div>
-            </el-col>
-            <el-col :xs="36" :sm="36" :md="18" :lg="18" :xl="12">
-              <div class="el-col_cell">{{ JVMInfo.version }}</div>
-            </el-col>
-            <el-col :xs="36" :sm="36" :md="18" :lg="18" :xl="12">
-              <div class="el-col_cell">JAVA安装路径</div>
-            </el-col>
-            <el-col :xs="36" :sm="36" :md="18" :lg="18" :xl="12">
-              <div class="el-col_cell">{{ JVMInfo.home }}</div>
-            </el-col>
-            <el-col :xs="36" :sm="36" :md="18" :lg="18" :xl="12">
-              <div class="el-col_cell">JDK启动时间</div>
-            </el-col>
-            <el-col :xs="36" :sm="36" :md="18" :lg="18" :xl="12">
-              <div class="el-col_cell">{{ JVMInfo.startTime }}</div>
-            </el-col>
-            <el-col :xs="36" :sm="36" :md="18" :lg="18" :xl="12">
-              <div class="el-col_cell">JDK运行时间</div>
-            </el-col>
-            <el-col :xs="36" :sm="36" :md="18" :lg="18" :xl="12">
-              <div class="el-col_cell">{{ JVMInfo.runTime }}</div>
-            </el-col>
-            <el-col :xs="36" :sm="36" :md="18" :lg="18" :xl="12">
-              <div class="el-col_cell">JVM最大可用内存</div>
-            </el-col>
-            <el-col :xs="36" :sm="36" :md="18" :lg="18" :xl="12">
-              <div class="el-col_cell">{{ JVMInfo.total }}M</div>
-            </el-col>
-          </el-row>
+          <el-form class="orgManagement-edit-container" label-width="115px">
+            <el-row>
+              <el-col :span="12">
+                <el-tooltip effect="dark" :content="JVMInfo.name" placement="top">
+                <el-form-item label="JVM名称">
+                  {{ JVMInfo.name }}
+                </el-form-item>
+                </el-tooltip>
+              </el-col>
+              <el-col :span="12">
+                <el-tooltip effect="dark" :content="JVMInfo.version" placement="top">
+                <el-form-item label="JAVA版本">
+                  {{ JVMInfo.version }}
+                </el-form-item>
+                </el-tooltip>
+              </el-col>
+            </el-row>
+
+            <el-row>
+              <el-col :span="12">
+                <el-tooltip effect="dark" :content="JVMInfo.vendor" placement="top">
+                <el-form-item label="JAVA供应商">
+                  {{ JVMInfo.vendor }}
+                </el-form-item>
+                </el-tooltip>
+              </el-col>
+              <el-col :span="12">
+                <el-tooltip effect="dark" :content="JVMInfo.vendorUrl" placement="top">
+                <el-form-item label="JAVA供应商URL">
+                  {{ JVMInfo.vendorUrl }}
+                </el-form-item>
+                </el-tooltip>
+              </el-col>
+            </el-row>
+
+            <el-row>
+              <el-col :span="12">
+                <el-form-item label="JDK启动时间">
+                  {{ JVMInfo.startTime }}
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="JDK运行时间">
+                  {{ JVMInfo.runTime }}
+                </el-form-item>
+              </el-col>
+            </el-row>
+
+            <el-row>
+              <el-col :span="12">
+                <el-tooltip effect="dark" :content="JVMInfo.home" placement="top">
+                  <el-form-item label="JAVA安装路径">
+                    {{ JVMInfo.home }}
+                  </el-form-item>
+                </el-tooltip>
+              </el-col>
+            </el-row>
+
+          </el-form>
         </el-card>
       </el-col>
     </el-row>
+
     <el-row :gutter="12">
-      <el-col el-col :xs="72" :sm="72" :md="36" :lg="36" :xl="24">
+      <el-col :xs="72" :sm="72" :md="36" :lg="36" :xl="24">
         <el-card shadow="hover" :body-style="{ padding: '0px' }">
           <div slot="header">磁盘信息</div>
           <el-table
@@ -211,7 +229,11 @@
             <el-table-column prop="usage" label="已用百分比" align="left">
               <template slot-scope="scope">
                 <span>
-                  <el-progress :percentage="scope.row.usage"></el-progress>
+                  <el-progress
+                    :text-inside="true" :stroke-width="26"
+                    :percentage="scope.row.usage"
+                    :color="customColors"
+                  ></el-progress>
                 </span>
               </template>
             </el-table-column>
@@ -239,8 +261,18 @@
     },
     data() {
       return {
+        customColors: [
+          {color: '#5cb87a', percentage: 20},
+          {color: '#1989fa', percentage: 40},
+          {color: '#6f7ad3', percentage: 60},
+          {color: '#e6a23c', percentage: 80},
+          {color: '#f56c6c', percentage: 100},
+        ],
+
         listLoading: true,
         loadingData: true,
+        // 刷新速度
+        speed: 5,
         chartCpu: {
           tooltip: {
             formatter: "{a} <br/>{b} : {c}%",
@@ -311,22 +343,26 @@
           usage: "",
           startTime: "",
           runTime: "",
+          vendor: "",
+          vendorUrl: "",
         },
         SysFilesInfoTableData: [],
       };
     },
     created() {
+      // 默认 5秒 刷一次
       this.timer = setInterval(() => {
         this.cpuData();
         this.memData();
         this.JVMData();
-      }, 10000);
+      }, this.$options.data().speed * 1000);
     },
     destroyed() {
       clearInterval(this.timer);
     },
     mounted() {
-      this.$nextTick(this.fetchData());
+      // 加载数据
+      this.fetchData();
     },
     methods: {
       async fetchData() {
@@ -353,7 +389,6 @@
           this.cpuInfo = data;
           this.chartCpu.series[0].data[0].value = data.used;
         }
-        //console.log("cpu"+this.cpuInfo);
       },
       async memData() {
         const { data } = await getMemInfo(this.queryForm);
@@ -361,7 +396,6 @@
           this.memInfo = data;
           this.chartMem.series[0].data[0].value = data.usage;
         }
-        //console.log("mem"+this.memInfo);
       },
       async JVMData() {
         const { data } = await getJVMInfo(this.queryForm);
@@ -369,38 +403,30 @@
           this.JVMInfo = data;
           this.chartJVM.series[0].data[0].value = data.usage;
         }
-        //console.log("jvm"+this.JVMInfo);
       },
     },
   };
 </script>
 
 <style scoped>
-  .chart_box {
+  .monitor-ui .grid-content{
+    width: 100%;    /*根据自己项目进行定义宽度*/
+    overflow: hidden;     /*设置超出的部分进行影藏*/
+    text-overflow: ellipsis;     /*设置超出部分使用省略号*/
+    white-space:nowrap ;    /*设置为单行*/
+  }
+  .chart-box {
     width: 100%;
   }
-  .backColor {
-    background-color: #ffba00;
-  }
-  .whitebackColor {
-    background-color: white;
-  }
-  .el-col {
-    position: relative;
-    box-sizing: border-box;
-    padding: 7.5px 0;
-  }
-  .col-font {
-    font-family: Avenir, Helvetica, Arial, sans-serif;
-  }
+
   .el-col_cell {
     box-sizing: border-box;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: normal;
-    word-break: break-all;
-    line-height: 23px;
-    padding-left: 10px;
     padding-right: 10px;
+    padding-left: 10px;
+    overflow: hidden;
+    line-height: 23px;
+    text-overflow: ellipsis;
+    word-break: break-all;
+    white-space: normal;
   }
 </style>
