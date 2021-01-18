@@ -890,6 +890,99 @@
             timestamp: "2020-12-21",
           },
 
+          {
+            content: "优化登录失败返回状态",
+            timestamp: "2020-12-22",
+          },
+          {
+            content: "优化登录验证码校验",
+            timestamp: "2020-12-22",
+          },
+          {
+            content: "新增用户重置密码功能",
+            timestamp: "2020-12-24",
+          },
+          {
+            content: "优化租户，加入租户缓存提高登录效率",
+            timestamp: "2020-12-24",
+          },
+          {
+            content: "登录记录用户IP功能采用异步多线程处理",
+            timestamp: "2020-12-24",
+          },
+          {
+            content: "更新地域数据为中国2020最新地域信息",
+            timestamp: "2020-12-25",
+          },
+          {
+            content: "升级fastjson与hutool版本",
+            timestamp: "2020-12-25",
+          },
+          {
+            content: "优化启动告警项",
+            timestamp: "2020-12-29",
+          },
+          {
+            content: "优化系统启动信息",
+            timestamp: "2020-12-29",
+          },
+          {
+            content: "优化Redis信道订阅代码",
+            timestamp: "2020-12-29",
+          },
+          {
+            content: "扩展登录方式",
+            timestamp: "2020-12-30",
+          },
+          {
+            content: "优化缓存工具类",
+            timestamp: "2021-01-3",
+          },
+          {
+            content: "新增业务限流器",
+            timestamp: "2021-01-5",
+          },
+          {
+            content: "登录增加限流器验证 防止同一IP下 疯狂撞库",
+            timestamp: "2021-01-5",
+          },
+          {
+            content: "缓存系统刷新优化",
+            timestamp: "2021-01-6",
+          },
+          {
+            content: "内置数据空指针BUG",
+            timestamp: "2021-01-6",
+          },
+          {
+            content: "条件构造器代码优化",
+            timestamp: "2021-01-6",
+          },
+          {
+            content: "增加搜索历史注解-可记录当前用户检索历史",
+            timestamp: "2021-01-7",
+          },
+          {
+            content: "Shiro 认证优化",
+            timestamp: "2021-01-8",
+          },
+          {
+            content: "工具类优化",
+            timestamp: "2021-01-10",
+          },
+          {
+            content: "组织结构修复更改租户无法逐级修改问题",
+            timestamp: "2021-01-11",
+          },
+          {
+            content: "增加开源伙伴提供的系统监控模块",
+            timestamp: "2021-01-17",
+          },
+          {
+            content: "发布1.2.0版",
+            timestamp: "2021-01-18",
+          },
+
         ];
         data.map((item, index) => {
           if (index === data.length - 1) {
