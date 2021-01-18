@@ -378,7 +378,7 @@
           this.SysFilesInfoTableData = data.sysFileInfo;
           setTimeout(() => {
             this.listLoading = false;
-          }, 300);
+          }, 150);
         }
         this.listLoading = true;
         this.loadingData = false;
