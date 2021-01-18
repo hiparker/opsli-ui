@@ -1,6 +1,5 @@
 import request from "@/utils/request";
-import {downloadFileByData} from "@/utils/download";
-
+import { downloadFileByData } from "@/utils/download";
 
 export function getList(data) {
   return request({
@@ -9,7 +8,6 @@ export function getList(data) {
     params: data,
   });
 }
-
 
 export function doInsert(data) {
   return request({
@@ -43,7 +41,6 @@ export function doDeleteAll(data) {
   });
 }
 
-
 /**
  * 导出Excel 目前只支持一层参数传递
  * @param data
@@ -54,7 +51,6 @@ export function doExportExcel(data) {
   // 下载文件
   downloadFileByData(requestURL, data);
 }
-
 
 /**
  * 下载模版
@@ -78,7 +74,7 @@ export function doImportExcel(data) {
     // 最长超时时间 50秒
     timeout: 50000,
     headers: {
-      'Content-Type': 'multipart/form-data'
+      "Content-Type": "multipart/form-data",
     },
     data,
   });
