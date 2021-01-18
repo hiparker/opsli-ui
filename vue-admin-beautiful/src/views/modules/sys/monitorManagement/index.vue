@@ -127,35 +127,27 @@
           <el-form class="orgManagement-edit-container" label-width="115px">
             <el-row>
               <el-col :span="12">
-                <el-tooltip effect="dark" :content="JVMInfo.name" placement="top">
                 <el-form-item label="JVM名称">
                   {{ JVMInfo.name }}
                 </el-form-item>
-                </el-tooltip>
               </el-col>
               <el-col :span="12">
-                <el-tooltip effect="dark" :content="JVMInfo.version" placement="top">
                 <el-form-item label="JAVA版本">
                   {{ JVMInfo.version }}
                 </el-form-item>
-                </el-tooltip>
               </el-col>
             </el-row>
 
             <el-row>
               <el-col :span="12">
-                <el-tooltip effect="dark" :content="JVMInfo.vendor" placement="top">
                 <el-form-item label="JAVA供应商">
                   {{ JVMInfo.vendor }}
                 </el-form-item>
-                </el-tooltip>
               </el-col>
               <el-col :span="12">
-                <el-tooltip effect="dark" :content="JVMInfo.vendorUrl" placement="top">
                 <el-form-item label="JAVA供应商URL">
                   {{ JVMInfo.vendorUrl }}
                 </el-form-item>
-                </el-tooltip>
               </el-col>
             </el-row>
 
@@ -174,11 +166,9 @@
 
             <el-row>
               <el-col :span="12">
-                <el-tooltip effect="dark" :content="JVMInfo.home" placement="top">
                   <el-form-item label="JAVA安装路径">
                     {{ JVMInfo.home }}
                   </el-form-item>
-                </el-tooltip>
               </el-col>
             </el-row>
 
