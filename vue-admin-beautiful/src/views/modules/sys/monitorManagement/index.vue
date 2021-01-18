@@ -16,7 +16,7 @@
           <el-form class="orgManagement-edit-container" label-width="115px">
             <el-row>
               <el-col>
-                <el-form-item label="CPU主频" class="grid-content">
+                <el-form-item label="CPU主频">
                   {{ cpuInfo.cpuName }}
                 </el-form-item>
               </el-col>
@@ -417,16 +417,5 @@
   }
   .chart-box {
     width: 100%;
-  }
-
-  .el-col_cell {
-    box-sizing: border-box;
-    padding-right: 10px;
-    padding-left: 10px;
-    overflow: hidden;
-    line-height: 23px;
-    text-overflow: ellipsis;
-    word-break: break-all;
-    white-space: normal;
   }
 </style>
