@@ -5,11 +5,16 @@ import { loginRSA, tokenName } from "@/config/settings";
 export async function login(data) {
   if (loginRSA) {
     data = await encryptedData(data);
+  }else{
+    data = JSON.stringify(data);
   }
+
   return request({
     url: "/sys/login",
     method: "post",
-    data,
+    data: {
+      loginFormStr: data
+    }
   });
 }
 

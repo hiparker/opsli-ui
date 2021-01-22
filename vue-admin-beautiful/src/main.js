@@ -2,6 +2,7 @@ import Vue from "vue";
 import App from "./App";
 import $perms from "@/utils/perms";
 import $dict from "@/utils/dict";
+import $publicKey from "@/utils/publicKey";
 import store from "./store";
 import router from "./router";
 import "./plugins";
@@ -21,6 +22,9 @@ Vue.config.productionTip = false;
 Vue.use($perms)
 // 添加全局字典
 Vue.use($dict)
+// 添加全局公钥
+Vue.use($publicKey)
+
 
 new Vue({
   el: "#vue-admin-beautiful",

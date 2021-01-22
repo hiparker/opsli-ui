@@ -149,4 +149,64 @@ instance.interceptors.response.use(
   }
 );
 
+/**
+ * 原始ajax 访问方式
+ * @param obj
+ */
+export function ajax(obj){
+  //指定提交方式的默认值
+  obj.type = obj.type || "get";
+  //设置是否异步，默认为true(异步)
+  if(obj.async === null || obj.async === undefined){
+    obj.async = true;
+  }
+  //设置数据的默认值
+  obj.data = obj.data || null;
+  let params=_params(obj.data);
+  //在路径后面添加时间戳加随机数防止浏览器缓存。
+  obj.url+=(obj.url.indexOf("?")>-1?"&":"?")+"t="+((new Date()).getTime()+Math.random());
+  if(obj.type.toLowerCase() === "get" && params.length>0){//将转换后的data.与url进行拼接。
+    obj.url+="&"+params;
+  }
+  let xhr=new XMLHttpRequest();
+
+  xhr.open(obj.type,obj.url,obj.async);
+
+  // 设置 token
+  if (store.getters["user/accessToken"]) {
+    xhr.setRequestHeader( tokenName, store.getters["user/accessToken"]);
+  }
+
+  if(obj.type.toLowerCase() === "post"){
+    xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+    xhr.send(params)
+  }else
+    xhr.send(null);
+  if(obj.async){//异步调用
+    //监听响应状态。
+    xhr.onreadystatechange=function(){
+      if(xhr.readyState === 4)//响应状态为4，数据加载完毕。
+        callback();
+    }
+  }else//同步
+    callback();
+  function callback(){
+    if(xhr.status === 200){
+      obj.success(xhr.responseText);
+    }else{
+      obj.error(xhr.status);
+    }
+  }
+  //将对象序列化，将对象拼接成url字符串
+  function _params(data){
+    if(obj==null)
+      return obj;
+    let arr = [];
+    for(let i in data){
+      arr.push(encodeURIComponent(i) + '=' + encodeURIComponent(data[i]));
+    }
+    return arr.join("&");
+  }
+}
+
 export default instance;
