@@ -10,7 +10,7 @@ export async function login(data) {
   return request({
     url: "/sys/login",
     method: "post",
-    data
+    data,
   });
 }
 
@@ -27,8 +27,8 @@ export function getUserInfo(accessToken) {
     url: "/api/v1/sys/user/getInfo",
     method: "get",
     headers: {
-      [tokenName]: accessToken
-    }
+      [tokenName]: accessToken,
+    },
   });
 }
 
@@ -37,8 +37,8 @@ export function getUserOrg(accessToken) {
     url: "/api/v1/sys/user/getOrg",
     method: "get",
     headers: {
-      [tokenName]: accessToken
-    }
+      [tokenName]: accessToken,
+    },
   });
 }
 
