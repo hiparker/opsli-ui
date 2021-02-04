@@ -1,3 +1,5 @@
+import { isNull } from "@/utils/validate";
+
 /**
  * @copyright chuzhixin 1204505056@qq.com
  * @description 格式化时间
@@ -229,6 +231,50 @@ export function uuid(length = 32) {
 }
 
 /**
+ * 给URL追加参数
+ * url
+ * parameter 参数名
+ * value  参数值
+ */
+export function urlAddArgs(urls, parameter, value) {
+  let buf = "";
+  if (!isNull(urls)) {
+    buf = urls;
+    if (urls.indexOf("?") > -1) {
+      //已经有参数
+      buf += "&";
+    } else {
+      buf += "?";
+    }
+    buf += parameter;
+    buf += "=";
+    buf += value;
+  }
+  return buf.toString();
+}
+
+/**
+ * 给URL追加参数
+ * url
+ * parameter 参数名
+ * value  参数值
+ */
+export function urlAddArgsByData(urls, data) {
+  let buf = "";
+  if (!isNull(urls)) {
+    buf = urls;
+    if (urls.indexOf("?") > -1) {
+      //已经有参数
+      buf += "&";
+    } else {
+      buf += "?";
+    }
+    buf += data;
+  }
+  return buf.toString();
+}
+
+/**
  * @copyright chuzhixin 1204505056@qq.com
  * @description m到n的随机数
  * @param m
@@ -239,20 +285,24 @@ export function random(m, n) {
   return Math.floor(Math.random() * (m - n) + n);
 }
 
-
 // 按钮倒计时锁定
 export function vueButtonClickBan(el, second) {
-  if(el !== null && el !== undefined && el.path !== null && el.path !== undefined){
+  if (
+    el !== null &&
+    el !== undefined &&
+    el.path !== null &&
+    el.path !== undefined
+  ) {
     let btnEl = null;
     for (let i = 0; i < el.path.length; i++) {
-      if("BUTTON" === el.path[i].nodeName){
+      if ("BUTTON" === el.path[i].nodeName) {
         btnEl = el.path[i];
         break;
       }
     }
 
     // 如果按钮对象不为空 则 进行处理
-    if(btnEl !== null && btnEl !== undefined){
+    if (btnEl !== null && btnEl !== undefined) {
       buttonClickBan(btnEl, second);
     }
   }
@@ -260,7 +310,7 @@ export function vueButtonClickBan(el, second) {
 
 // 按钮倒计时锁定
 export function buttonClickBan(el, second) {
-  if(el === null || el === undefined){
+  if (el === null || el === undefined) {
     return;
   }
 
@@ -272,21 +322,24 @@ export function buttonClickBan(el, second) {
   const btnText = textSpan.innerText;
 
   // 设置按钮倒计时
-  textSpan.innerText= btnText + " ("+(second)+")";
+  textSpan.innerText = btnText + " (" + second + ")";
 
-  for(let i=second; i>0; i--){
-    setTimeout((function(i){
-      return function(){
-        // 设置按钮倒计时
-        textSpan.innerText= btnText + " ("+(second - i)+")";
-        if(i === second){
-          // 解除按钮
-          el.classList.remove("is-disabled");
+  for (let i = second; i > 0; i--) {
+    setTimeout(
+      (function (i) {
+        return function () {
           // 设置按钮倒计时
-          textSpan.innerText= btnText;
-        }
-      }
-    })(i),i*1000);
+          textSpan.innerText = btnText + " (" + (second - i) + ")";
+          if (i === second) {
+            // 解除按钮
+            el.classList.remove("is-disabled");
+            // 设置按钮倒计时
+            textSpan.innerText = btnText;
+          }
+        };
+      })(i),
+      i * 1000
+    );
   }
 }
 
@@ -315,5 +368,3 @@ export const off = (function () {
     }
   };
 })();
-
-

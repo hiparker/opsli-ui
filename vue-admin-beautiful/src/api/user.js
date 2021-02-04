@@ -1,4 +1,6 @@
 import request from "@/utils/request";
+import { urlAddArgsByData } from "@/utils";
+const { baseURL } = require("@/config/settings");
 import { encryptedData } from "@/utils/encrypt";
 import { loginRSA, tokenName } from "@/config/settings";
 
@@ -54,4 +56,22 @@ export function register() {
     url: "/register",
     method: "post",
   });
+}
+
+export function captcha(uuid) {
+  // 请求地址
+  let url = "/captcha";
+  let data = {
+    uuid: uuid,
+    timestamp: new Date().getTime(),
+  };
+
+  // 转换参数
+  let params = Object.keys(data)
+    .map(function (key) {
+      return encodeURIComponent(key) + "=" + encodeURIComponent(data[key]);
+    })
+    .join("&");
+
+  return baseURL + urlAddArgsByData(url, params);
 }

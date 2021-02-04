@@ -44,12 +44,12 @@
               :type="passwordType"
               tabindex="2"
               placeholder="请输入密码"
-              @keyup.enter.native="handleLogin"
               show-password
+              @keyup.enter.native="handleLogin"
             />
           </el-form-item>
 
-          <el-form-item prop="captcha" v-if="captchaFlag">
+          <el-form-item v-if="captchaFlag" prop="captcha">
             <span class="svg-container">
               <i class="el-icon-warning" />
             </span>
@@ -83,9 +83,9 @@
           >
             登录
           </el-button>
-<!--          <router-link to="/register">-->
-<!--            <div style="margin-top: 20px">注册</div>-->
-<!--          </router-link>-->
+          <!--          <router-link to="/register">-->
+          <!--            <div style="margin-top: 20px">注册</div>-->
+          <!--          </router-link>-->
         </el-form>
       </el-col>
     </el-row>
@@ -93,8 +93,9 @@
 </template>
 
 <script>
-  import {isNull, isPassword} from "@/utils/validate";
-  const { baseURL } = require("@/config/settings");
+  import { uuid } from "@/utils";
+  import { isNull, isPassword } from "@/utils/validate";
+  import { captcha } from "@/api/user";
   export default {
     name: "Login",
     directives: {
@@ -114,7 +115,7 @@
       };
       const validatePassword = (rule, value, callback) => {
         if (isNull(value)) {
-          callback(new Error('请输入密码'));
+          callback(new Error("请输入密码"));
         } else if (!isPassword(value)) {
           callback(new Error("密码至少包含大小写字母，数字，且不少于6位"));
         } else {
@@ -130,7 +131,7 @@
       };
 
       // UUID
-      const uuid = this.uuid();
+      const currUUID = uuid();
 
       return {
         nodeEnv: process.env.NODE_ENV,
@@ -139,7 +140,7 @@
           username: "",
           password: "",
           captcha: "",
-          uuid: uuid,
+          uuid: currUUID,
         },
         rules: {
           username: [
@@ -168,7 +169,7 @@
         loading: false,
         passwordType: "password",
         redirect: undefined,
-        captchaImg: baseURL + "/captcha.jpg?uuid=" + uuid,
+        captchaImg: captcha(currUUID),
       };
     },
     watch: {
@@ -196,25 +197,7 @@
     methods: {
       // 获得新验证码
       getCaptcha() {
-        this.captchaImg =
-          baseURL +
-          "/captcha.jpg?uuid=" +
-          this.form.uuid +
-          "&timestamp=" +
-          new Date().getTime();
-      },
-      // 获取uuid
-      uuid() {
-        const s = [];
-        const hexDigits = "0123456789abcdef";
-        for (let i = 0; i < 36; i++) {
-          s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
-        }
-        s[14] = "4";
-        s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1);
-        s[8] = s[13] = s[18] = s[23];
-        this.uuidA = s.join("");
-        return this.uuidA;
+        this.captchaImg = captcha(this.form.uuid);
       },
       handleLogin() {
         this.$refs.form.validate((valid) => {
@@ -236,12 +219,13 @@
                   .dispatch("user/getSlipCount", this.form)
                   .then((ret) => {
                     this.loading = false;
-                    const {data} = ret;
-                    if(!isNull(data) && data.curr >= data.base ){
+                    const { data } = ret;
+                    if (!isNull(data) && data.curr >= data.base) {
                       // 失败次数大于系统规定阈值 开启验证码校验
                       this.captchaFlag = true;
                     }
-                  }).catch(() => {
+                  })
+                  .catch(() => {
                     this.loading = false;
                   });
               });
@@ -362,6 +346,10 @@
       height: 58px;
       margin-top: 2px;
       cursor: pointer;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
     }
 
     ::v-deep {
