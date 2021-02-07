@@ -54,7 +54,7 @@
     "element-ui": "^2.13.2",
     "file-saver": "^2.0.2",
     "js-cookie": "^2.2.1",
-    "jsencrypt": "^3.0.0-rc.1",
+    "jsencrypt": "3.0.0-rc.1",
     "jsonlint": "^1.6.3",
     "lodash": "^4.17.20",
     "maptalks": "^0.49.1",
