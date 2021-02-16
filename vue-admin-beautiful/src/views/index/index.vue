@@ -982,6 +982,111 @@
             content: "发布1.2.0版",
             timestamp: "2021-01-18",
           },
+          {
+            content: "用户名密码验证加强",
+            timestamp: "2021-01-25",
+          },
+          {
+            content: "用户名密码验证加强",
+            timestamp: "2021-01-25",
+          },
+          {
+            content: "修复字典缓存刷新BUG",
+            timestamp: "2021-01-25",
+          },
+          {
+            content: "Ret返回类优化",
+            timestamp: "2021-01-26",
+          },
+          {
+            content: "ReView 拦截器，并加以规范化",
+            timestamp: "2021-01-26",
+          },
+          {
+            content: "优化Mybatis自动填充器",
+            timestamp: "2021-01-26",
+          },
+          {
+            content: "修复代码生成器 用户多条生成记录数据获取异常问题",
+            timestamp: "2021-01-27",
+          },
+          {
+            content: "修复代码生成器 字段长度限制异常",
+            timestamp: "2021-01-27",
+          },
+          {
+            content: "修复修改用户刷新缓存无效问题",
+            timestamp: "2021-01-28",
+          },
+          {
+            content: "修复代码生成器 生成日期类型BUG",
+            timestamp: "2021-01-29",
+          },
+          {
+            content: "代码生成器优化-解决手动更改数据库痛点",
+            timestamp: "2021-01-30",
+          },
+          {
+            content: "优化配置文件",
+            timestamp: "2021-02-01",
+          },
+          {
+            content: "优化缓存系统模式",
+            timestamp: "2021-02-02",
+          },
+          {
+            content: "优化系统工具类",
+            timestamp: "2021-02-03",
+          },
+          {
+            content: "优化登录票据",
+            timestamp: "2021-02-04",
+          },
+          {
+            content: "增加登录终端限制",
+            timestamp: "2021-02-05",
+          },
+          {
+            content: "修复我删我自己行为",
+            timestamp: "2021-02-06",
+          },
+          {
+            content: "稳定升级 springboot版本为 2.3.3",
+            timestamp: "2021-02-07",
+          },
+          {
+            content: "优化登录验证码",
+            timestamp: "2021-02-07",
+          },
+          {
+            content: "新加入 redisson 分布式锁插件",
+            timestamp: "2021-02-08",
+          },
+          {
+            content: "软防火墙提取成starter插件",
+            timestamp: "2021-02-09",
+          },
+          {
+            content: "Maven结构调整",
+            timestamp: "2021-02-10",
+          },
+          {
+            content: "新增系统参数配置",
+            timestamp: "2021-02-11",
+          },
+          {
+            content: "优化唯一验证",
+            timestamp: "2021-02-11",
+          },
+          {
+            content: "优化接口加密模式，支持在线修改3种非对称加密",
+            timestamp: "2021-02-13",
+          },
+          {
+            content: "发布1.3.0版",
+            timestamp: "2021-02-17",
+          },
+
 
         ];
         data.map((item, index) => {
