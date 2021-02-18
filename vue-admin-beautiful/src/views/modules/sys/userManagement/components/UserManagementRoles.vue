@@ -4,8 +4,8 @@
     :visible.sync="dialogVisible"
     :destroy-on-close="true"
     width="650px"
-    @close="close"
     class="role-management-perms"
+    @close="close"
   >
     <div class="roleManagement-container">
       <vab-query-form>
@@ -26,7 +26,11 @@
               />
             </el-form-item>
             <el-form-item>
-              <el-button icon="el-icon-search" type="primary" @click="queryData">
+              <el-button
+                icon="el-icon-search"
+                type="primary"
+                @click="queryData"
+              >
                 查询
               </el-button>
             </el-form-item>
@@ -59,14 +63,14 @@
           show-overflow-tooltip
           prop="roleName"
           label="角色名称"
-        ></el-table-column>s
+        ></el-table-column>
+        s
 
         <el-table-column
           show-overflow-tooltip
           prop="remark"
           label="备注"
         ></el-table-column>
-
       </el-table>
 
       <el-pagination
@@ -75,12 +79,9 @@
         :page-size="queryForm.pageSize"
         :layout="layout"
         :total="total"
-        @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
       ></el-pagination>
-
     </div>
-
 
     <div slot="footer" class="dialog-footer">
       <el-button @click="close">取 消</el-button>
@@ -90,14 +91,13 @@
 </template>
 
 <script>
-  import { getList} from "@/api/roleManagement";
+  import { getList } from "@/api/roleManagement";
   import { isNull } from "@/utils/validate";
   import { getRoleIdsByUserId, doSetRoles } from "@/api/userManagement";
 
-
   export default {
     name: "UserManagementRoles",
-    components: {  },
+    components: {},
     data() {
       return {
         userId: "",
@@ -105,7 +105,7 @@
         listLoading: true,
         defaultCheckedKeys: [],
         tmpCheckedKeys: {},
-        layout: "total, sizes, prev, pager, next, jumper",
+        layout: "total, prev, pager, next, jumper",
         total: 0,
         selectRows: "",
         elementLoadingText: "正在加载...",
@@ -134,15 +134,17 @@
         this.defaultCheckedKeys = [];
         this.tmpCheckedKeys = {};
       },
-      async save(){
+      async save() {
         // 合并数据 - 当前操作数据 + 默认数据
         let roleIds = [];
 
-
-        for(let key in this.tmpCheckedKeys){
+        for (let key in this.tmpCheckedKeys) {
           // 如果删除了默认选中参数 则执行删除操作
           for (let i = 0; i < this.tmpCheckedKeys[key].remove.length; i++) {
-            this.removeByValue(this.defaultCheckedKeys, this.tmpCheckedKeys[key].remove[i].id);
+            this.removeByValue(
+              this.defaultCheckedKeys,
+              this.tmpCheckedKeys[key].remove[i].id
+            );
           }
 
           // 合并 save 数据
@@ -157,9 +159,9 @@
         }
 
         // 执行 设置角色
-        const {success, msg} = await doSetRoles({
+        const { success, msg } = await doSetRoles({
           userId: this.userId,
-          roleIds: this.unique(roleIds)
+          roleIds: this.unique(roleIds),
         });
 
         if (success) {
@@ -176,12 +178,12 @@
         for (let i = 0; i < this.list.length; i++) {
           let flag = true;
           for (let j = 0; j < this.selectRows.length; j++) {
-            if(this.list[i].id === this.selectRows[j].id){
+            if (this.list[i].id === this.selectRows[j].id) {
               flag = false;
               break;
             }
           }
-          if(flag){
+          if (flag) {
             delTemp.push(this.list[i]);
           }
         }
@@ -207,7 +209,7 @@
       async fetchData() {
         this.listLoading = true;
         const { data } = await getList(this.queryForm);
-        if(!isNull(data)){
+        if (!isNull(data)) {
           this.list = data.rows;
           this.total = data.total;
           setTimeout(() => {
@@ -215,24 +217,23 @@
           }, 300);
         }
 
-        const roles = await getRoleIdsByUserId({userId: this.userId});
-        if(!isNull(roles)){
+        const roles = await getRoleIdsByUserId({ userId: this.userId });
+        if (!isNull(roles)) {
           this.defaultCheckedKeys = roles.data;
         }
-
 
         // 设置当前页选中数据
         let checkedKeys = this.tmpCheckedKeys[this.queryForm.pageNo];
 
-        if(!isNull(checkedKeys)){
+        if (!isNull(checkedKeys)) {
           let checkData = checkedKeys.save;
           let delData = checkedKeys.remove;
 
           // 清空选中
           for (let i = 0; i < delData.length; i++) {
             for (let j = 0; j < this.list.length; j++) {
-              if(this.list[j].id === delData[i].id){
-                this.$refs.rolesTable.toggleRowSelection(this.list[j],false);
+              if (this.list[j].id === delData[i].id) {
+                this.$refs.rolesTable.toggleRowSelection(this.list[j], false);
                 break;
               }
             }
@@ -241,26 +242,23 @@
           // 设置选中
           for (let i = 0; i < checkData.length; i++) {
             for (let j = 0; j < this.list.length; j++) {
-              if(this.list[j].id === checkData[i].id){
-                this.$refs.rolesTable.toggleRowSelection(this.list[j],true);
+              if (this.list[j].id === checkData[i].id) {
+                this.$refs.rolesTable.toggleRowSelection(this.list[j], true);
                 break;
               }
             }
           }
-
         } else {
           // 默认设置选中
           for (let i = 0; i < this.defaultCheckedKeys.length; i++) {
             for (let j = 0; j < this.list.length; j++) {
-              if(this.list[j].id === this.defaultCheckedKeys[i]){
-                this.$refs.rolesTable.toggleRowSelection(this.list[j],true);
+              if (this.list[j].id === this.defaultCheckedKeys[i]) {
+                this.$refs.rolesTable.toggleRowSelection(this.list[j], true);
                 break;
               }
             }
           }
-
         }
-
       },
       // ============
       // 删除数组元素
@@ -273,10 +271,9 @@
         }
       },
       // 数组去重
-      unique (arr) {
-        return Array.from(new Set(arr))
+      unique(arr) {
+        return Array.from(new Set(arr));
       },
-
     },
   };
 </script>
