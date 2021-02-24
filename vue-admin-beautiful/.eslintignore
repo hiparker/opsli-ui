@@ -1,5 +1,6 @@
 src/assets
 src/icons
+src/views
 public
 dist
 node_modules

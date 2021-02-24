@@ -304,7 +304,7 @@
               >
                 <el-select v-model="scope.row.javaType" placeholder="请选择"
                            default-first-option="" filterable
-                           :disabled="scope.row.disabled"
+                           :disabled="scope.row.disabled || scope.row.showType === '2'"
                            style="width: 100%" >
                   <el-option
                     v-for="item in dict.java_data_type"
@@ -480,7 +480,7 @@
 </template>
 
 <script>
-  import Sortable from 'sortablejs'
+  import Sortable from "sortablejs";
   import { deepClone } from "@/utils/clone";
   import { doInsert, doUpdate, getSubList} from "@/api/creater/tableManagement";
   import {isCode, isNull} from "@/utils/validate";
@@ -828,6 +828,11 @@
             el.izShowForm = 0;
             el.izShowList = 0;
             el.queryType = "";
+          }else{
+            // 如果是 字典 则需要把 Java类型强制改为 String 且不可改
+            if(el.showType === "2"){
+              el.javaType = "String";
+            }
           }
           this.izShowListChange(el);
         }
