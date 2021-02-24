@@ -3,6 +3,7 @@
     :title="dialogTitle"
     :visible.sync="dialogVisible"
     :destroy-on-close="true"
+    :close-on-click-modal="false"
     width="650px"
     class="role-management-perms"
     @close="close"

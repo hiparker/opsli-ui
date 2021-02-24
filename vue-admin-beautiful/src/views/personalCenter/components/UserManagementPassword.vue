@@ -2,6 +2,7 @@
   <el-dialog
     :title="title"
     :visible.sync="dialogFormVisible"
+    :close-on-click-modal="false"
     width="500px"
     @close="close"
   >
