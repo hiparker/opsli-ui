@@ -1086,7 +1086,38 @@
             content: "发布1.3.0版",
             timestamp: "2021-02-17",
           },
-
+          {
+            content: "删除无用代码",
+            timestamp: "2021-02-18",
+          },
+          {
+            content: "修复等待线程池无法释放BUG",
+            timestamp: "2021-02-18",
+          },
+          {
+            content: "修复参数缓存过滤器BUG",
+            timestamp: "2021-02-19",
+          },
+          {
+            content: "Excel导入导出性能大幅度优化",
+            timestamp: "2021-02-23",
+          },
+          {
+            content: "字典工具类优化",
+            timestamp: "2021-02-23",
+          },
+          {
+            content: "租户正在被其他用户绑定，禁止删除",
+            timestamp: "2021-02-24",
+          },
+          {
+            content: "代码生成器前端模板优化",
+            timestamp: "2021-02-25",
+          },
+          {
+            content: "发布1.3.1 - Beta版",
+            timestamp: "2021-02-25",
+          },
 
         ];
         data.map((item, index) => {
