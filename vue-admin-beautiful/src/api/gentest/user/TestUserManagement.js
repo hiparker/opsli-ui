@@ -71,8 +71,8 @@ export function doImportExcel(data) {
   return request({
     url: "/api/v1/gentest/user/importExcel",
     method: "post",
-    // 最长超时时间 50秒
-    timeout: 50000,
+    // 最长超时时间 3分钟
+    timeout: 180000,
     headers: {
       "Content-Type": "multipart/form-data",
     },
