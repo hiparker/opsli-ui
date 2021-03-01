@@ -1115,8 +1115,24 @@
             timestamp: "2021-02-25",
           },
           {
-            content: "发布1.3.1 - Beta版",
+            content: "优化组织机构操作限制",
             timestamp: "2021-02-25",
+          },
+          {
+            content: "修复javassist 在某些jdk版本下 class地址不能很好获取BUG",
+            timestamp: "2021-02-25",
+          },
+          {
+            content: "优化转化工具类性能",
+            timestamp: "2021-02-26",
+          },
+          {
+            content: "超级管理员 角色-菜单-权限 逻辑调整",
+            timestamp: "2021-02-27",
+          },
+          {
+            content: "发布1.3.1 - Beta版",
+            timestamp: "2021-03-01",
           },
 
         ];
