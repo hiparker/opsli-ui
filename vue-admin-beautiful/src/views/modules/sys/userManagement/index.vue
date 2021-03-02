@@ -16,6 +16,7 @@
           :filter-node-method="filterNode"
           :load="loadNode"
           :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
+          :expand-on-click-node="false"
           @node-click="handleNodeClick"
         >
           <span slot-scope="{ node, data }" class="vab-custom-tree-node">
