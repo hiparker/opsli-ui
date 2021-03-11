@@ -10,7 +10,9 @@
       <el-row>
         <el-col :span="12">
           <el-form-item label="角色编号" prop="roleCode">
-            <el-input v-model="form.roleCode" autocomplete="off"></el-input>
+            <el-input v-model="form.roleCode" autocomplete="off"
+                      :disabled="!formStatus"
+            ></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
@@ -41,7 +43,7 @@
       </el-row>
 
       <!-- 如果是超级管理员 可以设置租户 -->
-      <el-row v-if="userInfo != null && userInfo.izSuperAdmin" >
+      <el-row v-if="userInfo != null && (userInfo.izSuperAdmin || $perms('system_user_tenant'))" >
         <el-col :span="12">
           <el-form-item label="租户ID" prop="icon">
             <el-input v-model="form.tenantId" autocomplete="off" readonly ></el-input>
@@ -95,6 +97,7 @@
       };
 
       return {
+        formStatus: true,
         userInfo: null,
         form: {
           tenantId:"",
@@ -138,12 +141,14 @@
           this.title = "添加";
         } else {
           this.title = "编辑";
+          this.formStatus = false;
           this.form = Object.assign({}, row);
         }
         this.dialogFormVisible = true;
       },
       close() {
         this.dialogFormVisible = false;
+        this.formStatus = true;
         this.$refs["form"].resetFields();
         this.form = this.$options.data().form;
         this.$emit("fetchData");

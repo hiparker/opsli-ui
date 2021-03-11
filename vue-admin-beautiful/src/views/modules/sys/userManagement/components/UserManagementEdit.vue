@@ -96,7 +96,7 @@
       </el-row>
 
       <!-- 如果是超级管理员 可以设置租户 -->
-      <el-row v-if="userInfo != null && userInfo.izSuperAdmin" >
+      <el-row v-if="userInfo != null && (userInfo.izSuperAdmin || $perms('system_user_tenant'))" >
         <el-col :span="12">
           <el-form-item label="租户ID" prop="icon">
             <el-input v-model="form.tenantId" autocomplete="off" readonly ></el-input>

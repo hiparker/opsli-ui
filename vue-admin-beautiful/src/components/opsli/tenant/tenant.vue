@@ -4,6 +4,7 @@
     :visible.sync="dialogFormVisible"
     :modal="false"
     :destroy-on-close="true"
+    :close-on-click-modal="false"
     top="7vh"
     width="850px"
     @close="close"
@@ -14,6 +15,13 @@
       <vab-query-form>
         <vab-query-form-left-panel :span="24">
           <el-form :inline="true" :model="queryForm" @submit.native.prevent>
+            <el-form-item>
+              <el-input
+                v-model.trim="queryForm.id_EQ"
+                placeholder="请输入租户ID"
+                clearable
+              />
+            </el-form-item>
             <el-form-item>
               <el-input
                 v-model.trim="queryForm.tenantName_LIKE"
@@ -44,6 +52,11 @@
           </template>
         </el-table-column>
 
+        <el-table-column
+          show-overflow-tooltip
+          prop="id"
+          label="租户ID"
+        ></el-table-column>
 
         <el-table-column
           show-overflow-tooltip
