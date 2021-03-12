@@ -5,6 +5,7 @@ const msgMap = {
   isGeneral: "只能为字母、数字或下划线",
   isGeneralWithChinese: "只能为汉字、字母、数字和下划线",
   isNumber: "只能为纯数字",
+  isDecimal: "小数浮点格式不正确",
   isLetter: "只能纯字母",
   isUpperCase: "只能为大写字母",
   isLowerCase: "只能为小写字母",
@@ -52,6 +53,17 @@ export function isGeneral(str) {
 export function isNumber(str) {
   str = str + "";
   const reg = /^[0-9]*$/;
+  return reg.test(str);
+}
+
+/**
+ * @description 判断是否是小数浮点
+ * @param str
+ * @returns {boolean}
+ */
+export function isDecimal(str) {
+  str = str + "";
+  const reg = /^(\d+(?:\.\d+)?)$/;
   return reg.test(str);
 }
 
