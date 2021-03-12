@@ -129,6 +129,7 @@
             fixed="right"
             label="操作"
             width="200"
+            v-if="$perms('system_menu_insert') || $perms('system_menu_update') || $perms('system_menu_delete')"
           >
             <template v-slot="scope">
               <el-button

@@ -125,7 +125,7 @@
               <el-form-item>
                 <el-input
                   v-model.trim="queryForm.realName_LIKE"
-                  placeholder="请输入用户真实名"
+                  placeholder="请输入昵称"
                   clearable
                 />
               </el-form-item>
@@ -160,6 +160,23 @@
 
           <el-table-column
             show-overflow-tooltip
+            prop="locked"
+            label="锁定账户"
+            width="95"
+            v-if="$perms('system_user_lockAccount')"
+          >
+            <template slot-scope="scope">
+              <el-switch
+                v-model="scope.row.locked"
+                active-value="1"
+                inactive-value="0"
+                @change="handleLockAccount(scope.row)"
+              ></el-switch>
+            </template>
+          </el-table-column>
+
+          <el-table-column
+            show-overflow-tooltip
             prop="username"
             label="用户名"
             width="95"
@@ -168,7 +185,7 @@
           <el-table-column
             show-overflow-tooltip
             prop="realName"
-            label="用户真实名"
+            label="昵称"
             width="95"
           ></el-table-column>
 
@@ -176,37 +193,22 @@
             show-overflow-tooltip
             prop="no"
             label="工号"
+            width="95"
           ></el-table-column>
 
           <el-table-column
             show-overflow-tooltip
             prop="mobile"
             label="手机"
+            width="120"
           ></el-table-column>
 
           <el-table-column
             show-overflow-tooltip
             prop="email"
             label="邮箱"
+            width="140"
           ></el-table-column>
-
-          <el-table-column
-            show-overflow-tooltip
-            prop="locked"
-            label="是否锁定"
-            width="95"
-          >
-            <template slot-scope="scope">
-            <span>
-              <el-tag v-if="scope.row.locked === '0' " type="success">
-                {{ $getDictNameByValue('no_yes', scope.row.locked) }}
-              </el-tag>
-              <el-tag v-if="scope.row.locked === '1' " type="danger">
-                {{ $getDictNameByValue('no_yes', scope.row.locked) }}
-              </el-tag>
-            </span>
-            </template>
-          </el-table-column>
 
           <el-table-column
             show-overflow-tooltip
@@ -217,14 +219,9 @@
 
           <el-table-column
             show-overflow-tooltip
-            prop="sign"
-            label="签名"
-          ></el-table-column>
-
-          <el-table-column
-            show-overflow-tooltip
             prop="remark"
             label="备注"
+            width="130"
           ></el-table-column>
 
           <el-table-column
@@ -232,6 +229,7 @@
             fixed="right"
             label="操作"
             width="200"
+            v-if="$perms('system_user_update') || $perms('system_user_delete')"
           >
             <template v-slot="scope">
               <el-button
@@ -268,7 +266,7 @@
 
 <script>
 
-  import { getList, doDelete, doDeleteAll, doResetPasswordById } from "@/api/userManagement";
+  import { getList, doDelete, doDeleteAll, doResetPasswordById, doLockAccount } from "@/api/userManagement";
   import { getTreeLazyByUser } from "@/api/orgManagement";
   import Edit from "./components/UserManagementEdit";
   import Roles from "./components/UserManagementRoles";
@@ -385,6 +383,23 @@
             this.$baseMessage("未选中任何行", "error");
             return false;
           }
+        }
+      },
+      async handleLockAccount(row) {
+        const locked = row.locked;
+        // 回退原有状态
+        if(row.locked === "0") row.locked = "1"
+        else if(row.locked === "1") row.locked = "0"
+
+        if (row.id) {
+            const { msg } = await doLockAccount({
+              userId: row.id,
+              locked: locked
+            });
+            row.locked = locked;
+            this.$baseMessage(msg, "success");
+        } else {
+            this.$baseMessage("未选中任何行", "error");
         }
       },
       handleSizeChange(val) {

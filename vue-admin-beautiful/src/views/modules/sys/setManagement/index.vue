@@ -1,6 +1,46 @@
 <template>
   <div v-loading="loadingData" class="setManagement-container">
     <el-tabs v-model="activeName" v-loading="loadingTabs">
+      <el-tab-pane label="系统默认" name="def">
+        <el-form
+          ref="defForm"
+          :model="def.form"
+          :rules="def.rules"
+          label-width="125px"
+        >
+
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="默认重置密码" prop="def_pass">
+                <el-input
+                  v-model="def.form.def_pass"
+                  autocomplete="off"
+                ></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="默认角色编号" prop="def_role">
+                <el-input
+                  v-model="def.form.def_role"
+                  autocomplete="off"
+                ></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+
+          <el-button
+            type="primary"
+            style="margin-top: 50px"
+            @click="save('defForm', def.form)"
+          >
+            保存
+          </el-button>
+        </el-form>
+      </el-tab-pane>
+
       <el-tab-pane label="接口加密" name="crypto">
         <el-form
           ref="cryptoForm"
@@ -107,14 +147,31 @@
   } from "@/api/set/setManagement";
   import { isNull } from "@/utils/validate";
 
+
   export default {
     name: "SetManagement",
-    components: {},
+    components: {
+    },
     data() {
       return {
-        activeName: "crypto",
+        activeName: "def",
         dict: {},
         baseData: {},
+
+        def: {
+          form: {
+            def_pass: "",
+            def_role: "",
+          },
+          rules: {
+            def_pass: [
+              { required: true, trigger: "blur", message: "请输入默认密码" },
+            ],
+            def_role: [
+              { required: true, trigger: "blur", message: "请输入默认角色编号" },
+            ]
+          },
+        },
         crypto: {
           form: {
             crypto_asymmetric: "",
@@ -197,10 +254,20 @@
         if (success && !isNull(data)) {
           this.baseData = data;
 
+          // 系统默认配置
+          this.def.form.def_pass = !isNull(this.baseData.def_pass)?
+            this.baseData.def_pass.optionValue:"";
+          this.def.form.def_role = !isNull(this.baseData.def_role)?
+            this.baseData.def_role.optionValue:"";
+
+
           // 接口加密数据
-          this.crypto.form.crypto_asymmetric = this.baseData.crypto_asymmetric.optionValue;
-          this.crypto.form.crypto_asymmetric_public_key = this.baseData.crypto_asymmetric_public_key.optionValue;
-          this.crypto.form.crypto_asymmetric_private_key = this.baseData.crypto_asymmetric_private_key.optionValue;
+          this.crypto.form.crypto_asymmetric = !isNull(this.baseData.crypto_asymmetric)?
+            this.baseData.crypto_asymmetric.optionValue:"";
+          this.crypto.form.crypto_asymmetric_public_key = !isNull(this.baseData.crypto_asymmetric_public_key)?
+            this.baseData.crypto_asymmetric_public_key.optionValue:"";
+          this.crypto.form.crypto_asymmetric_private_key = !isNull(this.baseData.crypto_asymmetric_private_key)?
+            this.baseData.crypto_asymmetric_private_key.optionValue:"";
 
           setTimeout(() => {
             this.loadingData = false;

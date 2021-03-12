@@ -86,6 +86,7 @@
             fixed="right"
             label="操作"
             width="105"
+            v-if="$perms('system_dict_update') || $perms('system_dict_delete')"
           >
             <template v-slot="scope">
               <el-button

@@ -106,6 +106,7 @@
         fixed="right"
         label="操作"
         width="200"
+        v-if="$perms('system_role_update') || $perms('system_role_delete')"
       >
         <template v-slot="scope">
           <el-button

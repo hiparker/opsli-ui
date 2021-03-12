@@ -69,39 +69,25 @@
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="是否锁定" prop="izLock">
-            <el-select v-model="form.locked" placeholder="请选择" style="width: 100%">
-              <el-option
-                v-for="item in dict.no_yes"
-                :key="item.dictValue"
-                :label="item.dictName"
-                :value="item.dictValue"
-              ></el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-      </el-row>
-
-      <el-row>
-        <el-col :span="12">
           <el-form-item label="签名" prop="sign">
             <el-input type="textarea" v-model="form.sign" autocomplete="off"></el-input>
           </el-form-item>
         </el-col>
+      </el-row>
+      <el-row>
+        <!-- 如果是超级管理员 可以设置租户 -->
+        <el-col :span="12"
+                v-if="userInfo != null && (userInfo.izSuperAdmin || $perms('system_user_tenant'))"
+          >
+            <el-form-item label="租户ID" prop="icon">
+              <el-input v-model="form.tenantId" autocomplete="off" readonly ></el-input>
+              <el-button type="primary" icon="el-icon-search"
+                         class="input-btn-choose" @click="showTenant"></el-button>
+            </el-form-item>
+        </el-col>
         <el-col :span="12">
           <el-form-item label="备注" prop="remark">
             <el-input type="textarea" v-model="form.remark" autocomplete="off"></el-input>
-          </el-form-item>
-        </el-col>
-      </el-row>
-
-      <!-- 如果是超级管理员 可以设置租户 -->
-      <el-row v-if="userInfo != null && (userInfo.izSuperAdmin || $perms('system_user_tenant'))" >
-        <el-col :span="12">
-          <el-form-item label="租户ID" prop="icon">
-            <el-input v-model="form.tenantId" autocomplete="off" readonly ></el-input>
-            <el-button type="primary" icon="el-icon-search"
-                       class="input-btn-choose" @click="showTenant"></el-button>
           </el-form-item>
         </el-col>
       </el-row>

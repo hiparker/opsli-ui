@@ -98,6 +98,14 @@ export function doResetPasswordById(data) {
   });
 }
 
+export function doLockAccount(data) {
+  return request({
+    url: "/api/v1/sys/user/lockAccount",
+    method: "post",
+    params: data,
+  });
+}
+
 export function doUpdatePassword(data) {
   return request({
     url: "/api/v1/sys/user/updatePassword",
