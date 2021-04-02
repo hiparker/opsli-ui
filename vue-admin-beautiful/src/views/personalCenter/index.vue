@@ -71,12 +71,12 @@
                 <vab-icon :icon="['fas', 'ellipsis-h']" class="upload-mask-icon" ></vab-icon>
               </div>
               <div></div>
-              <el-avatar v-if="options.img === null || options.img === ''"
+              <el-avatar v-if="!avatar"
                          icon="el-icon-user-solid"
                          :size="180" style="font-size: 80px"
               ></el-avatar>
               <div v-else :style="{ minHeight: '180px' }">
-                <img :src="options.img" alt="头像去火星了">
+                <img :src="avatar" alt="头像去火星了">
               </div>
             </div>
           </el-col>
@@ -110,6 +110,7 @@
   import { doUpdate } from "@/api/userManagement";
   import UpdatePassword from "./components/UserManagementPassword";
   import AvatarEdit from "./components/AvatarEdit";
+  import { mapGetters } from "vuex";
   const { baseURL } = require("@/config/settings");
 
   export default {
@@ -148,7 +149,6 @@
         proFileLoading: true,
         baseFormOrg: {},
         baseFormOrgInput: '',
-        baseFormInfo: {},
         baseForm: {
           locked: "0"
         },
@@ -165,9 +165,6 @@
         },
         // cropper
         preview: {},
-        options: {
-          img: "",
-        },
         tabPosition: "left",
       };
     },
@@ -177,26 +174,28 @@
       // 加载用户组织机构
       this.fetchOrgData();
     },
+    computed: {
+      ...mapGetters({
+        avatar: "user/avatar"
+      }),
+    },
     methods: {
       showAvatarEdit(){
         this.$refs["avatar-edit"].showAvatarEdit({
-          id: this.baseFormInfo.id,
-          avatar: this.options.img,
+          id: this.baseForm.id,
+          avatar: this.avatar
         });
       },
       saveUser() {
         this.$refs["baseForm"].validate(async (valid) => {
           if (valid) {
-            // 修改
             if (!isNull(this.baseForm.id)) {
               const { success, msg } = await doUpdate(this.baseForm);
-              if(success){
+              if (success) {
                 this.$baseMessage(msg, "success");
+                this.fetchData()
               }
             }
-            await this.$emit("fetchData");
-          } else {
-            return false;
           }
         });
       },
@@ -206,19 +205,10 @@
       // 获取数据
       async fetchData() {
         let accessToken = getAccessToken();
-        this.proFileLoading = true;
         const { data } = await getUserInfo(accessToken);
-        if(!isNull(data)){
-          this.baseFormInfo = Object.assign({}, data);
-          if(!isNull(this.baseFormInfo.avatar)){
-            this.options.img = baseURL + this.baseFormInfo.avatar;
-          }
+        if (!isNull(data)) {
           this.baseForm = Object.assign({}, data);
           this.baseForm.locked = "0";
-          this.baseForm.avatar = "";
-          setTimeout(() => {
-            this.proFileLoading = false;
-          }, 300);
         }
       },
 
