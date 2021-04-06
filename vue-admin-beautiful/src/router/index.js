@@ -22,6 +22,11 @@ export const constantRoutes = [
     hidden: true,
   },
   {
+    path: "/personal/center",
+    component: () => import("@/views/personalCenter/index"),
+    hidden: true,
+  },
+  {
     path: "/401",
     name: "401",
     component: () => import("@/views/401"),
