@@ -84,8 +84,8 @@
       return {
         dict: {
         },
-        // 0 世界级  ---- 1343492673444646912 中国
-        defaultNode: "1343492673444646912",
+        // 0 世界级  ---- 86 中国
+        defaultNode: "86",
         data: [],
         tmpTreeData: {},
         defaultProps: {
