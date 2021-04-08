@@ -160,17 +160,17 @@
 
           <el-table-column
             show-overflow-tooltip
-            prop="locked"
-            label="锁定账户"
+            prop="enable"
+            label="启用状态"
             width="95"
-            v-if="$perms('system_user_lockAccount')"
+            v-if="$perms('system_user_enable')"
           >
             <template slot-scope="scope">
               <el-switch
-                v-model="scope.row.locked"
+                v-model="scope.row.enable"
                 active-value="1"
                 inactive-value="0"
-                @change="handleLockAccount(scope.row)"
+                @change="handleEnableAccount(scope.row)"
               ></el-switch>
             </template>
           </el-table-column>
@@ -266,7 +266,7 @@
 
 <script>
 
-  import { getList, doDelete, doDeleteAll, doResetPasswordById, doLockAccount } from "@/api/userManagement";
+  import { getList, doDelete, doDeleteAll, doResetPasswordById, doEnableAccount } from "@/api/userManagement";
   import { getTreeLazyByUser } from "@/api/orgManagement";
   import Edit from "./components/UserManagementEdit";
   import Roles from "./components/UserManagementRoles";
@@ -385,18 +385,18 @@
           }
         }
       },
-      async handleLockAccount(row) {
-        const locked = row.locked;
+      async handleEnableAccount(row) {
+        const enable = row.enable;
         // 回退原有状态
-        if(row.locked === "0") row.locked = "1"
-        else if(row.locked === "1") row.locked = "0"
+        if(row.enable === "0") row.enable = "1"
+        else if(row.enable === "1") row.enable = "0"
 
         if (row.id) {
-            const { msg } = await doLockAccount({
+            const { msg } = await doEnableAccount({
               userId: row.id,
-              locked: locked
+              enable: enable
             });
-            row.locked = locked;
+            row.enable = enable;
             this.$baseMessage(msg, "success");
         } else {
             this.$baseMessage("未选中任何行", "error");

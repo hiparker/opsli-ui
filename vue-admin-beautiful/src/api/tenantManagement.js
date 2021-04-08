@@ -8,7 +8,6 @@ export function getList(data) {
   });
 }
 
-
 export function doInsert(data) {
   return request({
     url: "/api/v1/sys/tenant/insert",
@@ -41,3 +40,10 @@ export function doDeleteAll(data) {
   });
 }
 
+export function doEnableTenant(data) {
+  return request({
+    url: "/api/v1/sys/tenant/enableTenant",
+    method: "post",
+    params: data,
+  });
+}

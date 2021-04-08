@@ -1,5 +1,5 @@
 import request from "@/utils/request";
-import {tokenName} from "@/config/settings";
+import { tokenName } from "@/config/settings";
 
 export function getUserInfo(data) {
   return request({
@@ -49,7 +49,6 @@ export function doDeleteAll(data) {
   });
 }
 
-
 export function getRoleIdsByUserId(data) {
   return request({
     url: "/api/v1/sys/user/getRoleIdsByUserId",
@@ -98,9 +97,9 @@ export function doResetPasswordById(data) {
   });
 }
 
-export function doLockAccount(data) {
+export function doEnableAccount(data) {
   return request({
-    url: "/api/v1/sys/user/lockAccount",
+    url: "/api/v1/sys/user/enableAccount",
     method: "post",
     params: data,
   });
@@ -119,7 +118,7 @@ export function doUpdateAvatar(data) {
     url: "/api/v1/sys/user/updateAvatar",
     method: "post",
     headers: {
-      'Content-Type': 'multipart/form-data'
+      "Content-Type": "multipart/form-data",
     },
     data,
   });

@@ -59,6 +59,23 @@
 
       <el-table-column
         show-overflow-tooltip
+        prop="enable"
+        label="启用状态"
+        width="95"
+        v-if="$perms('system_tenant_enable')"
+      >
+        <template slot-scope="scope">
+          <el-switch
+            v-model="scope.row.enable"
+            active-value="1"
+            inactive-value="0"
+            @change="handleEnable(scope.row)"
+          ></el-switch>
+        </template>
+      </el-table-column>
+
+      <el-table-column
+        show-overflow-tooltip
         prop="id"
         label="租户ID"
       ></el-table-column>
@@ -69,24 +86,6 @@
         label="租户名称"
       ></el-table-column>
 
-      <el-table-column
-        show-overflow-tooltip
-        prop="izUsable"
-        label="是否启用"
-      >
-
-        <template slot-scope="scope">
-          <span>
-            <el-tag v-if="scope.row.izUsable === '0' " type="info">
-              {{ $getDictNameByValue('no_yes', scope.row.izUsable) }}
-            </el-tag>
-            <el-tag v-if="scope.row.izUsable === '1' " type="success">
-              {{ $getDictNameByValue('no_yes', scope.row.izUsable) }}
-            </el-tag>
-          </span>
-        </template>
-
-      </el-table-column>
 
       <el-table-column
         show-overflow-tooltip
@@ -131,7 +130,7 @@
 </template>
 
 <script>
-  import { getList, doDelete, doDeleteAll } from "@/api/tenantManagement";
+  import { getList, doDelete, doDeleteAll, doEnableTenant } from "@/api/tenantManagement";
   import Edit from "./components/TenantManagementEdit";
   import {isNull} from "@/utils/validate";
 
@@ -188,6 +187,23 @@
             this.$baseMessage("未选中任何行", "error");
             return false;
           }
+        }
+      },
+      async handleEnable(row) {
+        const enable = row.enable;
+        // 回退原有状态
+        if(row.enable === "0") row.enable = "1"
+        else if(row.enable === "1") row.enable = "0"
+
+        if (row.id) {
+          const { msg } = await doEnableTenant({
+            tenantId: row.id,
+            enable: enable
+          });
+          row.enable = enable;
+          this.$baseMessage(msg, "success");
+        } else {
+          this.$baseMessage("未选中任何行", "error");
         }
       },
       handleSizeChange(val) {
