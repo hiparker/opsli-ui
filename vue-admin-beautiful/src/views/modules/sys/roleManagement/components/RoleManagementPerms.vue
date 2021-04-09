@@ -13,7 +13,6 @@
       <el-tree
         ref="permsTree"
         :data="permsData"
-        :default-checked-keys="defaultCheckedKeys"
         :expand-on-click-node="false"
         :filter-node-method="filterNode"
         :highlight-current="true"
@@ -101,14 +100,28 @@
       },
       // 获得菜单数据
       async fetchData() {
+        let that = this;
+
         this.listLoading = true;
         const { data } = await getMenuAndPermsTree();
         const checkedData = await doGetPerms({roleId: this.roleId})
         this.permsData = data;
-        // 设置选中数据
+
+        // 设置选中数据 原理 选中叶子节点 自动勾选父节点
         if(!isNull(checkedData) && !isNull(checkedData.data)){
-          this.defaultCheckedKeys = checkedData.data;
+          that.$nextTick(() => {
+            const checkArray = checkedData.data;
+            if(checkArray != null && checkArray.length > 0){
+              checkArray.forEach((id) => {
+                let node = that.$refs.permsTree.getNode(id);
+                if (node.isLeaf) {
+                  that.$refs.permsTree.setChecked(node, true);
+                }
+              });
+            }
+          })
         }
+
       },
       // 节点过滤操作
       filterNode(value, data) {
