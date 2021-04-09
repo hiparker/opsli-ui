@@ -57,7 +57,6 @@
         roleId: "",
         permsData: [],
         filterText: "",
-        defaultCheckedKeys: [],
         defaultProps: {
           children: "children",
           label: "name",
