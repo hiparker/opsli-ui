@@ -28,6 +28,7 @@
           <el-form-item label="类型" prop="type">
             <el-select v-model="form.type" placeholder="请选择"
                        default-first-option=""
+                       @change="menuTypeChange"
                        style="width: 100%" >
               <el-option
                 v-for="item in dict.menu_type"
@@ -51,7 +52,10 @@
       <el-row>
         <el-col :span="12">
           <el-form-item label="隐藏" prop="hidden">
-            <el-select v-model="form.hidden" placeholder="请选择" style="width: 100%">
+            <el-select
+              v-model="form.hidden"
+              :disabled="!(form.type === '1' || form.type === '3')"
+              placeholder="请选择" style="width: 100%">
               <el-option
                 v-for="item in dict.no_yes"
                 :key="item.dictValue"
@@ -63,7 +67,10 @@
         </el-col>
         <el-col :span="12">
           <el-form-item label="总是显示" prop="hidden">
-            <el-select v-model="form.alwaysShow" placeholder="请选择" style="width: 100%">
+            <el-select
+              v-model="form.alwaysShow"
+              :disabled="!(form.type === '1')"
+              placeholder="请选择" style="width: 100%">
               <el-option
                 v-for="item in dict.no_yes"
                 :key="item.dictValue"
@@ -81,6 +88,7 @@
             <el-autocomplete
               class="inline-input"
               v-model="form.url"
+              :disabled="!(form.type === '1' || form.type === '3')"
               :fetch-suggestions="pathQuerySearch"
               placeholder="请输入路径"
               style="width: 100%"
@@ -101,6 +109,7 @@
             <el-autocomplete
               class="inline-input"
               v-model="form.component"
+              :disabled="!(form.type === '1')"
               :fetch-suggestions="comQuerySearch"
               placeholder="请输入组件路径"
               style="width: 100%"
@@ -112,14 +121,21 @@
       <el-row>
         <el-col :span="12">
           <el-form-item label="重定向" prop="redirect">
-            <el-input v-model="form.redirect" autocomplete="off"></el-input>
+            <el-input
+              v-model="form.redirect"
+              :disabled="!(form.type === '1')"
+              autocomplete="off"></el-input>
           </el-form-item>
         </el-col>
 
         <el-col :span="12">
           <el-form-item label="图标" prop="icon">
-            <el-input v-model="form.icon" autocomplete="off" ></el-input>
+            <el-input
+              v-model="form.icon"
+              :disabled="!(form.type === '1' || form.type === '3')"
+              autocomplete="off" ></el-input>
             <el-button type="primary" icon="el-icon-search"
+                       :disabled="!(form.type === '1' || form.type === '3')"
                        class="input-btn-choose" @click="showIcon"></el-button>
           </el-form-item>
         </el-col>
@@ -290,6 +306,23 @@
           return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
         };
       },
+      // 菜单类型更改
+      menuTypeChange(type){
+        const buttonType = "2";
+        const outreachType = "3";
+        // 按钮
+        if(buttonType === type){
+          this.form.url = null;
+          this.form.component = null;
+          this.form.redirect = null;
+          this.form.icon = null;
+        }
+        // 外链
+        else if(outreachType === type){
+          this.form.component = null;
+          this.form.redirect = null;
+        }
+      }
     },
   };
 </script>
