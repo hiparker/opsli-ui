@@ -14,21 +14,6 @@
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="是否启用" prop="izUsable">
-            <el-select v-model="form.izUsable" placeholder="请选择" style="width: 100%">
-              <el-option
-                v-for="item in dict.no_yes"
-                :key="item.dictValue"
-                :label="item.dictName"
-                :value="item.dictValue"
-              ></el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-      </el-row>
-
-      <el-row>
-        <el-col :span="12">
           <el-form-item label="备注" prop="remark">
             <el-input type="textarea" v-model="form.remark" autocomplete="off"></el-input>
           </el-form-item>
