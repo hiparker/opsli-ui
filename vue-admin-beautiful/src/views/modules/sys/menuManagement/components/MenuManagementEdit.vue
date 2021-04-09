@@ -41,7 +41,6 @@
         <el-col :span="12">
           <el-form-item label="排序" prop="sortNo">
             <el-input-number
-                :min="1"
                 :max="500"
                 v-model="form.sortNo"
                 autocomplete="off"
@@ -51,7 +50,7 @@
       </el-row>
       <el-row>
         <el-col :span="12">
-          <el-form-item label="是否隐藏" prop="hidden">
+          <el-form-item label="隐藏" prop="hidden">
             <el-select v-model="form.hidden" placeholder="请选择" style="width: 100%">
               <el-option
                 v-for="item in dict.no_yes"
@@ -62,6 +61,21 @@
             </el-select>
           </el-form-item>
         </el-col>
+        <el-col :span="12">
+          <el-form-item label="总是显示" prop="hidden">
+            <el-select v-model="form.alwaysShow" placeholder="请选择" style="width: 100%">
+              <el-option
+                v-for="item in dict.no_yes"
+                :key="item.dictValue"
+                :label="item.dictName"
+                :value="item.dictValue"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+
+      </el-row>
+      <el-row>
         <el-col :span="12">
           <el-form-item label="路径" prop="url">
             <el-autocomplete
@@ -81,8 +95,7 @@
             </el-autocomplete>
           </el-form-item>
         </el-col>
-      </el-row>
-      <el-row>
+
         <el-col :span="12">
           <el-form-item label="组件路径" prop="component">
             <el-autocomplete
@@ -94,13 +107,15 @@
             ></el-autocomplete>
           </el-form-item>
         </el-col>
+
+      </el-row>
+      <el-row>
         <el-col :span="12">
           <el-form-item label="重定向" prop="redirect">
             <el-input v-model="form.redirect" autocomplete="off"></el-input>
           </el-form-item>
         </el-col>
-      </el-row>
-      <el-row>
+
         <el-col :span="12">
           <el-form-item label="图标" prop="icon">
             <el-input v-model="form.icon" autocomplete="off" ></el-input>
@@ -167,6 +182,7 @@
           // 设置默认值
           type: "1",
           hidden: "0",
+          alwaysShow: "0",
           sortNo: 1,
           version: 0,
         },
@@ -181,6 +197,9 @@
             { required: false, trigger: "blur", validator: validateName },
           ],
           sortNo: [{ required: true, trigger: "blur", message: "请输入排序" }],
+          type: [{ required: true, trigger: "blur", message: "请选择是否类型" }],
+          hidden: [{ required: true, trigger: "blur", message: "请选择是否隐藏" }],
+          alwaysShow: [{ required: true, trigger: "blur", message: "请选择是否总是显示" }],
         },
         title: "",
         dialogFormVisible: false,

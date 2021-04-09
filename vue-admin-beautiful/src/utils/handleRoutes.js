@@ -1,3 +1,8 @@
+const dict = {
+  0: false,
+  1: true,
+};
+
 /**
  * @copyright chuzhixin 1204505056@qq.com
  * @description all模式渲染后端返回路由
@@ -34,6 +39,13 @@ export function filterAllRoutes(constantRoutes) {
     }
     if (route.children && route.children.length === 0) {
       delete route.children;
+    }
+
+    // 翻译字典
+    if (
+      "[object Boolean]" !== Object.prototype.toString.call(route.alwaysShow)
+    ) {
+      route.alwaysShow = dict[route.alwaysShow];
     }
     return true;
   });
