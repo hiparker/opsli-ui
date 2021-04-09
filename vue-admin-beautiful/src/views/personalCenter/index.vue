@@ -105,9 +105,9 @@
 
 <script>
   import { getAccessToken } from "@/utils/accessToken";
-  import { getUserInfo,getUserOrg } from "@/api/user";
+  import { getUserInfo, getUserOrg } from "@/api/user";
   import { isEmail, isName, isNull, isPhone} from "@/utils/validate";
-  import { doUpdate } from "@/api/userManagement";
+  import { doUpdateSelf } from "@/api/userManagement";
   import UpdatePassword from "./components/UserManagementPassword";
   import AvatarEdit from "./components/AvatarEdit";
   import { mapGetters } from "vuex";
@@ -190,7 +190,7 @@
         this.$refs["baseForm"].validate(async (valid) => {
           if (valid) {
             if (!isNull(this.baseForm.id)) {
-              const { success, msg } = await doUpdate(this.baseForm);
+              const { success, msg } = await doUpdateSelf(this.baseForm);
               if (success) {
                 this.$baseMessage(msg, "success");
                 this.fetchData()

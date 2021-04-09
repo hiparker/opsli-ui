@@ -33,6 +33,14 @@ export function doUpdate(data) {
   });
 }
 
+export function doUpdateSelf(data) {
+  return request({
+    url: "/api/v1/sys/user/updateSelf",
+    method: "post",
+    data,
+  });
+}
+
 export function doDelete(data) {
   return request({
     url: "/api/v1/sys/user/del",

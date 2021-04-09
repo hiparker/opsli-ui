@@ -22,9 +22,20 @@ export const constantRoutes = [
     hidden: true,
   },
   {
-    path: "/personal/center",
-    component: () => import("@/views/personalCenter/index"),
+    path: "/personal",
+    component: Layout,
     hidden: true,
+    redirect: "personal",
+    children: [
+      {
+        path: "center",
+        name: "center",
+        component: () => import("@/views/personalCenter/index"),
+        meta: {
+          title: "个人中心",
+        },
+      },
+    ],
   },
   {
     path: "/401",
