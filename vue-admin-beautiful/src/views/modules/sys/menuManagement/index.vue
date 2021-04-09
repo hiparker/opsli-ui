@@ -20,27 +20,6 @@
 
           </vab-query-form-left-panel>
           <vab-query-form-right-panel :span="12">
-            <el-form :inline="true" :model="queryForm" @submit.native.prevent>
-              <el-form-item>
-                <el-input
-                  v-model.trim="queryForm.menuCode_EQ"
-                  placeholder="请输入菜单编号"
-                  clearable
-                />
-              </el-form-item>
-              <el-form-item>
-                <el-input
-                  v-model.trim="queryForm.menuName_LIKE"
-                  placeholder="请输入菜单名称"
-                  clearable
-                />
-              </el-form-item>
-              <el-form-item>
-                <el-button icon="el-icon-search" type="primary" @click="queryData">
-                  查询
-                </el-button>
-              </el-form-item>
-            </el-form>
           </vab-query-form-right-panel>
         </vab-query-form>
 
@@ -49,22 +28,19 @@
           v-loading="listLoading"
           :data="data"
           :element-loading-text="elementLoadingText"
-          row-key="menuCode"
+          row-key="id"
           border
           :default-expand-all="false"
           :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
         >
-          <el-table-column
-            show-overflow-tooltip
-            prop="menuCode"
-            label="编号"
-            min-width="300"
-          ></el-table-column>
+
           <el-table-column
             show-overflow-tooltip
             prop="menuName"
             label="名称"
+            width="280"
           ></el-table-column>
+
           <el-table-column
             show-overflow-tooltip
             prop="type"
@@ -84,11 +60,13 @@
               </span>
             </template>
           </el-table-column>
+
           <el-table-column
             show-overflow-tooltip
             prop="sortNo"
             label="排序"
           ></el-table-column>
+
           <el-table-column show-overflow-tooltip label="是否隐藏">
             <template slot-scope="scope">
               <span>
@@ -101,21 +79,33 @@
               </span>
             </template>
           </el-table-column>
+
+          <el-table-column show-overflow-tooltip label="总是显示">
+            <template slot-scope="scope">
+              <span>
+                {{ $getDictNameByValue('no_yes', scope.row.alwaysShow) }}
+              </span>
+            </template>
+          </el-table-column>
+
           <el-table-column
             show-overflow-tooltip
             prop="url"
             label="路径"
           ></el-table-column>
+
           <el-table-column
             show-overflow-tooltip
             prop="component"
             label="组件路径"
           ></el-table-column>
+
           <el-table-column
             show-overflow-tooltip
             prop="redirect"
             label="重定向"
           ></el-table-column>
+
           <el-table-column show-overflow-tooltip label="图标">
             <template slot-scope="scope">
               <vab-icon
@@ -124,6 +114,7 @@
               ></vab-icon>
             </template>
           </el-table-column>
+
           <el-table-column
             show-overflow-tooltip
             fixed="right"
@@ -176,8 +167,6 @@
           label: "menuName",
         },
         queryForm: {
-          menuCode_EQ: "",
-          menuName_LIKE: "",
         },
         isExpand: false,
         listLoading: true,
@@ -200,8 +189,6 @@
           rowTmp.parentId = row.id;
           // 上级名称
           rowTmp.parentName = row.menuName;
-          // 上级编号
-          rowTmp.parentCode = row.menuCode;
           this.$refs["edit"].showEdit(rowTmp);
         }
       },

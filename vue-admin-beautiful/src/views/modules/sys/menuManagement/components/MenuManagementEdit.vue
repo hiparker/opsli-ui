@@ -9,21 +9,11 @@
     <el-form ref="form" :model="form" :rules="rules" label-width="105px" class="menuManagement-edit-container">
       <el-row>
         <el-col :span="12">
-          <el-form-item label="编号" prop="menuCode">
-            <el-input v-model="form.menuCode" autocomplete="off" ></el-input>
-            <!-- 如果上级编号不为空 则出现提醒 -->
-            <span v-if="base.parentCode !== '' ">
-              添加下级只需要写本级编号，如：user
-            </span>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
           <el-form-item label="名称" prop="menuName">
             <el-input v-model="form.menuName" autocomplete="off"></el-input>
           </el-form-item>
         </el-col>
-      </el-row>
-      <el-row>
+
         <el-col :span="12">
           <el-form-item label="类型" prop="type">
             <el-select v-model="form.type" placeholder="请选择"
@@ -39,6 +29,20 @@
             </el-select>
           </el-form-item>
         </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="12">
+          <el-form-item label="权限" prop="permissions">
+            <el-input
+              v-model="form.permissions"
+              :disabled="!(form.type === '2')"
+              autocomplete="off"></el-input>
+              <span v-if="form.type === '2'">
+                对应后端 @RequiresPermissions("xxx")
+              </span>
+          </el-form-item>
+        </el-col>
+
         <el-col :span="12">
           <el-form-item label="排序" prop="sortNo">
             <el-input-number
@@ -190,9 +194,6 @@
           { value: "http://${BASE_PATH}", describe: "状态为外链时有效"},
           { value: "https://${BASE_PATH}", describe: "状态为外链时有效"},
         ],
-        base: {
-          parentCode: ""
-        },
         form: {
           icon:"",
           // 设置默认值
@@ -204,13 +205,12 @@
         },
         dict: {},
         rules: {
-          menuCode: [
-            { required: true, trigger: "blur", message: "请输入编号" },
-            { required: false, trigger: "blur", validator: validateCode },
-          ],
           menuName: [
             { required: true, trigger: "blur", message: "请输入名称" },
             { required: false, trigger: "blur", validator: validateName },
+          ],
+          permissions: [
+            { required: false, trigger: "blur", validator: validateCode },
           ],
           sortNo: [{ required: true, trigger: "blur", message: "请输入排序" }],
           type: [{ required: true, trigger: "blur", message: "请选择是否类型" }],
@@ -243,8 +243,7 @@
           if(!isNull(row) && !isNull(row.parentName) && !isNull(row.parentId) && !isNull(row.parentCode)){
             // 设置上级Id
             this.form.parentId = row.parentId;
-            this.base.parentCode = row.parentCode;
-            this.title += "  - 上级名称 [ " + row.parentName +" ] - 上级编号 [" + this.base.parentCode + "]";
+            this.title += "  - 上级名称 [ " + row.parentName +" ] ";
           }
         } else {
           this.title = "编辑";
@@ -256,7 +255,6 @@
         this.dialogFormVisible = false;
         this.$refs["form"].resetFields();
         this.form = this.$options.data().form;
-        this.base.parentCode = "";
         this.$emit("fetchData");
       },
       save() {
@@ -272,10 +270,6 @@
                 this.$baseMessage(msg, "success");
               }
             } else {
-              // 如果上级code不为空 则在新增是 拼上上级code
-              if(!isNull(this.base.parentCode)){
-                tmpForm.menuCode = this.base.parentCode + "_" + tmpForm.menuCode;
-              }
               const { success, msg } = await doInsert(tmpForm);
               if(success){
                 this.$baseMessage(msg, "success");
@@ -310,8 +304,12 @@
       menuTypeChange(type){
         const buttonType = "2";
         const outreachType = "3";
+        // 外链
+        if(outreachType === type){
+          this.form.permissions = null;
+        }
         // 按钮
-        if(buttonType === type){
+        else if(buttonType === type){
           this.form.url = null;
           this.form.component = null;
           this.form.redirect = null;
@@ -321,6 +319,7 @@
         else if(outreachType === type){
           this.form.component = null;
           this.form.redirect = null;
+          this.form.permissions = null;
         }
       }
     },
