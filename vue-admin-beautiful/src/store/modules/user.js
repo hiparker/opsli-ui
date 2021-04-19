@@ -79,15 +79,13 @@ const actions = {
       return false;
     }
     let { roles, perms, realName, avatar } = data;
-    if (
-      roles &&
-      realName &&
-      Array.isArray(roles)
-    ) {
+    if (roles && realName && Array.isArray(roles)) {
       commit("setPermissions", roles);
       commit("setPerms", perms);
       commit("setUsername", realName);
-      commit("setAvatar", baseURL + avatar);
+      if (avatar) {
+        commit("setAvatar", baseURL + avatar);
+      }
       return state.permissions;
     } else {
       Vue.prototype.$baseMessage("用户信息接口异常", "error");
@@ -99,18 +97,18 @@ const actions = {
     await dispatch("resetAccessToken");
     await resetRouter();
   },
-  async getSlipCount({ commit }, {username}) {
-    return getSlipCount({username: username});
+  async getSlipCount({ commit }, { username }) {
+    return getSlipCount({ username: username });
   },
   resetAccessToken({ commit }) {
     commit("setPermissions", []);
     commit("setPerms", []);
     commit("setAccessToken", "");
     removeAccessToken();
-    setTimeout(function (){
+    setTimeout(function () {
       // 清除字典数据
       Vue.prototype.$clearDictList();
-    },500);
+    }, 500);
   },
 };
 export default { state, getters, mutations, actions };
