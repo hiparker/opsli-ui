@@ -21,6 +21,7 @@
         :check-on-click-node="true"
         :check-strictly="false"
         :props="defaultProps"
+        :default-expanded-keys="treeExpandData"
         class="vab-filter-tree"
         node-key="id"
         lazy
@@ -38,8 +39,7 @@
 
 <script>
   import { isNull} from "@/utils/validate";
-  import {getTreeChooseLazy, getTreeLazy} from "@/api/menuManagement";
-  import { doGetPerms, doSetPerms } from "@/api/roleManagement";
+  import { getTreeChooseLazy } from "@/api/menuManagement";
 
   export default {
     name: "MenuManagementChoose",
@@ -48,14 +48,13 @@
         menuId: "",
         menuData: [],
         filterText: "",
-        // 0 根目录
-        defaultNode: "0",
         tmpTreeData: {},
         defaultProps: {
           children: "children",
           label: "menuName",
           isLeaf: "isLeaf"
         },
+        treeExpandData:["0"],
         dialogTitle: "选择菜单",
         dialogVisible: false,
         chooseLoading: false
@@ -72,6 +71,7 @@
       },
       close() {
         this.dialogVisible = false;
+        this.tmpTreeData = {};
         this.menuData = [];
       },
       // 保存权限
