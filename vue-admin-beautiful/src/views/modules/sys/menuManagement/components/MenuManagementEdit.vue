@@ -3,17 +3,33 @@
     :title="title"
     :visible.sync="dialogFormVisible"
     :close-on-click-modal="false"
+
     width="800px"
     @close="close"
   >
-    <el-form ref="form" :model="form" :rules="rules" label-width="105px" class="menuManagement-edit-container">
+    <el-form ref="form" v-loading="formLoading" :model="form" :rules="rules" label-width="105px" class="menuManagement-edit-container">
       <el-row>
+        <el-col :span="12">
+          <el-form-item label="上级菜单" prop="parentId">
+            <el-input
+              v-model="parentMenu.menuName"
+              :readonly="true"
+              autocomplete="off"
+              @click.native="showParentMenu"
+            ></el-input>
+            <el-button type="primary" icon="el-icon-search"
+                       class="input-btn-choose" @click="showParentMenu"></el-button>
+          </el-form-item>
+        </el-col>
+
         <el-col :span="12">
           <el-form-item label="名称" prop="menuName">
             <el-input v-model="form.menuName" autocomplete="off"></el-input>
           </el-form-item>
         </el-col>
+      </el-row>
 
+      <el-row>
         <el-col :span="12">
           <el-form-item label="类型" prop="type">
             <el-select v-model="form.type" placeholder="请选择"
@@ -29,8 +45,7 @@
             </el-select>
           </el-form-item>
         </el-col>
-      </el-row>
-      <el-row>
+
         <el-col :span="12">
           <el-form-item label="权限" prop="permissions">
             <el-input
@@ -42,18 +57,19 @@
               </span>
           </el-form-item>
         </el-col>
+      </el-row>
 
+      <el-row>
         <el-col :span="12">
           <el-form-item label="排序" prop="sortNo">
             <el-input-number
-                :max="500"
-                v-model="form.sortNo"
-                autocomplete="off"
+              :max="500"
+              v-model="form.sortNo"
+              autocomplete="off"
             ></el-input-number>
           </el-form-item>
         </el-col>
-      </el-row>
-      <el-row>
+
         <el-col :span="12">
           <el-form-item label="隐藏" prop="hidden">
             <el-select
@@ -69,6 +85,9 @@
             </el-select>
           </el-form-item>
         </el-col>
+      </el-row>
+
+      <el-row>
         <el-col :span="12">
           <el-form-item label="总是显示" prop="hidden">
             <el-select
@@ -85,8 +104,6 @@
           </el-form-item>
         </el-col>
 
-      </el-row>
-      <el-row>
         <el-col :span="12">
           <el-form-item label="路径" prop="url">
             <el-autocomplete
@@ -107,7 +124,9 @@
             </el-autocomplete>
           </el-form-item>
         </el-col>
+      </el-row>
 
+      <el-row>
         <el-col :span="12">
           <el-form-item label="组件路径" prop="component">
             <el-autocomplete
@@ -121,8 +140,6 @@
           </el-form-item>
         </el-col>
 
-      </el-row>
-      <el-row>
         <el-col :span="12">
           <el-form-item label="重定向" prop="redirect">
             <el-input
@@ -131,7 +148,9 @@
               autocomplete="off"></el-input>
           </el-form-item>
         </el-col>
+      </el-row>
 
+      <el-row>
         <el-col :span="12">
           <el-form-item label="图标" prop="icon">
             <el-input
@@ -144,6 +163,7 @@
           </el-form-item>
         </el-col>
       </el-row>
+
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="close">取 消</el-button>
@@ -155,19 +175,25 @@
       ref="icon"
     ></icon>
 
+    <menu-management-choose
+      ref="menu-management-choose"
+      @menuChoose="menuChoose"
+    ></menu-management-choose>
+
   </el-dialog>
 </template>
 
 <script>
-  import {doInsert, doUpdate} from "@/api/menuManagement";
+  import {doInsert, doUpdate, get, getTree} from "@/api/menuManagement";
   import Icon from "@/components/opsli/icon/icon";
+  import MenuManagementChoose from "./MenuManagementChoose";
   import { deepClone } from "@/utils/clone";
   import { isNull} from "@/utils/validate";
-  import { isNotNull, isGeneral , isGeneralWithChinese, getMsg} from "@/utils/valiargs";
+  import { isGeneral , isGeneralWithChinese, getMsg} from "@/utils/valiargs";
 
   export default {
     name: "MenuManagementEdit",
-    components: { Icon },
+    components: {MenuManagementChoose, Icon },
     data() {
       const validateCode = (rule, value, callback) => {
         if (!isGeneral(value)) {
@@ -184,6 +210,7 @@
         }
       };
       return {
+        formLoading: true,
         comRestaurants: [
           { value: "Layout"},
           { value: "EmptyLayout"},
@@ -194,12 +221,14 @@
           { value: "http://${BASE_PATH}", describe: "状态为外链时有效"},
           { value: "https://${BASE_PATH}", describe: "状态为外链时有效"},
         ],
+        parentMenu: {},
         form: {
           icon:"",
           // 设置默认值
           type: "1",
           hidden: "0",
           alwaysShow: "0",
+          parentId: "0",
           sortNo: 1,
           version: 0,
         },
@@ -229,6 +258,13 @@
       this.dict.menu_type =  this.$getDictList("menu_type")
     },
     methods: {
+      menuChoose(node){
+        this.parentMenu = node;
+        this.form.parentId = this.parentMenu.id;
+      },
+      showParentMenu(){
+        this.$refs["menu-management-choose"].showMenuChoose();
+      },
       showIcon(){
         this.$refs["icon"].showIcon();
       },
@@ -240,22 +276,23 @@
         if (isNull(row) || isNull(row.id)) {
           this.title = "添加";
           // 如果上级菜单名称不为空 则显示到标题上
-          if(!isNull(row) && !isNull(row.parentName) && !isNull(row.parentId) && !isNull(row.parentCode)){
+          if(row && !isNull(row.parentName) && !isNull(row.parentId)){
             // 设置上级Id
             this.form.parentId = row.parentId;
-            this.title += "  - 上级名称 [ " + row.parentName +" ] ";
           }
         } else {
           this.title = "编辑";
           this.form = Object.assign({}, row);
         }
         this.dialogFormVisible = true;
+        // 加载上级菜单数据
+        this.fetchData();
       },
       close() {
         this.dialogFormVisible = false;
         this.$refs["form"].resetFields();
         this.form = this.$options.data().form;
-        this.$emit("fetchData");
+        this.$emit("refreshNodeBy",this.form.parentId);
       },
       save() {
         this.$refs["form"].validate(async (valid) => {
@@ -276,7 +313,7 @@
               }
             }
 
-            await this.$emit("fetchData");
+            await this.$emit("refreshNodeBy",this.form.parentId);
             this.close();
           } else {
             return false;
@@ -314,6 +351,8 @@
           this.form.component = null;
           this.form.redirect = null;
           this.form.icon = null;
+          this.form.alwaysShow = "0";
+          this.form.hidden = "0";
         }
         // 外链
         else if(outreachType === type){
@@ -321,7 +360,19 @@
           this.form.redirect = null;
           this.form.permissions = null;
         }
-      }
+      },
+      // 获得菜单数据
+      async fetchData() {
+        this.formLoading = true;
+        const { data } = await get({id: this.form.parentId});
+        if(data){
+          this.parentMenu = data;
+        }
+
+        setTimeout(() => {
+          this.formLoading = false;
+        }, 300);
+      },
     },
   };
 </script>

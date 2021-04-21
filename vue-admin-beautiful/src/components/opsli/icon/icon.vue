@@ -2,12 +2,12 @@
   <el-dialog
     :title="title"
     :visible.sync="dialogFormVisible"
-    :modal="false"
     :destroy-on-close="true"
     top="7vh"
     width="850px"
-    @close="close"
     center
+    append-to-body
+    @close="close"
   >
     <div class="icon-container">
       <el-row :gutter="20">
@@ -67,123 +67,123 @@
 </template>
 
 <script>
-import clip from "@/utils/clipboard";
-import { getIconList } from "@/router/mock/icon";
+  import clip from "@/utils/clipboard";
+  import { getIconList } from "@/router/mock/icon";
 
-export default {
-  name: "AwesomeIcon",
-  data() {
-    return {
-      copyText: "",
-      layout: "total, sizes, prev, pager, next, jumper",
-      total: 0,
-      background: true,
-      height: 0,
-      selectRows: "",
-      elementLoadingText: "正在加载...",
-      queryIcon: [],
-      queryForm: {
-        pageNo: 1,
-        pageSize: 48,
-        title: "",
+  export default {
+    name: "AwesomeIcon",
+    data() {
+      return {
+        copyText: "",
+        layout: "total, sizes, prev, pager, next, jumper",
+        total: 0,
+        background: true,
+        height: 0,
+        selectRows: "",
+        elementLoadingText: "正在加载...",
+        queryIcon: [],
+        queryForm: {
+          pageNo: 1,
+          pageSize: 48,
+          title: "",
+        },
+        title: "图标选择",
+        dialogFormVisible: false,
+      };
+    },
+    created() {},
+    methods: {
+      showIcon() {
+        this.fetchData();
+        this.dialogFormVisible = true;
       },
-      title: "图标选择",
-      dialogFormVisible: false,
-    };
-  },
-  created() {},
-  methods: {
-    showIcon() {
-      this.fetchData();
-      this.dialogFormVisible = true;
+      close() {
+        this.copyText = "";
+        this.queryIcon = [];
+        this.queryForm = {
+          pageNo: 1,
+          pageSize: 48,
+          title: "",
+        };
+        this.dialogFormVisible = false;
+      },
+      save() {
+        this.$emit("icon", this.copyText);
+        this.close();
+      },
+      handleSizeChange(val) {
+        this.queryForm.pageSize = val;
+        this.fetchData();
+      },
+      handleCurrentChange(val) {
+        this.queryForm.pageNo = val;
+        this.fetchData();
+      },
+      queryData() {
+        this.queryForm.pageNo = 1;
+        this.fetchData();
+      },
+      async fetchData() {
+        const { data, totalCount } = getIconList(this.queryForm);
+        this.queryIcon = data;
+        this.allIcon = data;
+        this.total = totalCount;
+      },
+      hasClass(element, cls) {
+        return (" " + element.className + " ").indexOf(" " + cls + " ") > -1;
+      },
+      handleCopyIcon(index, event) {
+        if (!this.hasClass(event.target, "el-card__body")) {
+          return;
+        }
+        let elCard = document.querySelectorAll(".el-card__body");
+        for (let i = 0; i < elCard.length; i++) {
+          elCard[i].parentNode.classList.remove("active");
+        }
+        event.target.parentNode.classList.add("active");
+        this.copyText = this.queryIcon[index];
+        // 暂时不需要复制
+        //clip(copyText, event);
+      },
     },
-    close() {
-      this.copyText = "";
-      this.queryIcon = [];
-      this.queryForm = {
-        pageNo: 1,
-        pageSize: 48,
-        title: "",
-      }
-      this.dialogFormVisible = false;
-    },
-    save() {
-      this.$emit('icon', this.copyText);
-      this.close();
-    },
-    handleSizeChange(val) {
-      this.queryForm.pageSize = val;
-      this.fetchData();
-    },
-    handleCurrentChange(val) {
-      this.queryForm.pageNo = val;
-      this.fetchData();
-    },
-    queryData() {
-      this.queryForm.pageNo = 1;
-      this.fetchData();
-    },
-    async fetchData() {
-      const { data, totalCount } = getIconList(this.queryForm);
-      this.queryIcon = data;
-      this.allIcon = data;
-      this.total = totalCount;
-    },
-    hasClass(element, cls) {
-      return (' ' + element.className + ' ').indexOf(' ' + cls + ' ') > -1;
-    },
-    handleCopyIcon(index, event) {
-      if(!this.hasClass(event.target, "el-card__body")){
-        return;
-      }
-      let elCard = document.querySelectorAll(".el-card__body");
-      for (let i = 0; i < elCard.length; i++) {
-        elCard[i].parentNode.classList.remove("active")
-      }
-      event.target.parentNode.classList.add("active");
-      this.copyText = this.queryIcon[index];
-      // 暂时不需要复制
-      //clip(copyText, event);
-    },
-  },
-};
+  };
 </script>
 
 <style lang="scss" scoped>
-.icon-container {
-  ::v-deep {
-    .el-card__body {
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      align-items: center; /* 垂直居中 */
-      justify-content: center; /* 水平居中 */
+  .icon-container {
+    ::v-deep {
+      .el-card__body {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* 垂直居中 */
+        justify-content: center; /* 水平居中 */
 
-      svg:not(:root).svg-inline--fa {
-        font-size: 35px;
-        font-weight: bold;
-        color: $base-color-gray;
-        text-align: center;
-        vertical-align: middle;
-        pointer-events: none;
-        cursor: pointer;
+        svg:not(:root).svg-inline--fa {
+          font-size: 35px;
+          font-weight: bold;
+          color: $base-color-gray;
+          text-align: center;
+          vertical-align: middle;
+          pointer-events: none;
+          cursor: pointer;
+        }
       }
     }
-  }
 
-  .icon-text {
-    height: 30px;
-    margin-top: -15px;
-    overflow: hidden;
-    font-size: 12px;
-    line-height: 30px;
-    text-align: center;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
+    .icon-text {
+      height: 30px;
+      margin-top: -15px;
+      overflow: hidden;
+      font-size: 12px;
+      line-height: 30px;
+      text-align: center;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
 
-  .active{
-    border: 1px solid #4091F7 !important;
+    .active {
+      border: 1px solid #4091f7 !important;
+    }
   }
-}
 </style>

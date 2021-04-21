@@ -12,12 +12,6 @@
               @click="handleInsert"
             > 添加 </el-button>
 
-            <el-button
-              icon="el-icon-sort"
-              type="primary"
-              @click="handleExpand"
-            > 展开数据 </el-button>
-
           </vab-query-form-left-panel>
           <vab-query-form-right-panel :span="12">
           </vab-query-form-right-panel>
@@ -31,6 +25,8 @@
           row-key="id"
           border
           :default-expand-all="false"
+          lazy
+          :load="loadNode"
           :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
         >
 
@@ -123,8 +119,9 @@
             v-if="$perms('system_menu_insert') || $perms('system_menu_update') || $perms('system_menu_delete')"
           >
             <template v-slot="scope">
+              <!-- 添加下级 只有上级为 菜单是才可以 -->
               <el-button
-                v-if="$perms('system_menu_insert')"
+                v-if="$perms('system_menu_insert') && scope.row.type === '1'"
                 type="text"
                 @click="handleInsertByParent(scope.row)"
               > 添加下级 </el-button>
@@ -144,13 +141,14 @@
       </el-col>
     </el-row>
 
-    <edit ref="edit" @fetchData="fetchData"></edit>
+    <edit ref="edit" @refreshNodeBy="refreshNodeBy"></edit>
   </div>
 </template>
 
 <script>
-  import { getTree, doDelete } from "@/api/menuManagement";
+  import { getTreeLazy, doDelete } from "@/api/menuManagement";
   import Edit from "./components/MenuManagementEdit";
+  import {isNull} from "@/utils/validate";
 
   export default {
     name: "MenuManagement",
@@ -161,6 +159,9 @@
           menu_type: this.$getDictList("menu_type"),
           no_yes: this.$getDictList("no_yes"),
         },
+        // 0 根目录
+        defaultNode: "0",
+        tmpTreeData: {},
         data: [],
         defaultProps: {
           children: "children",
@@ -174,8 +175,8 @@
       };
     },
     async created() {
-      // 获得菜单数据
-      await this.fetchData();
+      // 获得树数据
+      this.refreshNodeBy();
     },
     methods: {
 
@@ -201,44 +202,43 @@
             const { success, msg } = await doDelete({ id: row.id });
             if(success){
               this.$baseMessage(msg, "success");
-              await this.fetchData();
+              await this.refreshNodeBy(row.parentId);
             }
           });
         }
       },
-      // 查询匹配数据
-      queryData() {
-        this.fetchData();
-      },
+
       // 获得菜单数据
       async fetchData() {
         this.listLoading = true;
-        const { data } = await getTree(this.queryForm);
+        const { data } = await getTreeLazy({parentId: this.defaultNode});
         this.data = data;
         setTimeout(() => {
           this.listLoading = false;
         }, 300);
       },
 
-
-
-      // 是否展开table(展开与折叠切换)
-      handleExpand() {
-        this.isExpand = !this.isExpand
-        this.$nextTick(() => {
-          this.forArr(this.data, this.isExpand)
-        })
+      //  刷新数据
+      refreshNodeBy(id){
+        if(isNull(this.tmpTreeData[id])){
+          this.fetchData();
+        }else{
+          // 通过节点id找到对应树节点对象
+          let tree = this.tmpTreeData[id].tree;
+          let treeNode = this.tmpTreeData[id].treeNode;
+          let resolve = this.tmpTreeData[id].resolve;
+          this.loadNode(tree, treeNode, resolve)
+        }
       },
-      // 遍历
-      forArr(arr, isExpand) {
-        arr.forEach(i => {
-          // toggleRowExpansion(i, isExpand)用于多选表格，切换某一行的选中状态，如果使用了第二个参数，则是设置这一行选中与否（selected 为 true 则选中）
-          this.$refs["tableTreeData"].toggleRowExpansion(i, isExpand)
-          if (i.children) {
-            this.forArr(i.children, isExpand)
-          }
-        })
+
+      //懒加载时触发
+      async loadNode(tree, treeNode, resolve) {
+        // 获得树数据
+        const { data } = await getTreeLazy({parentId: tree.id});
+        this.tmpTreeData[tree.id] = {tree, treeNode, resolve};
+        resolve(data);
       },
+
       handleNodeClick(data) {
         this.fetchData();
       },

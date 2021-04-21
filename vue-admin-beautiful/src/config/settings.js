@@ -17,7 +17,7 @@ module.exports = {
   baseURL:
     process.env.NODE_ENV === "development"
       ? "http://127.0.0.1:8080/opsli-boot"
-      : "http://demo.opsli.arcinbj.com:7000/opsli-boot",
+      : "/opsli-boot",
   //标题 （包括初次加载雪花屏的标题 页面的标题 浏览器的标题）
   title: "OPSLI 快速开发平台",
   //简写
