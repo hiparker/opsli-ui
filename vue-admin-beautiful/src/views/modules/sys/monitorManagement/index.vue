@@ -16,8 +16,12 @@
           <el-form class="orgManagement-edit-container" label-width="115px">
             <el-row>
               <el-col>
-                <el-form-item label="CPU主频">
-                  {{ cpuInfo.cpuName }}
+                <el-form-item label="CPU主频" >
+                  <el-tooltip :content="cpuInfo.cpuModel" placement="top">
+                    <div class="grid-content" title="">
+                      {{ cpuInfo.cpuModel}}
+                    </div>
+                  </el-tooltip>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -44,14 +48,14 @@
             <el-row>
               <el-col>
                 <el-form-item label="总内存">
-                  {{ memInfo.total }}G
+                  {{ memInfo.total }}
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row>
               <el-col>
                 <el-form-item label="已用内存">
-                  {{ memInfo.used }}G
+                  {{ memInfo.used }}
                 </el-form-item>
               </el-col>
             </el-row>
@@ -72,14 +76,14 @@
             <el-row>
               <el-col>
                 <el-form-item label="JMV大小">
-                  {{ JVMInfo.total}}M
+                  {{ JVMInfo.total}}
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row>
               <el-col>
                 <el-form-item label="已用JVM">
-                  {{ JVMInfo.used }}M
+                  {{ JVMInfo.used }}
                 </el-form-item>
               </el-col>
             </el-row>
@@ -117,6 +121,18 @@
                 </el-form-item>
               </el-col>
             </el-row>
+            <el-row>
+              <el-col :span="12">
+                <el-form-item label="操作用户">
+                  {{ systemInfo.userName }}
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="项目路径">
+                  {{ systemInfo.userDir }}
+                </el-form-item>
+              </el-col>
+            </el-row>
           </el-form>
         </el-card>
       </el-col>
@@ -128,7 +144,7 @@
             <el-row>
               <el-col :span="12">
                 <el-form-item label="JVM名称">
-                  {{ JVMInfo.name }}
+                  {{ JVMInfo.jvmName }}
                 </el-form-item>
               </el-col>
               <el-col :span="12">
@@ -187,17 +203,17 @@
             style="width: 100%"
           >
             <el-table-column
-              prop="dirName"
+              prop="diskName"
               label="盘符路径"
               align="left"
             ></el-table-column>
             <el-table-column
-              prop="typeName"
+              prop="fileName"
               label="文件系统"
               align="left"
             ></el-table-column>
             <el-table-column
-              prop="sysTypeName"
+              prop="diskType"
               label="盘符类型"
               align="left"
             ></el-table-column>
@@ -307,9 +323,11 @@
           computerIp: "",
           osName: "",
           osArch: "",
+          userName: "",
+          userDir: ""
         },
         cpuInfo: {
-          cpuName: "",
+          cpuModel: "",
           cpuNum: 0,
           total: 0,
           sys: 0,
@@ -323,7 +341,7 @@
           free: 0,
         },
         JVMInfo: {
-          name: "",
+          jvmName: "",
           total: 0,
           max: 0,
           free: 0,
@@ -353,6 +371,15 @@
     mounted() {
       // 加载数据
       this.fetchData();
+    },
+    filters: {
+      ellipsis(value) {
+        if (!value) return "";
+        if (value.length > 30) {
+          return value.slice(0, 30) + "...";
+        }
+        return value;
+      }
     },
     methods: {
       async fetchData() {
@@ -400,7 +427,7 @@
 
 <style scoped>
   .monitor-ui .grid-content{
-    width: 100%;    /*根据自己项目进行定义宽度*/
+    width: 95%;    /*根据自己项目进行定义宽度*/
     overflow: hidden;     /*设置超出的部分进行影藏*/
     text-overflow: ellipsis;     /*设置超出部分使用省略号*/
     white-space:nowrap ;    /*设置为单行*/
