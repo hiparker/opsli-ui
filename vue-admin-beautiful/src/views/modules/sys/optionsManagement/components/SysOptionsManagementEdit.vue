@@ -10,7 +10,7 @@
       <el-row>
         <el-col :span="12">
           <el-form-item label="参数编号" prop="optionCode">
-            <el-input v-model="form.optionCode"autocomplete="off"
+            <el-input v-model="form.optionCode" autocomplete="off"
                       :disabled="!formStatus"
             ></el-input>
           </el-form-item>
