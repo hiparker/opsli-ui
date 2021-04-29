@@ -1,7 +1,7 @@
 <template>
   <div v-loading="loadingData" class="setManagement-container">
-    <el-tabs v-model="activeName" v-loading="loadingTabs">
-      <el-tab-pane name="def">
+    <el-tabs v-model="activeName" v-loading="loadingTabs" type="card">
+      <el-tab-pane name="def" class="tab-pane">
         <span slot="label"><i class="el-icon-c-scale-to-original"></i> 系统默认</span>
         <el-form
           ref="defForm"
@@ -42,7 +42,7 @@
         </el-form>
       </el-tab-pane>
 
-      <el-tab-pane name="crypto">
+      <el-tab-pane name="crypto" class="tab-pane">
         <span slot="label"><i class="el-icon-key"></i> 接口加密</span>
         <el-form
           ref="cryptoForm"
@@ -138,101 +138,155 @@
       </el-tab-pane>
 
 
-      <el-tab-pane name="email">
+      <el-tab-pane name="email" class="tab-pane" >
         <span slot="label"><i class="el-icon-message"></i> SMTP服务</span>
-        <el-form
-          ref="emailForm"
-          :model="email.form"
-          :rules="email.rules"
-          label-width="125px"
-        >
 
-          <el-row>
-            <el-col :span="12">
-              <el-form-item label="SMTP地址" prop="email_smtp">
-                <el-autocomplete
-                  class="inline-input"
-                  v-model="email.form.email_smtp"
-                  :fetch-suggestions="smtpQuerySearch"
-                  placeholder="请输入SMTP地址"
-                  style="width: 100%"
-                ></el-autocomplete>
-              </el-form-item>
-            </el-col>
-          </el-row>
+        <el-tabs v-model="smtpActiveName">
+          <el-tab-pane label="发信设置" name="smtp-config">
+            <el-form
+              ref="emailForm"
+              :model="email.form"
+              :rules="email.rules"
+              label-width="125px"
+            >
 
-          <el-row>
-            <el-col :span="12">
-              <el-form-item label="SMTP端口" prop="email_port">
-                <el-input
-                  v-model="email.form.email_port"
-                  autocomplete="off"
-                ></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
+              <el-row>
+                <el-col :span="12">
+                  <el-form-item label="SMTP地址" prop="email_smtp">
+                    <el-autocomplete
+                      class="inline-input"
+                      v-model="email.form.email_smtp"
+                      :fetch-suggestions="smtpQuerySearch"
+                      placeholder="请输入SMTP地址"
+                      style="width: 100%"
+                    ></el-autocomplete>
+                  </el-form-item>
+                </el-col>
+              </el-row>
 
-          <el-row>
-            <el-col :span="12">
-              <el-form-item label="开启SSL认证" prop="email_ssl_enable">
-                <el-select
-                  v-model="email.form.email_ssl_enable"
-                  placeholder="请选择是否开启SSL认证" >
-                  <el-option
-                    v-for="item in dict.no_yes"
-                    :key="item.dictValue"
-                    :label="item.dictName"
-                    :value="item.dictValue"
-                  ></el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-          </el-row>
+              <el-row>
+                <el-col :span="12">
+                  <el-form-item label="SMTP端口" prop="email_port">
+                    <el-input
+                      v-model="email.form.email_port"
+                      autocomplete="off"
+                    ></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
 
-          <el-row>
-            <el-col :span="12">
-              <el-form-item label="邮箱账号" prop="email_account">
-                <el-input
-                  v-model="email.form.email_account"
-                  autocomplete="off"
-                  placeholder="xxxx@xx.com"
-                ></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
+              <el-row>
+                <el-col :span="12">
+                  <el-form-item label="开启SSL认证" prop="email_ssl_enable">
+                    <el-select
+                      v-model="email.form.email_ssl_enable"
+                      placeholder="请选择是否开启SSL认证" >
+                      <el-option
+                        v-for="item in dict.no_yes"
+                        :key="item.dictValue"
+                        :label="item.dictName"
+                        :value="item.dictValue"
+                      ></el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+              </el-row>
 
-          <el-row>
-            <el-col :span="12">
-              <el-form-item label="邮箱账号密码" prop="email_password">
-                <el-input
-                  v-model="email.form.email_password"
-                  autocomplete="off"
-                  placeholder="某些邮箱需要为SMTP服务单独设置密码"
-                ></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
+              <el-row>
+                <el-col :span="12">
+                  <el-form-item label="邮箱账号" prop="email_account">
+                    <el-input
+                      v-model="email.form.email_account"
+                      autocomplete="off"
+                      placeholder="xxxx@xx.com"
+                    ></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
 
-          <el-row>
-            <el-col :span="12">
-              <el-form-item label="发件人" prop="email_addresser">
-                <el-input
-                  v-model="email.form.email_addresser"
-                  autocomplete="off"
-                  placeholder="发件人 xxxx@xx.com 或 测试<xxx.xx.com>"
-                ></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
+              <el-row>
+                <el-col :span="12">
+                  <el-form-item label="邮箱账号密码" prop="email_password">
+                    <el-input
+                      v-model="email.form.email_password"
+                      type="password"
+                      autocomplete="off"
+                      placeholder="某些邮箱需要为SMTP服务单独设置密码"
+                      show-password
+                    ></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
 
-          <el-button
-            type="primary"
-            style="margin-top: 50px"
-            @click="save('emailForm', email.form)"
-          >
-            保存
-          </el-button>
-        </el-form>
+              <el-row>
+                <el-col :span="12">
+                  <el-form-item label="发件人" prop="email_addresser">
+                    <el-input
+                      v-model="email.form.email_addresser"
+                      autocomplete="off"
+                      placeholder="发件人 xxxx@xx.com 或 测试<xxx.xx.com>"
+                    ></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+
+              <el-button
+                type="primary"
+                style="margin-top: 50px"
+                @click="save('emailForm', email.form)"
+              >
+                保存
+              </el-button>
+            </el-form>
+          </el-tab-pane>
+
+          <el-tab-pane label="发信测试" name="smtp-test">
+            <el-form ref="smtp-test-form" :model="emailTest.form" :rules="emailTest.rules" label-width="105px">
+              <el-row>
+                <el-col :span="12">
+                  <el-form-item label="收件人" prop="to">
+                    <el-input v-model="emailTest.form.to"
+                              autocomplete="off"
+                              placeholder="xxxx@xx.com"
+                    ></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+
+              <el-row>
+                <el-col :span="12">
+                  <el-form-item label="主题" prop="subject">
+                    <el-input v-model="emailTest.form.subject"
+                              autocomplete="off"
+                    ></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+
+              <el-row>
+                <el-col :span="12">
+                  <el-form-item label="内容" prop="content">
+                    <el-input type="textarea"
+                              v-model="emailTest.form.content"
+                              autocomplete="off"
+                    ></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+
+              <el-button
+                type="primary"
+                style="margin-top: 50px"
+                @click="smtpTestSend"
+              >
+                发送邮件
+              </el-button>
+
+            </el-form>
+          </el-tab-pane>
+        </el-tabs>
+
+
       </el-tab-pane>
 
     </el-tabs>
@@ -245,6 +299,7 @@
     getAllOptions,
     doCreateCrypto,
     doUpdateOptions,
+    doTestSend,
   } from "@/api/set/setManagement";
   import { isNull } from "@/utils/validate";
   import {getMsg, isNumber} from "@/utils/valiargs";
@@ -266,6 +321,7 @@
 
       return {
         activeName: "def",
+        smtpActiveName: "smtp-config",
         dict: {},
         baseData: {},
 
@@ -330,6 +386,26 @@
             ]
           },
         },
+
+        emailTest: {
+          form: {
+            to: "",
+            subject: "",
+            content: "",
+          },
+          rules: {
+            to: [
+              { required: true, trigger: "change", message: "请输入收件人" },
+            ],
+            subject: [
+              { required: true, trigger: "blur", message: "请输入主题" },
+            ],
+            content: [
+              { required: true, trigger: "blur", message: "请输入内容" },
+            ]
+          },
+        },
+
         smtpRestaurants: [
           { value: "smtp.aliyun.com"},
           { value: "smtp.gmail.com"},
@@ -386,6 +462,24 @@
                 this.loadingTabs = false;
               }, 300);
             });
+            if (success) {
+              this.$baseMessage(msg, "success");
+              setTimeout(() => {
+                this.loadingTabs = false;
+              }, 300);
+            }
+          } else {
+            return false;
+          }
+        });
+      },
+
+
+      // 保存
+      async smtpTestSend() {
+        this.$refs["smtp-test-form"].validate(async (valid) => {
+          if (valid) {
+            const { success, msg } = await doTestSend(this.emailTest.form);
             if (success) {
               this.$baseMessage(msg, "success");
               setTimeout(() => {
@@ -464,3 +558,9 @@
     },
   };
 </script>
+<style>
+  .setManagement-container .tab-pane {
+    padding-right: 15px;
+    padding-left: 15px;
+  }
+</style>

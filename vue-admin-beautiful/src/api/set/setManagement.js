@@ -16,6 +16,14 @@ export function doUpdateOptions(data) {
   });
 }
 
+export function doTestSend(data) {
+  return request({
+    url: "/api/v1/tools/email/testSend",
+    method: "post",
+    data,
+  });
+}
+
 // ===========================
 
 /**
@@ -28,7 +36,7 @@ export function doCreateCrypto(type) {
     url: "/api/v1/sys/options/createCrypto",
     method: "post",
     params: {
-      type: type
+      type: type,
     },
   });
 }
