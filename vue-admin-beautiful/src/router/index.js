@@ -38,6 +38,22 @@ export const constantRoutes = [
     ],
   },
   {
+    path: "/personalCenter",
+    component: Layout,
+    hidden: true,
+    redirect: "personalCenter",
+    children: [
+      {
+        path: "personalCenter",
+        name: "PersonalCenter",
+        component: () => import("@/views/personalCenter/index"),
+        meta: {
+          title: "个人中心",
+        },
+      },
+    ],
+  },
+  {
     path: "/401",
     name: "401",
     component: () => import("@/views/401"),
