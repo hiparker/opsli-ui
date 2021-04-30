@@ -11,7 +11,7 @@ import {
   setAccessToken,
 } from "@/utils/accessToken";
 import { resetRouter } from "@/router";
-import { title, tokenName, baseURL } from "@/config/settings";
+import { title, tokenName } from "@/config/settings";
 const state = {
   accessToken: getAccessToken(),
   username: "",
@@ -78,13 +78,13 @@ const actions = {
       Vue.prototype.$baseMessage("验证失败，请重新登录...", "error");
       return false;
     }
-    let { roles, perms, realName, avatar } = data;
+    let { roles, perms, realName, avatarStorageDomain, avatar } = data;
     if (roles && realName && Array.isArray(roles)) {
       commit("setPermissions", roles);
       commit("setPerms", perms);
       commit("setUsername", realName);
       if (avatar) {
-        commit("setAvatar", baseURL + avatar);
+        commit("setAvatar", avatarStorageDomain + avatar);
       }
       return state.permissions;
     } else {

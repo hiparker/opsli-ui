@@ -107,6 +107,7 @@
       },
       close() {
         this.id = null;
+        this.options.img = "";
         this.dialogVisible = false;
       },
       save() {
