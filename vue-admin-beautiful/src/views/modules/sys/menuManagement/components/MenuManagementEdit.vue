@@ -222,6 +222,7 @@
           { value: "https://${BASE_PATH}", describe: "状态为外链时有效"},
         ],
         parentMenu: {},
+        genParentId: "",
         form: {
           icon:"",
           // 设置默认值
@@ -279,6 +280,7 @@
           if(row && !isNull(row.parentName) && !isNull(row.parentId)){
             // 设置上级Id
             this.form.parentId = row.parentId;
+            this.genParentId = row.genParentId;
           }
         } else {
           this.title = "编辑";
@@ -292,6 +294,9 @@
         this.dialogFormVisible = false;
         this.$refs["form"].resetFields();
         this.form = this.$options.data().form;
+        if(!isNull(this.genParentId)){
+          this.$emit("refreshNodeBy", this.genParentId);
+        }
         this.$emit("refreshNodeBy",this.form.parentId);
       },
       save() {
@@ -313,6 +318,9 @@
               }
             }
 
+            if(!isNull(this.genParentId)){
+              this.$emit("refreshNodeBy", this.genParentId);
+            }
             await this.$emit("refreshNodeBy",this.form.parentId);
             this.close();
           } else {

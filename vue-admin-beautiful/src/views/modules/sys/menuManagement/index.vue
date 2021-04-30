@@ -186,6 +186,8 @@
       handleInsertByParent(row) {
         if (row.id) {
           let rowTmp = {};
+          // 上上级Id
+          rowTmp.genParentId = row.parentId;
           // 上级Id
           rowTmp.parentId = row.id;
           // 上级名称
