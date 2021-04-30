@@ -32,6 +32,24 @@
             </el-col>
           </el-row>
 
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="文件存储位置" prop="storage_type">
+                <el-select
+                  v-model="def.form.storage_type"
+                  placeholder="请选择文件存储位置"
+                >
+                  <el-option
+                    v-for="item in dict.storage_type"
+                    :key="item.dictValue"
+                    :label="item.dictName"
+                    :value="item.dictValue"
+                  ></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+          </el-row>
+
           <el-button
             type="primary"
             style="margin-top: 50px"
@@ -289,6 +307,58 @@
 
       </el-tab-pane>
 
+      <el-tab-pane name="storage" class="tab-pane">
+        <span slot="label">
+          <i class="el-icon-message"></i>
+          OSS存储服务
+        </span>
+
+        <el-tabs v-model="storageActiveName">
+          <el-tab-pane label="本地配置" name="local-config">
+            <el-form
+              ref="storageLocalForm"
+              :model="storage.storage_local.form"
+              :rules="storage.storage_local.rules"
+              label-width="125px"
+            >
+              <el-row>
+                <el-col :span="12">
+                  <el-form-item label="域名" prop="storage_local_domain">
+                    <el-input
+                      v-model="storage.storage_local.form.storage_local_domain"
+                      autocomplete="off"
+                      placeholder="请输入域名"
+                    ></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+
+              <el-row>
+                <el-col :span="12">
+                  <el-form-item label="路径前缀" prop="storage_local_path_prefix">
+                    <el-input
+                      v-model="
+                        storage.storage_local.form.storage_local_path_prefix
+                      "
+                      autocomplete="off"
+                      placeholder="路径前缀默认为空"
+                    ></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+
+              <el-button
+                type="primary"
+                style="margin-top: 50px"
+                @click="save('storageLocalForm', storage.storage_local.form)"
+              >
+                保存
+              </el-button>
+            </el-form>
+          </el-tab-pane>
+        </el-tabs>
+      </el-tab-pane>
+
     </el-tabs>
   </div>
 </template>
@@ -302,7 +372,7 @@
     doTestSend,
   } from "@/api/set/setManagement";
   import { isNull } from "@/utils/validate";
-  import {getMsg, isNumber} from "@/utils/valiargs";
+  import {getMsg, isNumber, isUrl} from "@/utils/valiargs";
 
 
   export default {
@@ -319,9 +389,18 @@
         }
       };
 
+      const validate_optionCode_isUrl = (rule, value, callback) => {
+        if (!isUrl(value)) {
+          callback(new Error(getMsg('isUrl')))
+        } else {
+          callback()
+        }
+      }
+
       return {
         activeName: "def",
         smtpActiveName: "smtp-config",
+        storageActiveName: 'local-config',
         dict: {},
         baseData: {},
 
@@ -329,6 +408,7 @@
           form: {
             def_pass: "",
             def_role: "",
+            storage_type: ""
           },
           rules: {
             def_pass: [
@@ -406,6 +486,25 @@
           },
         },
 
+        storage: {
+          storage_local: {
+            form: {
+              storage_local_domain: '',
+              storage_local_path_prefix: '',
+            },
+            rules: {
+              storage_local_domain: [
+                { required: true, trigger: 'blur', message: '请输入域名' },
+                {
+                  required: false,
+                  trigger: 'blur',
+                  validator: validate_optionCode_isUrl,
+                },
+              ],
+            },
+          },
+        },
+
         smtpRestaurants: [
           { value: "smtp.aliyun.com"},
           { value: "smtp.gmail.com"},
@@ -430,6 +529,7 @@
     created() {
       // 加载字典
       this.dict.no_yes = this.$getDictList("no_yes");
+      this.dict.storage_type = this.$getDictList("storage_type");
       this.dict.crypto_asymmetric = this.$getDictList("crypto_asymmetric");
       this.fetchData();
     },
@@ -522,6 +622,8 @@
             this.baseData.def_pass.optionValue:"";
           this.def.form.def_role = !isNull(this.baseData.def_role)?
             this.baseData.def_role.optionValue:"";
+          this.def.form.storage_type = !isNull(this.baseData.storage_type)?
+            this.baseData.storage_type.optionValue:"local";
 
 
           // 接口加密数据
@@ -548,7 +650,17 @@
           this.email.form.email_addresser = !isNull(this.baseData.email_addresser)?
             this.baseData.email_addresser.optionValue:"";
 
-
+          // 本地存储
+          this.storage.storage_local.form.storage_local_domain = !isNull(
+            this.baseData.storage_local_domain
+          )
+            ? this.baseData.storage_local_domain.optionValue
+            : ''
+          this.storage.storage_local.form.storage_local_domain = !isNull(
+            this.baseData.storage_local_domain
+          )
+            ? this.baseData.storage_local_domain.optionValue
+            : ''
 
           setTimeout(() => {
             this.loadingData = false;
