@@ -11,7 +11,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="内容" prop="content" class="vab-quill-content">
-        <vab-quill v-model="form.content" :min-height="400"></vab-quill>
+        <tinymce v-model="form.content" :min-height="400"></tinymce>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="handleSee">预览效果</el-button>
@@ -28,10 +28,10 @@
 </template>
 
 <script>
-  import vabQuill from "@/plugins/vabQuill";
+  import Tinymce from "@/components/Tinymce"
   export default {
     name: "Editor",
-    components: { vabQuill },
+    components: { Tinymce },
     data() {
       return {
         borderColor: "#dcdfe6",
