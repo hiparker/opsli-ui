@@ -327,7 +327,7 @@
                     <el-input
                       v-model="storage.storage_local.form.storage_local_domain"
                       autocomplete="off"
-                      placeholder="请输入域名"
+                      placeholder="本地需要到代理名 如 http:xxx.com/opsli-boot"
                     ></el-input>
                   </el-form-item>
                 </el-col>
