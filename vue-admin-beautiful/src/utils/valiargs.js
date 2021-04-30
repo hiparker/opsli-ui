@@ -16,7 +16,7 @@ const msgMap = {
   isCitizenid: "身份证格式不正确",
   isMac: "MAC地址不正确",
   isPlateNumber: "中国车牌号不正确",
-
+  isUrl: "URL地址不正确",
 };
 
 /**
@@ -30,8 +30,15 @@ export function isNotNull(val) {
    *  val
    * @returns
    */
-  return !(val === undefined || val == null || val === "" || val === ''
-    || val === "undefined" || val === "null" || val === "NULL");
+  return !(
+    val === undefined ||
+    val == null ||
+    val === "" ||
+    val === "" ||
+    val === "undefined" ||
+    val === "null" ||
+    val === "NULL"
+  );
 }
 
 /**
