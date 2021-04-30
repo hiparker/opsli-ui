@@ -309,7 +309,7 @@
 
       <el-tab-pane name="storage" class="tab-pane">
         <span slot="label">
-          <i class="el-icon-message"></i>
+          <i class="el-icon-folder-opened"></i>
           OSS存储服务
         </span>
 
