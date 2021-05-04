@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import {doDeleteAll, doImportTables, doInsert, doUpdate, getTables} from "@/api/creater/tableManagement";
+import { doImportTables, getTables} from "@/api/creater/tableManagement";
   import { isNull } from "@/utils/validate";
 
   export default {

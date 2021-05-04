@@ -34,10 +34,11 @@
         > 生成代码 </el-button>
 
         <el-button
-          v-if="$perms('deve_creater_createmenu')"
-          icon="el-icon-plus"
+          v-if="$perms('deve_creater_createMenu')"
+          :disabled="selectRows.length !== 1"
+          icon="el-icon-menu"
           type="warning"
-          @click="handleImport"
+          @click="showMenuChoose"
         > 生成菜单 </el-button>
 
       </vab-query-form-left-panel>
@@ -177,21 +178,30 @@
     ></el-pagination>
 
     <edit ref="edit" @fetchData="fetchData"></edit>
+
     <show-database-tables ref="show-database-tables" @fetchData="fetchData"></show-database-tables>
+
     <gen-create ref="gen-create"></gen-create>
+
+    <menu-management-choose
+      ref="menu-management-choose"
+      @menuChoose="handleCreateMenu"
+    ></menu-management-choose>
+
   </div>
 </template>
 
 <script>
-  import { getList, doDelete, doDeleteAll, doSync, doImportTables } from "@/api/creater/tableManagement";
+  import { getList, doDelete, doDeleteAll, doSync, doCreateMenu } from "@/api/creater/tableManagement";
   import { isNull } from "@/utils/validate";
   import Edit from "./components/TableEdit";
+  import MenuManagementChoose from "@/components/opsli/menu/MenuManagementChoose";
   import ShowDatabaseTables from "./components/showDatabaseTables";
   import GenCreate from "./components/GenCreate";
 
   export default {
     name: "CreateTableManagement",
-    components: {GenCreate, Edit,ShowDatabaseTables },
+    components: {GenCreate, Edit,ShowDatabaseTables,MenuManagementChoose },
     data() {
       return {
         list: null,
@@ -231,6 +241,29 @@
           return ;
         }
         this.$refs["gen-create"].showEdit(ids[0]);
+      },
+
+      showMenuChoose(){
+         this.$refs["menu-management-choose"].showMenuChoose();
+      },
+
+      async handleCreateMenu(menuNode) {
+        if(isNull(menuNode)){
+          this.$baseMessage("请选择上级菜单", "warning");
+          return;
+        }
+
+        const ids = this.selectRows.map((item) => item.id);
+        if(ids === null || ids === undefined || ids.length === 0){
+          return ;
+        }
+        const tableId = ids[0];
+
+        const { msg } = await doCreateMenu({
+          menuParentId: menuNode.id,
+          tableId: tableId
+        });
+        this.$baseMessage(msg, "success");
       },
       handleDelete(row) {
         if (row.id) {

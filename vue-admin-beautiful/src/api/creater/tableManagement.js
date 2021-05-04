@@ -61,7 +61,7 @@ export function doSync(data) {
 export function getTables() {
   return request({
     url: "/api/v1/creater/table/getTables",
-    method: "get"
+    method: "get",
   });
 }
 
@@ -88,8 +88,16 @@ export function doCreate(data) {
     url: "/api/v1/creater/logs/create",
     method: "post",
     // 重要
-    responseType: 'blob',
+    responseType: "blob",
     data,
+  });
+}
+
+export function doCreateMenu(data) {
+  return request({
+    url: "/api/v1/creater/logs/createMenu",
+    method: "post",
+    params: data,
   });
 }
 

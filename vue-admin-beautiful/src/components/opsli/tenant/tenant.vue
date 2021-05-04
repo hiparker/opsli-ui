@@ -7,10 +7,9 @@
     :close-on-click-modal="false"
     top="7vh"
     width="850px"
-    @close="close"
     center
+    @close="close"
   >
-
     <div class="tenantManagement-container">
       <vab-query-form>
         <vab-query-form-left-panel :span="24">
@@ -30,7 +29,11 @@
               />
             </el-form-item>
             <el-form-item>
-              <el-button icon="el-icon-search" type="primary" @click="queryData">
+              <el-button
+                icon="el-icon-search"
+                type="primary"
+                @click="queryData"
+              >
                 查询
               </el-button>
             </el-form-item>
@@ -45,10 +48,9 @@
         highlight-current-row
         @current-change="setCurrent"
       >
-
         <el-table-column show-overflow-tooltip label="序号" width="95">
           <template slot-scope="scope">
-            {{(queryForm.pageNo - 1) * queryForm.pageSize + scope.$index + 1}}
+            {{ (queryForm.pageNo - 1) * queryForm.pageSize + scope.$index + 1 }}
           </template>
         </el-table-column>
 
@@ -69,7 +71,6 @@
           prop="remark"
           label="备注"
         ></el-table-column>
-
       </el-table>
       <el-pagination
         background
@@ -80,9 +81,7 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
       ></el-pagination>
-
     </div>
-
 
     <div slot="footer" class="dialog-footer">
       <el-button @click="close">取 消</el-button>
@@ -93,11 +92,11 @@
 
 <script>
   import { getList } from "@/api/tenantManagement";
-  import {isNull} from "@/utils/validate";
+  import { isNull } from "@/utils/validate";
 
   export default {
     name: "TenantManagement",
-    components: { },
+    components: {},
     data() {
       return {
         list: null,
@@ -130,16 +129,16 @@
           title: "",
           izUsable_EQ: "1",
           tenantName_LIKE: "",
-        }
+        };
         this.currentRow = null;
         this.dialogFormVisible = false;
       },
       save() {
-        if(isNull(this.currentRow)){
+        if (isNull(this.currentRow)) {
           this.$baseMessage("请选择租户", "warning");
           return;
         }
-        this.$emit('tenant', this.currentRow);
+        this.$emit("tenant", this.currentRow);
         this.close();
       },
       setCurrent(val) {
@@ -160,7 +159,7 @@
       async fetchData() {
         this.listLoading = true;
         const { data } = await getList(this.queryForm);
-        if(!isNull(data)){
+        if (!isNull(data)) {
           this.list = data.rows;
           this.total = data.total;
           setTimeout(() => {
