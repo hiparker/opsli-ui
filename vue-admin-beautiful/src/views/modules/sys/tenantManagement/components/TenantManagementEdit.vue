@@ -7,13 +7,14 @@
     @close="close"
   >
     <el-form ref="form" :model="form" :rules="rules" label-width="105px">
-      <el-row>
-        <el-col :span="12">
+      <el-row :gutter="10" >
+        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
           <el-form-item label="租户名称" prop="tenantName">
             <el-input v-model="form.tenantName" autocomplete="off"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12">
+
+        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
           <el-form-item label="备注" prop="remark">
             <el-input type="textarea" v-model="form.remark" autocomplete="off"></el-input>
           </el-form-item>

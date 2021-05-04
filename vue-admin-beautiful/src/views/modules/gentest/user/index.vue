@@ -167,7 +167,6 @@
       <el-table-column
         v-if="$perms('gentest_user_update') || $perms('gentest_user_delete')"
         show-overflow-tooltip
-        fixed="right"
         label="操作"
         width="200"
       >

@@ -117,7 +117,6 @@
 
       <el-table-column
         show-overflow-tooltip
-        fixed="right"
         label="操作"
         width="200"
         v-if="$perms('system_options_update') || $perms('system_options_delete')"

@@ -113,7 +113,6 @@
 
           <el-table-column
             show-overflow-tooltip
-            fixed="right"
             label="操作"
             width="200"
             v-if="$perms('system_menu_insert') || $perms('system_menu_update') || $perms('system_menu_delete')"
@@ -210,6 +209,16 @@
         }
       },
 
+      // 是否展开table(展开与折叠切换)
+      handleExpand() {
+        this.isExpand = !this.isExpand
+        this.$nextTick(() => {
+          this.forArr(this.data, this.isExpand)
+        })
+      },
+
+
+
       // 获得菜单数据
       async fetchData() {
         this.listLoading = true;
@@ -241,6 +250,16 @@
         resolve(data);
       },
 
+      // 遍历
+      forArr(arr, isExpand) {
+        arr.forEach(i => {
+          // toggleRowExpansion(i, isExpand)用于多选表格，切换某一行的选中状态，如果使用了第二个参数，则是设置这一行选中与否（selected 为 true 则选中）
+          this.$refs["tableTreeData"].toggleRowExpansion(i, isExpand)
+          if (i.children) {
+            this.forArr(i.children, isExpand)
+          }
+        })
+      },
       handleNodeClick(data) {
         this.fetchData();
       },

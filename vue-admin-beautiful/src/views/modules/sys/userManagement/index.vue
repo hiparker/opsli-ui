@@ -1,8 +1,7 @@
 <template>
   <div class="userManagement-container">
-
-    <el-container style="min-height: calc( 100vh - 60px - 55px - 20px - 20px - 55px - 30px )">
-      <el-aside width="240px" style="border: 1px solid #eee">
+    <el-row>
+      <el-col :xs="24" :sm="24" :md="24" :lg="4" :xl="4">
         <el-input v-model="filterText" placeholder="输入关键字过滤" />
         <el-tree
           ref="tableTreeData"
@@ -34,8 +33,8 @@
             </span>
           </span>
         </el-tree>
-      </el-aside>
-      <el-main>
+      </el-col>
+      <el-col :xs="24" :sm="24" :md="24" :lg="20" :xl="20">
         <el-collapse-transition>
           <div class="more-query" v-show="this.moreQueryFlag">
             <!-- 更多查找 -->
@@ -226,7 +225,6 @@
 
           <el-table-column
             show-overflow-tooltip
-            fixed="right"
             label="操作"
             width="200"
             v-if="$perms('system_user_update') || $perms('system_user_delete')"
@@ -258,9 +256,8 @@
         <roles ref="roles"></roles>
         <update-password ref="update-password"></update-password>
         <set-org ref="set-org"></set-org>
-      </el-main>
-    </el-container>
-
+      </el-col>
+    </el-row>
   </div>
 </template>
 

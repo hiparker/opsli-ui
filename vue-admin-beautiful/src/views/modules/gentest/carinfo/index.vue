@@ -167,7 +167,6 @@
           $perms('gentest_carinfo_update') || $perms('gentest_carinfo_delete')
         "
         show-overflow-tooltip
-        fixed="right"
         label="操作"
         width="200"
       >

@@ -3,17 +3,18 @@
     :title="title"
     :visible.sync="dialogFormVisible"
     :close-on-click-modal="false"
-    width="80%"
+    width="1220px"
     @close="close"
   >
     <el-form ref="form" :model="form" :rules="rules" label-width="105px">
-      <el-row>
-        <el-col :span="8">
+      <el-row :gutter="10" >
+        <el-col :xs="24" :sm="24" :md="12" :lg="8" :xl="8">
           <el-form-item label="表名称" prop="tableName">
             <el-input v-model="form.tableName" autocomplete="off"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="8">
+
+        <el-col :xs="24" :sm="24" :md="12" :lg="8" :xl="8">
           <el-form-item label="表类型" prop="tableType">
             <el-select v-model="form.tableType" placeholder="请选择"
                        @change="tableTypeChange" :disabled="formState.tableType"
@@ -28,7 +29,7 @@
           </el-form-item>
         </el-col>
 
-        <el-col :span="8">
+        <el-col :xs="24" :sm="24" :md="12" :lg="8" :xl="8">
           <el-form-item label="描述" prop="comments">
             <el-input v-model="form.comments"
                       autocomplete="off"
@@ -37,10 +38,8 @@
             ></el-input>
           </el-form-item>
         </el-col>
-      </el-row>
 
-      <el-row>
-        <el-col :span="8">
+        <el-col :xs="24" :sm="24" :md="12" :lg="8" :xl="8">
           <el-form-item label="数据库类型" prop="jdbcType">
             <el-select v-model="form.jdbcType" placeholder="请选择" :disabled="formState.jdbcType"
                        @change="jdbcTypeChange" ref="jdbcType"
@@ -54,7 +53,8 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="8">
+
+        <el-col :xs="24" :sm="24" :md="12" :lg="8" :xl="8">
           <el-form-item label="备注" prop="remark">
             <el-input v-model="form.remark"
                       autocomplete="off"
@@ -63,6 +63,7 @@
             ></el-input>
           </el-form-item>
         </el-col>
+
       </el-row>
 
     </el-form>
@@ -102,7 +103,7 @@
             show-overflow-tooltip
             prop="fieldName"
             label="字段名称"
-            width="240"
+            width="200"
           >
             <template slot-scope="scope">
               <el-form-item
@@ -121,6 +122,7 @@
             show-overflow-tooltip
             prop="fieldType"
             label="字段类型"
+            width="180"
           >
             <template slot-scope="scope">
               <el-form-item
@@ -147,6 +149,7 @@
             show-overflow-tooltip
             prop="fieldLength"
             label="字段长度"
+            width="140"
           >
             <template slot-scope="scope">
               <el-form-item
@@ -167,6 +170,7 @@
             show-overflow-tooltip
             prop="fieldPrecision"
             label="字段精度"
+            width="140"
           >
             <template slot-scope="scope">
               <el-form-item
@@ -188,6 +192,7 @@
             show-overflow-tooltip
             prop="fieldComments"
             label="字段描述"
+            min-width="240"
           >
             <template slot-scope="scope">
               <el-form-item
@@ -278,7 +283,7 @@
             show-overflow-tooltip
             prop="fieldName"
             label="字段名称"
-            width="240"
+            width="200"
           >
             <template slot-scope="scope">
               <el-form-item
@@ -296,6 +301,7 @@
             show-overflow-tooltip
             prop="javaType"
             label="Java类型"
+            width="120"
           >
             <template slot-scope="scope">
               <el-form-item
@@ -322,6 +328,7 @@
             show-overflow-tooltip
             prop="showType"
             label="生成方案"
+            width="140"
           >
             <template slot-scope="scope">
               <el-form-item
@@ -348,6 +355,7 @@
             show-overflow-tooltip
             prop="dictTypeCode"
             label="字典类型编号"
+            min-width="140"
           >
             <template slot-scope="scope">
               <el-form-item
@@ -394,7 +402,7 @@
             show-overflow-tooltip
             prop="izShowList"
             label="列表显示"
-            width="100"
+            width="80"
           >
             <template slot-scope="scope">
               <el-form-item
@@ -417,7 +425,7 @@
             show-overflow-tooltip
             prop="izShowForm"
             label="表单显示"
-            width="100"
+            width="80"
           >
             <template slot-scope="scope">
               <el-form-item
@@ -439,6 +447,7 @@
             show-overflow-tooltip
             prop="queryType"
             label="检索类别"
+            width="140"
           >
             <template slot-scope="scope">
               <el-form-item

@@ -5,15 +5,15 @@
     :destroy-on-close="true"
     :close-on-click-modal="false"
     width="350px"
-    @close="close"
     class="menu-management-choose"
     append-to-body
+    @close="close"
   >
     <el-col>
       <el-input v-model="filterText" placeholder="输入关键字过滤" />
       <el-tree
-        v-loading="chooseLoading"
         ref="menuTree"
+        v-loading="chooseLoading"
         :data="menuData"
         :expand-on-click-node="false"
         :filter-node-method="filterNode"
@@ -26,8 +26,7 @@
         node-key="id"
         lazy
         :load="loadNode"
-      >
-      </el-tree>
+      ></el-tree>
     </el-col>
 
     <div slot="footer" class="dialog-footer">
@@ -38,7 +37,6 @@
 </template>
 
 <script>
-  import { isNull} from "@/utils/validate";
   import { getTreeChooseLazy } from "@/api/menuManagement";
 
   export default {
@@ -52,12 +50,12 @@
         defaultProps: {
           children: "children",
           label: "menuName",
-          isLeaf: "isLeaf"
+          isLeaf: "isLeaf",
         },
-        treeExpandData:["0"],
+        treeExpandData: ["0"],
         dialogTitle: "选择菜单",
         dialogVisible: false,
-        chooseLoading: false
+        chooseLoading: false,
       };
     },
     watch: {
@@ -85,8 +83,8 @@
       async loadNode(treeNode, resolve) {
         const nodeData = treeNode.data;
         // 获得树数据
-        const { data } = await getTreeChooseLazy({parentId: nodeData.id});
-        this.tmpTreeData[nodeData.id] = {treeNode, resolve};
+        const { data } = await getTreeChooseLazy({ parentId: nodeData.id });
+        this.tmpTreeData[nodeData.id] = { treeNode, resolve };
         resolve(data);
       },
 
@@ -102,16 +100,14 @@
       // 节点过滤操作
       filterNode(value, data) {
         if (!value) return true;
-          return data.name.indexOf(value) !== -1;
+        return data.name.indexOf(value) !== -1;
       },
 
       // ===================
       // 数组去重
-      unique (arr) {
-        return Array.from(new Set(arr))
+      unique(arr) {
+        return Array.from(new Set(arr));
       },
-
     },
-
   };
 </script>

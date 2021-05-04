@@ -127,7 +127,6 @@
 
       <el-table-column
         show-overflow-tooltip
-        fixed="right"
         label="操作"
         width="200"
       >

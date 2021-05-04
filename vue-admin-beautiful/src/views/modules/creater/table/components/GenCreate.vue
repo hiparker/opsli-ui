@@ -3,26 +3,25 @@
     :title="title"
     :visible.sync="dialogFormVisible"
     :close-on-click-modal="false"
-    width="850px"
+    width="800px"
     @close="close"
   >
     <el-form ref="form" :model="form" :rules="rules" label-width="105px">
 
-      <el-row>
-        <el-col :span="12">
+      <el-row :gutter="10" >
+        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
           <el-form-item label="代码标题" prop="codeTitle">
             <el-input v-model="form.codeTitle" autocomplete="off"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12">
+
+        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
           <el-form-item label="标题简介" prop="codeTitleBrief">
             <el-input v-model="form.codeTitleBrief" autocomplete="off"></el-input>
           </el-form-item>
         </el-col>
-      </el-row>
 
-      <el-row>
-        <el-col :span="12">
+        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
           <el-form-item label="包路径" prop="packageName">
             <el-autocomplete
               class="inline-input"
@@ -39,25 +38,25 @@
             </el-autocomplete>
           </el-form-item>
         </el-col>
-        <el-col :span="12">
+
+        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
           <el-form-item label="模块名" prop="moduleName">
             <el-input v-model="form.moduleName" autocomplete="off"></el-input>
           </el-form-item>
         </el-col>
-      </el-row>
 
-      <el-row>
-        <el-col :span="12">
+        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
           <el-form-item label="子模块名" prop="subModuleName">
             <el-input v-model="form.subModuleName" autocomplete="off"></el-input>
           </el-form-item>
         </el-col>
 
-        <el-col :span="12">
+        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
           <el-form-item label="作者信息" prop="authorName">
             <el-input v-model="form.authorName" autocomplete="off"></el-input>
           </el-form-item>
         </el-col>
+
       </el-row>
 
     </el-form>

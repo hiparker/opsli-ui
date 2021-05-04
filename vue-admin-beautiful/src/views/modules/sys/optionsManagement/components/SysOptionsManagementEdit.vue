@@ -7,31 +7,33 @@
     @close="close"
   >
     <el-form ref="form" :model="form" :rules="rules" label-width="105px">
-      <el-row>
-        <el-col :span="12">
+      <el-row :gutter="10" >
+        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
           <el-form-item label="参数编号" prop="optionCode">
             <el-input v-model="form.optionCode" autocomplete="off"
                       :disabled="!formStatus"
             ></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12">
+
+        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
           <el-form-item label="参数名称" prop="optionName">
             <el-input v-model="form.optionName" autocomplete="off"></el-input>
           </el-form-item>
         </el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="12">
+
+        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
           <el-form-item label="参数值" prop="optionValue">
             <el-input v-model="form.optionValue" autocomplete="off"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12">
+
+        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
           <el-form-item label="备注" prop="remark">
             <el-input type="textarea" v-model="form.remark" autocomplete="off"></el-input>
           </el-form-item>
         </el-col>
+
       </el-row>
     </el-form>
     <div slot="footer" class="dialog-footer">

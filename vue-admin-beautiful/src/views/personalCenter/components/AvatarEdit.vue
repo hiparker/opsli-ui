@@ -3,27 +3,32 @@
     :title="title"
     :visible.sync="dialogVisible"
     :close-on-click-modal="false"
-    width="800px"
+    width="650px"
     @close="close"
   >
     <!-- 如果没头像 则上传 -->
-    <dl class="upload-avatar">
-      <dt>
+    <el-row class="upload-avatar" :gutter="10">
+      <el-col :xs="24" :sm="24" :md="4" :lg="4" :xl="4">
         <label class="el-button el-button--primary el-button--small" for="uploads">上传头像</label>
         <input
           id="uploads" ref="uploadImg"
           multiple
           type="file"
           accept="image/png,image/jpeg,image/gif,image/jpg"
-          class="hiddenInput" @change="uploadImg($event)"/>
-      </dt>
-      <dd>支持JPG、PNG等格式图片大小不超过1M，超出自动压缩</dd>
-    </dl>
+          @change="uploadImg($event)"/>
+      </el-col>
+      <el-col :xs="24" :sm="24" :md="20" :lg="20" :xl="20">
+        <div class="description-text">
+          支持JPG、PNG等格式图片
+        </div>
+      </el-col>
+    </el-row>
 
-    <el-row>
-      <el-col :xs="24" :md="12" :style="{height: '350px'}">
+    <el-row :gutter="10">
+      <el-col :xs="24" :sm="24" :md="13" :lg="13" :xl="13">
         <vue-cropper
           ref="cropper"
+          class="avatar-cropper"
           :img="options.img"
           :info="true"
           :autoCrop="options.autoCrop"
@@ -35,15 +40,31 @@
         >
         </vue-cropper>
       </el-col>
-      <el-col :xs="24" :md="12" :style="{height: '350px'}">
-        <div class="avatar-upload-preview">
-          <img :src="previews.url" :style="previews.img"/>
+
+      <el-col class="hidden-sm-and-down" :md="11" :lg="11" :xl="11">
+        <div class="avatar-preview">
+          <div class="preview preview-circle"
+               :style="previews.div" >
+            <img :src="previews.url" :style="previews.img" />
+          </div>
+          <div class="preview"
+               :style="previews.div">
+            <img :src="previews.url" :style="previews.img" />
+          </div>
         </div>
       </el-col>
     </el-row>
 
-    <div slot="footer" class="dialog-footer">
+    <el-row :gutter="10">
+      <el-col class="avatar-button" :xs="24" :sm="24" :md="13" :lg="13" :xl="13">
+        <el-button icon="el-icon-plus" @click="changeScale(1)" round>放大</el-button>
+        <el-button icon="el-icon-minus" @click="changeScale(-1)" round>缩小</el-button>
+        <el-button icon="el-icon-refresh-left" @click="turnLeft" round>左转</el-button>
+        <el-button icon="el-icon-refresh-right" @click="turnRight" round>右转</el-button>
+      </el-col>
+    </el-row>
 
+    <div slot="footer" class="dialog-footer">
       <el-button @click="close">取 消</el-button>
       <el-button type="primary" @click="save">确 定</el-button>
     </div>
@@ -78,8 +99,8 @@
           canScale: false,
           autoCrop: true,
           // 只有自动截图开启 宽度高度才生效
-          autoCropWidth: 180,
-          autoCropHeight: 180,
+          autoCropWidth: 150,
+          autoCropHeight: 150,
           maxImgSize: 1048,
           fixedBox: true,
           // 开启宽度和高度比例
@@ -109,6 +130,16 @@
         this.id = null;
         this.options.img = "";
         this.dialogVisible = false;
+      },
+      turnLeft() {
+        this.$refs.cropper.rotateLeft();
+      },
+      turnRight() {
+        this.$refs.cropper.rotateRight();
+      },
+      changeScale(num) {
+        num = num || 1;
+        this.$refs.cropper.changeScale(num);
       },
       save() {
         this.$refs.cropper.getCropBlob(data => {
@@ -167,37 +198,54 @@
 <style lang="scss" scoped>
 
   .upload-avatar {
+    padding-bottom: 15px;
 
-    .hiddenInput{
-      display: none;
-    }
+    .el-col{
+      height: 32px;
+      line-height: 32px;
 
-    dt {
-      float: left;
-      overflow: hidden;
-    }
-
-    dd {
-      float: left;
-      margin-top: 9px;
-      font-size: 13px;
-      color: #9194ab;
+      input{
+        display: none;
+      }
+      .description-text{
+        font-size: 13px;
+        color: #9194ab;
+      }
     }
   }
 
-  .avatar-upload-preview {
-    position: absolute;
-    top: 50%;
-    width: 180px;
-    height: 180px;
-    overflow: hidden;
-    border-radius: 50%;
-    box-shadow: 0 0 4px #ccc;
-    transform: translate(50%, -50%);
+  /* 裁剪工具 */
+  .avatar-cropper {
+    width: 325px;
+    height: 325px;
+    margin: 0 auto;
+  }
 
-    img {
-      width: 100%;
-      height: 100%;
+  /* 右侧预览项 */
+  .avatar-preview {
+    .preview{
+      margin: 0 auto;
+      overflow: hidden;
+      box-shadow: 0 0 4px #ccc;
+    }
+    .preview:first-child{
+      margin-bottom: 22px;
+    }
+    .preview-circle {
+      border-radius: 50%;
+    }
+  }
+
+  /* 底部按钮 */
+  .avatar-button button{
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+
+  @media screen and (max-width: 550px) {
+    .avatar-cropper {
+      width: 260px;
+      height: 260px;
     }
   }
 </style>

@@ -111,6 +111,7 @@
             const { success, msg } = await doUpdatePassword(this.form);
             if(success){
               this.$baseMessage(msg, "success");
+              await this.$emit("fetchData");
             }
             this.close();
           } else {

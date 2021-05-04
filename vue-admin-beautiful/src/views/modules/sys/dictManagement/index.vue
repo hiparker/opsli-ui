@@ -2,7 +2,7 @@
   <div class="dictManagement-container">
     <el-row :gutter="15">
       <!-- 字典主表 -->
-      <el-col :span="size">
+      <el-col>
         <vab-query-form>
           <vab-query-form-left-panel :span="6">
             <el-button
@@ -88,7 +88,6 @@
 
           <el-table-column
             show-overflow-tooltip
-            fixed="right"
             label="操作"
             width="160"
             v-if="$perms('system_dict_update') || $perms('system_dict_delete') || $perms('system_dict_setDict')"
@@ -126,13 +125,13 @@
         ></el-pagination>
       </el-col>
 
-      <!-- 字典详情 -->
-      <el-col :span="sizeDetail">
-        <dict-detail ref="dict-detail"></dict-detail>
-      </el-col>
     </el-row>
 
+    <!-- 编辑 -->
     <edit ref="edit" @fetchData="fetchData"></edit>
+
+    <!-- 字典详情 -->
+    <dict-detail ref="dict-detail"></dict-detail>
 
   </div>
 </template>
@@ -161,8 +160,6 @@
           typeCode_EQ: "",
           typeName_LIKE: "",
         },
-        size: 24,
-        sizeDetail: 0,
       };
     },
     created() {
@@ -171,31 +168,11 @@
     },
     methods: {
       setDict(row){
-        let flag = false;
-        if(this.currentRow && this.currentRow.id !== row.id){
-          this.$refs["dictTable"].setCurrentRow(row);
-          flag = true;
-        }else{
-          if(this.size === 24){
-            this.size = 12;
-            this.sizeDetail = 12;
-            this.$refs["dictTable"].setCurrentRow(row);
-            flag = true;
-          }else{
-            this.$refs["dictTable"].setCurrentRow(null);
-            this.size = 24;
-            this.sizeDetail = 0;
-          }
-        }
-
-        if(flag){
-          this.$refs["dict-detail"].show(row);
-        }else{
-          this.$refs["dict-detail"].close();
-        }
+        this.$refs["dictTable"].setCurrentRow(row);
+        this.$refs["dict-detail"].show(row);
       },
       setSelectRows(val) {
-          this.currentRow = val;
+        this.currentRow = val;
       },
       handleInsert() {
         this.$refs["edit"].showEdit();

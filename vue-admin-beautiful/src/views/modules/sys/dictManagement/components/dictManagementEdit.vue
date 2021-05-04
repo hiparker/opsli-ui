@@ -7,21 +7,20 @@
     @close="close"
   >
     <el-form ref="form" :model="form" :rules="rules" label-width="125px">
-      <el-row>
-        <el-col :span="12">
+      <el-row :gutter="10" >
+        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
           <el-form-item label="字典类型编号" prop="typeCode">
             <el-input v-model="form.typeCode" autocomplete="off"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12">
+
+        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
           <el-form-item label="字典类型名称" prop="typeName">
             <el-input v-model="form.typeName" autocomplete="off"></el-input>
           </el-form-item>
         </el-col>
-      </el-row>
 
-      <el-row>
-        <el-col :span="12">
+        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
           <el-form-item label="是否内置" prop="izLock">
             <el-select v-model="form.izLock" placeholder="请选择" style="width: 100%">
               <el-option
@@ -33,11 +32,13 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="12">
+
+        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
           <el-form-item label="备注" prop="remark">
             <el-input type="textarea" v-model="form.remark" autocomplete="off"></el-input>
           </el-form-item>
         </el-col>
+
       </el-row>
 
     </el-form>

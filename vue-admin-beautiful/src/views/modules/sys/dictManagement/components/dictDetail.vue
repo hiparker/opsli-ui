@@ -1,10 +1,17 @@
 <template>
-  <div v-if="dictDetailVisible" class="dictDetail-container">
+  <el-drawer
+    size="45%"
+    :visible.sync="dictDetailVisible"
+    :close-on-click-modal="false"
+    :before-close="close"
+    class="dictDetail-container"
+  >
+    <el-col slot="title" class="container-title">
+      字典类型 -
+      <el-tag type="info" class="container-title-tag">{{title}}</el-tag>
+    </el-col>
+
     <el-row class="container" >
-      <el-col class="container-title">
-        字典类型 -
-        <el-tag type="info" class="container-title-tag">{{title}}</el-tag>
-      </el-col>
       <!-- 字典明细表 -->
       <el-col>
         <vab-query-form>
@@ -83,7 +90,6 @@
 
           <el-table-column
             show-overflow-tooltip
-            fixed="right"
             label="操作"
             width="105"
             v-if="$perms('system_dict_update') || $perms('system_dict_delete')"
@@ -119,7 +125,7 @@
 
     <dict-detail-edit ref="dict-detail-edit" @fetchData="fetchData" ></dict-detail-edit>
 
-  </div>
+  </el-drawer>
 </template>
 
 <script>
@@ -134,10 +140,10 @@
     components: { DictDetailEdit },
     data() {
       return {
-        userInfo: null,
-        izLock: "0",
         title: "",
         dictDetailVisible: false,
+        userInfo: null,
+        izLock: "0",
         list: null,
         listLoading: true,
         layout: "total, sizes, prev, pager, next, jumper",
@@ -242,18 +248,14 @@
 </script>
 <style lang="scss" scoped>
 .dictDetail-container {
-
   .container {
     padding-left: 15px;
-    border-left: 1px solid #9e9e9e;
   }
   .container-title{
-    padding-bottom: 10px;
-    margin-bottom: 10px;
     font-size: 16px;
     font-weight: bold;
-    border-bottom: 1px solid #9e9e9e;
   }
+
   .container-title-tag{
     font-size: 15px;
     font-weight: bold;

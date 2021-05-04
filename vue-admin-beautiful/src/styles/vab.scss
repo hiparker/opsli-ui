@@ -280,3 +280,207 @@ html {
     /* 下拉树样式-----------结束 */
   }
 }
+
+/** 自定义支持 **/
+.input-btn-choose {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+.el-dialog__header,
+.el-dialog__body,
+.el-dialog__footer {
+  display: grid;
+}
+
+/* 下拉提示菜单 */
+.inline-input-container .inline-input-value {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.inline-input-container .inline-input-describe {
+  font-size: 12px;
+  color: #b4b4b4;
+}
+.inline-input-container .highlighted .inline-input-describe {
+  color: #ddd;
+}
+/* input clear */
+.input-clear {
+  position: absolute;
+  top: 1px;
+  right: 50px;
+  font-size: 16px;
+  color: #909399;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* 导入Excel */
+.import-excel .el-upload {
+  width: 100%;
+}
+.import-excel .el-upload .el-upload-dragger {
+  width: 100%;
+}
+
+@media screen and (max-width: 500px) {
+  .el-message {
+    min-width: 300px !important;
+  }
+}
+@media screen and (max-width: 500px) {
+  .el-message-box {
+    width: 300px !important;
+  }
+}
+
+
+@media screen and (max-width: 1200px) {
+  .adaptive-container {
+    width: 610px !important;
+  }
+
+  /* 对话框 */
+  .el-dialog__wrapper .el-dialog {
+    width: 650px !important;
+  }
+
+  .el-dialog__wrapper .el-dialog .el-dialog__body {
+    padding: 10px 20px !important;
+  }
+
+  .el-dialog__wrapper .el-dialog .el-dialog__body .el-form-item__label {
+    width: 105px !important;
+  }
+
+  .el-dialog__wrapper .el-dialog .el-dialog__body .el-select,
+  .el-input {
+    width: 100% !important;
+  }
+
+  /* tab签 */
+  .el-tabs .el-tabs__content .el-form-item__label {
+    width: 105px !important;
+  }
+  .el-tabs .el-tabs__content .el-select,
+  .el-input {
+    width: 100% !important;
+  }
+
+  /* 抽屉 */
+  .el-drawer__wrapper .el-drawer{
+    width: 70% !important;
+  }
+}
+@media screen and (max-width: 992px) {
+  .adaptive-container {
+    width: 560px !important;
+  }
+
+  /* 对话框 */
+  .el-dialog__wrapper .el-dialog {
+    width: 600px !important;
+  }
+
+  .el-dialog__wrapper .el-dialog .el-dialog__body {
+    padding: 10px 20px !important;
+  }
+
+  .el-dialog__wrapper .el-dialog .el-dialog__body .el-form-item__label {
+    width: 105px !important;
+  }
+
+  .el-dialog__wrapper .el-dialog .el-dialog__body .el-select,
+  .el-input {
+    width: 100% !important;
+  }
+
+  /* tab签 */
+  .el-tabs .el-tabs__content .el-form-item__label {
+    width: 105px !important;
+  }
+  .el-tabs .el-tabs__content .el-select,
+  .el-input {
+    width: 100% !important;
+  }
+
+  /* 抽屉 */
+  .el-drawer__wrapper .el-drawer{
+    width: 90% !important;
+  }
+}
+@media screen and (max-width: 768px) {
+  .adaptive-container {
+    width: 460px !important;
+  }
+
+  /* 对话框 */
+  .el-dialog__wrapper .el-dialog {
+    width: 500px !important;
+  }
+
+  .el-dialog__wrapper .el-dialog .el-dialog__body {
+    padding: 10px 20px !important;
+  }
+
+  .el-dialog__wrapper .el-dialog .el-dialog__body .el-form-item__label {
+    width: 105px !important;
+  }
+
+  .el-dialog__wrapper .el-dialog .el-dialog__body .el-select,
+  .el-input {
+    width: 100% !important;
+  }
+
+  /* tab签 */
+  .el-tabs .el-tabs__content .el-form-item__label {
+    width: 105px !important;
+  }
+  .el-tabs .el-tabs__content .el-select,
+  .el-input {
+    width: 100% !important;
+  }
+
+  /* 抽屉 */
+  .el-drawer__wrapper .el-drawer{
+    width: 90% !important;
+  }
+}
+@media screen and (max-width: 550px) {
+  .adaptive-container {
+    width: 280px !important;
+  }
+
+  /* 对话框 */
+  .el-dialog__wrapper .el-dialog {
+    width: 320px !important;
+  }
+
+  .el-dialog__wrapper .el-dialog .el-dialog__body {
+    padding: 10px 20px !important;
+  }
+
+  .el-dialog__wrapper .el-dialog .el-dialog__body .el-form-item__label {
+    width: auto !important;
+  }
+
+  .el-dialog__wrapper .el-dialog .el-dialog__body .el-select,
+  .el-input {
+    width: 100% !important;
+  }
+
+  /* tab签 */
+  .el-tabs .el-tabs__content .el-form-item__label {
+    width: auto !important;
+  }
+  .el-tabs .el-tabs__content .el-select,
+  .el-input {
+    width: 100% !important;
+  }
+
+  /* 抽屉 */
+  .el-drawer__wrapper .el-drawer{
+    width: 90% !important;
+  }
+}

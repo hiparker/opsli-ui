@@ -7,9 +7,9 @@
     @close="close"
   >
     <el-form ref="form" :model="form" :rules="rules" label-width="105px" class="userManagement-edit-container">
+      <el-row :gutter="10" >
 
-      <el-row>
-        <el-col :span="12">
+        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
           <!-- 大型项目设计都不是不允许修改用户名的 可能会关联很多地方 -->
           <!-- 修改不允许改用户名 -->
           <el-form-item label="用户名" prop="username">
@@ -18,16 +18,15 @@
             ></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12">
+
+        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
           <el-form-item label="昵称" prop="realName">
             <el-input v-model="form.realName" autocomplete="off"></el-input>
           </el-form-item>
         </el-col>
-      </el-row>
 
-      <!-- 如果是新增 则可以直接设置用户密码 修改则不允许 -->
-      <el-row v-if="formStatus">
-        <el-col :span="12">
+        <!-- 如果是新增 则可以直接设置用户密码 修改则不允许 -->
+        <el-col v-if="formStatus" :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
           <el-form-item label="密码" prop="password">
             <el-input
                 type="password"
@@ -37,7 +36,8 @@
             ></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12">
+
+        <el-col v-if="formStatus" :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
           <el-form-item label="确认密码" prop="verifyPassword">
             <el-input
               type="password"
@@ -47,36 +47,33 @@
             ></el-input>
           </el-form-item>
         </el-col>
-      </el-row>
 
-      <el-row>
-        <el-col :span="12">
+        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
           <el-form-item label="工号" prop="no">
             <el-input v-model.trim="form.no" autocomplete="off"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12">
+
+        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
           <el-form-item label="手机" prop="mobile">
             <el-input v-model.trim="form.mobile" autocomplete="off"></el-input>
           </el-form-item>
         </el-col>
-      </el-row>
 
-      <el-row>
-        <el-col :span="12">
+        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
           <el-form-item label="邮箱" prop="email">
             <el-input v-model.trim="form.email" autocomplete="off"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12">
+
+        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
           <el-form-item label="签名" prop="sign">
             <el-input type="textarea" v-model="form.sign" autocomplete="off"></el-input>
           </el-form-item>
         </el-col>
-      </el-row>
-      <el-row>
+
         <!-- 如果是超级管理员 可以设置租户 -->
-        <el-col :span="12"
+        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12"
                 v-if="userInfo != null && (userInfo.izSuperAdmin || $perms('system_user_tenant'))"
           >
             <el-form-item label="租户ID" prop="icon">
@@ -85,11 +82,13 @@
                          class="input-btn-choose" @click="showTenant"></el-button>
             </el-form-item>
         </el-col>
-        <el-col :span="12">
+
+        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12" >
           <el-form-item label="备注" prop="remark">
             <el-input type="textarea" v-model="form.remark" autocomplete="off"></el-input>
           </el-form-item>
         </el-col>
+
       </el-row>
 
     </el-form>

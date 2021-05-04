@@ -7,27 +7,27 @@
     @close="close"
   >
     <el-form ref="form" :model="form" :rules="rules" label-width="105px">
-      <el-row>
-        <el-col :span="12">
+      <el-row :gutter="10" >
+
+        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
           <el-form-item label="名称" prop="name">
             <el-input v-model="form.name" autocomplete="off"></el-input>
           </el-form-item>
         </el-col>
 
-        <el-col :span="12">
+        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
           <el-form-item label="金钱" prop="money">
             <el-input v-model="form.money" autocomplete="off"></el-input>
           </el-form-item>
         </el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="12">
+
+        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
           <el-form-item label="年龄" prop="age">
             <el-input v-model="form.age" autocomplete="off"></el-input>
           </el-form-item>
         </el-col>
 
-        <el-col :span="12">
+        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
           <el-form-item label="生日" prop="birth">
             <el-date-picker
               v-model="form.birth"
@@ -37,9 +37,8 @@
             ></el-date-picker>
           </el-form-item>
         </el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="12">
+
+        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
           <el-form-item label="是否启用" prop="izUsable">
             <el-select
               v-model="form.izUsable"
@@ -56,6 +55,7 @@
             </el-select>
           </el-form-item>
         </el-col>
+
       </el-row>
     </el-form>
     <div slot="footer" class="dialog-footer">

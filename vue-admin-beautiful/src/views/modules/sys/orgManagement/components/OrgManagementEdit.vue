@@ -7,8 +7,8 @@
     @close="close"
   >
     <el-form ref="form" :model="form" :rules="rules" label-width="105px" class="orgManagement-edit-container">
-      <el-row>
-        <el-col :span="12">
+      <el-row :gutter="10" >
+        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
           <el-form-item label="编号" prop="orgCode">
             <el-input v-model="form.orgCode" autocomplete="off" ></el-input>
             <!-- 如果上级编号不为空 则出现提醒 -->
@@ -17,14 +17,14 @@
             </span>
           </el-form-item>
         </el-col>
-        <el-col :span="12">
+
+        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
           <el-form-item label="名称" prop="orgName">
             <el-input v-model="form.orgName" autocomplete="off"></el-input>
           </el-form-item>
         </el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="12">
+
+        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
           <el-form-item label="类型" prop="orgType">
             <!-- 修改不允许改类型 -->
             <el-select v-model="form.orgType" placeholder="请选择"
@@ -40,20 +40,20 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="12">
+
+        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
           <el-form-item label="排序" prop="sortNo">
             <el-input-number
-                :min="1"
-                :max="500"
-                v-model="form.sortNo"
-                autocomplete="off"
+              :min="1"
+              :max="500"
+              v-model="form.sortNo"
+              autocomplete="off"
             ></el-input-number>
           </el-form-item>
         </el-col>
-      </el-row>
-      <el-row>
+
         <!-- 如果是最顶级类型 切是超级管理员的话 可以设置当前机构对应租户 -->
-        <el-col :span="12" v-if="
+        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12" v-if="
         ((form.id != null && form.id !== '' && form.orgType === '1') ||
         base.parentType === 0) &&
         userInfo != null && userInfo.izSuperAdmin">
@@ -63,8 +63,8 @@
                        class="input-btn-choose" @click="showTenant"></el-button>
           </el-form-item>
         </el-col>
-      </el-row>
 
+      </el-row>
 
     </el-form>
     <div slot="footer" class="dialog-footer">

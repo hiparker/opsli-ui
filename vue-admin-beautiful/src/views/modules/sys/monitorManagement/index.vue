@@ -1,7 +1,7 @@
 <template>
   <div class="card-container monitor-ui" v-loading="loadingData">
 
-    <el-row :gutter="12">
+    <el-row :gutter="10">
       <el-col :xs="24" :sm="24" :md="12" :lg="8" :xl="8">
         <el-card shadow="hover" :body-style="{ padding: '0px' }">
           <div slot="header">CPU使用率（检测{{speed}}秒）</div>
@@ -92,42 +92,43 @@
       </el-col>
     </el-row>
 
-    <el-row :gutter="12">
+    <el-row :gutter="10">
       <el-col>
         <el-card shadow="hover" :body-style="{ padding: '0px' }">
           <div slot="header">服务器信息</div>
           <el-form class="orgManagement-edit-container" label-width="115px">
-            <el-row>
-              <el-col :span="12">
+            <el-row :gutter="10" >
+              <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                 <el-form-item label="服务器名称">
                   {{ systemInfo.computerName }}
                 </el-form-item>
               </el-col>
-              <el-col :span="12">
+
+              <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                 <el-form-item label="操作系统">
                   {{ systemInfo.osName }}
                 </el-form-item>
               </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="12">
+
+              <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                 <el-form-item label="服务器IP">
                   {{ systemInfo.computerIp }}
                 </el-form-item>
               </el-col>
-              <el-col :span="12">
+
+              <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                 <el-form-item label="系统架构">
                   {{ systemInfo.osArch }}
                 </el-form-item>
               </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="12">
+
+              <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                 <el-form-item label="操作用户">
                   {{ systemInfo.userName }}
                 </el-form-item>
               </el-col>
-              <el-col :span="12">
+
+              <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                 <el-form-item label="项目路径">
                   {{ systemInfo.userDir }}
                 </el-form-item>
@@ -141,47 +142,44 @@
         <el-card shadow="hover" :body-style="{ padding: '0px' }">
           <div slot="header">JAVA虚拟机信息</div>
           <el-form class="orgManagement-edit-container" label-width="115px">
-            <el-row>
-              <el-col :span="12">
+            <el-row :gutter="10" >
+              <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                 <el-form-item label="JVM名称">
                   {{ JVMInfo.jvmName }}
                 </el-form-item>
               </el-col>
-              <el-col :span="12">
+
+              <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                 <el-form-item label="JAVA版本">
                   {{ JVMInfo.version }}
                 </el-form-item>
               </el-col>
-            </el-row>
 
-            <el-row>
-              <el-col :span="12">
+              <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                 <el-form-item label="JAVA供应商">
                   {{ JVMInfo.vendor }}
                 </el-form-item>
               </el-col>
-              <el-col :span="12">
+
+              <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                 <el-form-item label="JAVA供应商URL">
                   {{ JVMInfo.vendorUrl }}
                 </el-form-item>
               </el-col>
-            </el-row>
 
-            <el-row>
-              <el-col :span="12">
+              <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                 <el-form-item label="JDK启动时间">
                   {{ JVMInfo.startTime }}
                 </el-form-item>
               </el-col>
-              <el-col :span="12">
+
+              <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                 <el-form-item label="JDK运行时间">
                   {{ JVMInfo.runTime }}
                 </el-form-item>
               </el-col>
-            </el-row>
 
-            <el-row>
-              <el-col :span="12">
+              <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                   <el-form-item label="JAVA安装路径">
                     {{ JVMInfo.home }}
                   </el-form-item>
@@ -193,7 +191,7 @@
       </el-col>
     </el-row>
 
-    <el-row :gutter="12">
+    <el-row :gutter="10">
       <el-col :xs="72" :sm="72" :md="36" :lg="36" :xl="24">
         <el-card shadow="hover" :body-style="{ padding: '0px' }">
           <div slot="header">磁盘信息</div>

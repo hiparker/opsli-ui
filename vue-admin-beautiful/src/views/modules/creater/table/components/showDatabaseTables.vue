@@ -7,7 +7,7 @@
     @close="close"
   >
 
-  <div class="logsManagement-container">
+  <div class="adaptive-container">
 
     <el-table
       v-loading="listLoading"

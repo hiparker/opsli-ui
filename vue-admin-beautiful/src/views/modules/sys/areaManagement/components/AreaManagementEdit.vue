@@ -7,13 +7,14 @@
     @close="close"
   >
     <el-form ref="form" :model="form" :rules="rules" label-width="105px" class="areaManagement-edit-container">
-      <el-row>
-        <el-col :span="12">
+      <el-row :gutter="10" >
+        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
           <el-form-item label="编号" prop="areaCode">
             <el-input v-model="form.areaCode" autocomplete="off" ></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12">
+
+        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
           <el-form-item label="名称" prop="areaName">
             <el-input v-model="form.areaName" autocomplete="off"></el-input>
           </el-form-item>

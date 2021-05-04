@@ -5,23 +5,23 @@
     :close-on-click-modal="false"
     width="800px"
     @close="close"
+    append-to-body
   >
     <el-form ref="form" :model="form" :rules="rules" label-width="125px">
-      <el-row>
-        <el-col :span="12">
+      <el-row :gutter="10" >
+        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
           <el-form-item label="字典名称" prop="dictName">
             <el-input v-model="form.dictName" autocomplete="off"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12">
+
+        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
           <el-form-item label="字典值" prop="dictValue">
             <el-input v-model="form.dictValue" autocomplete="off"></el-input>
           </el-form-item>
         </el-col>
-      </el-row>
 
-      <el-row>
-        <el-col :span="12">
+        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
           <el-form-item label="是否内置" prop="izLock">
             <el-select v-model="form.izLock" placeholder="请选择" style="width: 100%">
               <el-option
@@ -33,7 +33,8 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="12">
+
+        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
           <el-form-item label="排序" prop="sortNo">
             <el-input-number
               :min="1"
@@ -43,6 +44,7 @@
             ></el-input-number>
           </el-form-item>
         </el-col>
+
       </el-row>
 
     </el-form>
@@ -108,13 +110,13 @@
     },
     methods: {
       showInsert(row) {
-        this.title = "添加";
+        this.title = "字典类型 - 添加";
         this.form.typeId = row.typeId;
         this.form.typeCode = row.typeCode;
         this.dialogFormVisible = true;
       },
       showUpdate(row) {
-        this.title = "编辑";
+        this.title = "字典类型 - 编辑";
         this.form = Object.assign({}, row);
         this.dialogFormVisible = true;
       },

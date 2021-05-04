@@ -3,13 +3,12 @@
     :title="title"
     :visible.sync="dialogFormVisible"
     :close-on-click-modal="false"
-
     width="800px"
     @close="close"
   >
     <el-form ref="form" v-loading="formLoading" :model="form" :rules="rules" label-width="105px" class="menuManagement-edit-container">
-      <el-row>
-        <el-col :span="12">
+      <el-row :gutter="10" >
+        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
           <el-form-item label="上级菜单" prop="parentId">
             <el-input
               v-model="parentMenu.menuName"
@@ -22,15 +21,13 @@
           </el-form-item>
         </el-col>
 
-        <el-col :span="12">
+        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
           <el-form-item label="名称" prop="menuName">
             <el-input v-model="form.menuName" autocomplete="off"></el-input>
           </el-form-item>
         </el-col>
-      </el-row>
 
-      <el-row>
-        <el-col :span="12">
+        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
           <el-form-item label="类型" prop="type">
             <el-select v-model="form.type" placeholder="请选择"
                        default-first-option=""
@@ -46,7 +43,7 @@
           </el-form-item>
         </el-col>
 
-        <el-col :span="12">
+        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
           <el-form-item label="权限" prop="permissions">
             <el-input
               v-model="form.permissions"
@@ -57,10 +54,8 @@
               </span>
           </el-form-item>
         </el-col>
-      </el-row>
 
-      <el-row>
-        <el-col :span="12">
+        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
           <el-form-item label="排序" prop="sortNo">
             <el-input-number
               :max="500"
@@ -70,7 +65,7 @@
           </el-form-item>
         </el-col>
 
-        <el-col :span="12">
+        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
           <el-form-item label="隐藏" prop="hidden">
             <el-select
               v-model="form.hidden"
@@ -85,10 +80,8 @@
             </el-select>
           </el-form-item>
         </el-col>
-      </el-row>
 
-      <el-row>
-        <el-col :span="12">
+        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
           <el-form-item label="总是显示" prop="hidden">
             <el-select
               v-model="form.alwaysShow"
@@ -104,7 +97,7 @@
           </el-form-item>
         </el-col>
 
-        <el-col :span="12">
+        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
           <el-form-item label="路径" prop="url">
             <el-autocomplete
               class="inline-input"
@@ -124,10 +117,8 @@
             </el-autocomplete>
           </el-form-item>
         </el-col>
-      </el-row>
 
-      <el-row>
-        <el-col :span="12">
+        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
           <el-form-item label="组件路径" prop="component">
             <el-autocomplete
               class="inline-input"
@@ -140,7 +131,7 @@
           </el-form-item>
         </el-col>
 
-        <el-col :span="12">
+        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
           <el-form-item label="重定向" prop="redirect">
             <el-input
               v-model="form.redirect"
@@ -148,10 +139,8 @@
               autocomplete="off"></el-input>
           </el-form-item>
         </el-col>
-      </el-row>
 
-      <el-row>
-        <el-col :span="12">
+        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
           <el-form-item label="图标" prop="icon">
             <el-input
               v-model="form.icon"
@@ -186,7 +175,7 @@
 <script>
   import {doInsert, doUpdate, get, getTree} from "@/api/menuManagement";
   import Icon from "@/components/opsli/icon/icon";
-  import MenuManagementChoose from "./MenuManagementChoose";
+  import MenuManagementChoose from "@/components/opsli/menu/MenuManagementChoose";
   import { deepClone } from "@/utils/clone";
   import { isNull} from "@/utils/validate";
   import { isGeneral , isGeneralWithChinese, getMsg} from "@/utils/valiargs";

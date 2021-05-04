@@ -10,8 +10,8 @@
           label-width="125px"
         >
 
-          <el-row>
-            <el-col :span="12">
+          <el-row :gutter="10">
+            <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
               <el-form-item label="默认重置密码" prop="def_pass">
                 <el-input
                   v-model="def.form.def_pass"
@@ -21,8 +21,8 @@
             </el-col>
           </el-row>
 
-          <el-row>
-            <el-col :span="12">
+          <el-row :gutter="10">
+            <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
               <el-form-item label="默认角色编号" prop="def_role">
                 <el-input
                   v-model="def.form.def_role"
@@ -32,8 +32,8 @@
             </el-col>
           </el-row>
 
-          <el-row>
-            <el-col :span="12">
+          <el-row :gutter="10">
+            <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
               <el-form-item label="文件存储位置" prop="storage_type">
                 <el-select
                   v-model="def.form.storage_type"
@@ -68,9 +68,24 @@
           :rules="crypto.rules"
           label-width="125px"
         >
-          <el-row>
-            <el-col :span="6">
-              <el-form-item label="非对称加密算法" prop="crypto_asymmetric">
+
+          <el-row :gutter="10" class="hidden-md-and-up">
+
+
+            <el-col :xs="24" :sm="24">
+              <el-form-item label="操作" prop="crypto_asymmetric">
+                <el-button
+                  icon="el-icon-refresh"
+                  type="primary"
+                  @click="cryptoReset"
+                >
+                  重置公私钥
+                </el-button>
+              </el-form-item>
+            </el-col>
+
+            <el-col :xs="24" :sm="24">
+              <el-form-item label="加密算法" prop="crypto_asymmetric">
                 <el-select
                   v-model="crypto.form.crypto_asymmetric"
                   placeholder="请选择加密算法类型"
@@ -86,7 +101,28 @@
                 </el-select>
               </el-form-item>
             </el-col>
-            <el-col :span="6" style="padding-left: 30px">
+          </el-row>
+
+          <el-row :gutter="10" class="hidden-sm-and-down">
+            <el-col :md="12" :lg="5" :xl="5">
+              <el-form-item label="加密算法" prop="crypto_asymmetric">
+                <el-select
+                  v-model="crypto.form.crypto_asymmetric"
+                  placeholder="请选择加密算法类型"
+                  style="width: 100%"
+                  @change="cryptoChange"
+                >
+                  <el-option
+                    v-for="item in dict.crypto_asymmetric"
+                    :key="item.dictValue"
+                    :label="item.dictName"
+                    :value="item.dictValue"
+                  ></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+
+            <el-col :md="12" :lg="6" :xl="6">
               <el-button
                 icon="el-icon-refresh"
                 type="primary"
@@ -97,8 +133,8 @@
             </el-col>
           </el-row>
 
-          <el-row>
-            <el-col :span="18">
+          <el-row :gutter="10">
+            <el-col :xs="24" :sm="24" :md="24" :lg="18" :xl="18">
               <el-form-item label="公钥" prop="crypto_asymmetric_public_key">
                 <el-input
                   v-model="crypto.form.crypto_asymmetric_public_key"
@@ -121,8 +157,8 @@
             </el-col>
           </el-row>
 
-          <el-row>
-            <el-col :span="18">
+          <el-row :gutter="10">
+            <el-col :xs="24" :sm="24" :md="24" :lg="18" :xl="18">
               <el-form-item label="私钥" prop="crypto_asymmetric_private_key">
                 <el-input
                   v-model="crypto.form.crypto_asymmetric_private_key"
@@ -168,8 +204,8 @@
               label-width="125px"
             >
 
-              <el-row>
-                <el-col :span="12">
+              <el-row :gutter="10">
+                <el-col :xs="22" :sm="22" :md="22" :lg="8" :xl="8">
                   <el-form-item label="SMTP地址" prop="email_smtp">
                     <el-autocomplete
                       class="inline-input"
@@ -182,8 +218,8 @@
                 </el-col>
               </el-row>
 
-              <el-row>
-                <el-col :span="12">
+              <el-row :gutter="10">
+                <el-col :xs="22" :sm="22" :md="22" :lg="8" :xl="8">
                   <el-form-item label="SMTP端口" prop="email_port">
                     <el-input
                       v-model="email.form.email_port"
@@ -193,8 +229,8 @@
                 </el-col>
               </el-row>
 
-              <el-row>
-                <el-col :span="12">
+              <el-row :gutter="10">
+                <el-col :xs="22" :sm="22" :md="22" :lg="8" :xl="8">
                   <el-form-item label="开启SSL认证" prop="email_ssl_enable">
                     <el-select
                       v-model="email.form.email_ssl_enable"
@@ -210,8 +246,8 @@
                 </el-col>
               </el-row>
 
-              <el-row>
-                <el-col :span="12">
+              <el-row :gutter="10">
+                <el-col :xs="22" :sm="22" :md="22" :lg="8" :xl="8">
                   <el-form-item label="邮箱账号" prop="email_account">
                     <el-input
                       v-model="email.form.email_account"
@@ -222,9 +258,9 @@
                 </el-col>
               </el-row>
 
-              <el-row>
-                <el-col :span="12">
-                  <el-form-item label="邮箱账号密码" prop="email_password">
+              <el-row :gutter="10">
+                <el-col :xs="22" :sm="22" :md="22" :lg="8" :xl="8">
+                  <el-form-item label="邮箱密码" prop="email_password">
                     <el-input
                       v-model="email.form.email_password"
                       type="password"
@@ -236,8 +272,8 @@
                 </el-col>
               </el-row>
 
-              <el-row>
-                <el-col :span="12">
+              <el-row :gutter="10">
+                <el-col :xs="22" :sm="22" :md="22" :lg="8" :xl="8">
                   <el-form-item label="发件人" prop="email_addresser">
                     <el-input
                       v-model="email.form.email_addresser"
@@ -260,8 +296,8 @@
 
           <el-tab-pane label="发信测试" name="smtp-test">
             <el-form ref="smtp-test-form" :model="emailTest.form" :rules="emailTest.rules" label-width="105px">
-              <el-row>
-                <el-col :span="12">
+              <el-row :gutter="10">
+                <el-col :xs="22" :sm="22" :md="22" :lg="8" :xl="8">
                   <el-form-item label="收件人" prop="to">
                     <el-input v-model="emailTest.form.to"
                               autocomplete="off"
@@ -271,8 +307,8 @@
                 </el-col>
               </el-row>
 
-              <el-row>
-                <el-col :span="12">
+              <el-row :gutter="10">
+                <el-col :xs="22" :sm="22" :md="22" :lg="8" :xl="8">
                   <el-form-item label="主题" prop="subject">
                     <el-input v-model="emailTest.form.subject"
                               autocomplete="off"
@@ -281,8 +317,8 @@
                 </el-col>
               </el-row>
 
-              <el-row>
-                <el-col :span="12">
+              <el-row :gutter="10">
+                <el-col :xs="22" :sm="22" :md="22" :lg="8" :xl="8">
                   <el-form-item label="内容" prop="content">
                     <el-input type="textarea"
                               v-model="emailTest.form.content"
@@ -321,8 +357,8 @@
               :rules="storage.storage_local.rules"
               label-width="125px"
             >
-              <el-row>
-                <el-col :span="12">
+              <el-row :gutter="10">
+                <el-col :xs="22" :sm="22" :md="22" :lg="8" :xl="8">
                   <el-form-item label="域名" prop="storage_local_domain">
                     <el-input
                       v-model="storage.storage_local.form.storage_local_domain"
@@ -333,8 +369,8 @@
                 </el-col>
               </el-row>
 
-              <el-row>
-                <el-col :span="12">
+              <el-row :gutter="10">
+                <el-col :xs="22" :sm="22" :md="22" :lg="8" :xl="8">
                   <el-form-item label="路径前缀" prop="storage_local_path_prefix">
                     <el-input
                       v-model="
@@ -675,4 +711,5 @@
     padding-right: 15px;
     padding-left: 15px;
   }
+
 </style>
