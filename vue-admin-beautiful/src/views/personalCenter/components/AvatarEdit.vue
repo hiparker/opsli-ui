@@ -26,19 +26,20 @@
 
     <el-row :gutter="10">
       <el-col :xs="24" :sm="24" :md="13" :lg="13" :xl="13">
-        <vue-cropper
-          ref="cropper"
-          class="avatar-cropper"
-          :img="options.img"
-          :info="true"
-          :autoCrop="options.autoCrop"
-          :autoCropWidth="options.autoCropWidth"
-          :autoCropHeight="options.autoCropHeight"
-          :fixedBox="options.fixedBox"
-          :maxImgSize="options.maxImgSize"
-          @realTime="realTime"
-        >
-        </vue-cropper>
+        <div class="avatar-cropper">
+          <vue-cropper
+            ref="cropper"
+            :img="options.img"
+            :info="true"
+            :autoCrop="options.autoCrop"
+            :autoCropWidth="options.autoCropWidth"
+            :autoCropHeight="options.autoCropHeight"
+            :fixedBox="options.fixedBox"
+            :maxImgSize="options.maxImgSize"
+            @realTime="realTime"
+          >
+          </vue-cropper>
+        </div>
       </el-col>
 
       <el-col class="hidden-sm-and-down" :md="11" :lg="11" :xl="11">
