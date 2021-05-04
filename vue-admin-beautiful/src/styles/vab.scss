@@ -360,6 +360,9 @@ html {
   }
 
   /* tab签 */
+  .el-dialog__wrapper .el-dialog .el-tabs {
+    width: 600px !important;
+  }
   .el-tabs .el-tabs__content .el-form-item__label {
     width: 105px !important;
   }
@@ -397,6 +400,9 @@ html {
   }
 
   /* tab签 */
+  .el-dialog__wrapper .el-dialog .el-tabs {
+    width: 550px !important;
+  }
   .el-tabs .el-tabs__content .el-form-item__label {
     width: 105px !important;
   }
@@ -434,6 +440,9 @@ html {
   }
 
   /* tab签 */
+  .el-dialog__wrapper .el-dialog .el-tabs {
+    width: 450px !important;
+  }
   .el-tabs .el-tabs__content .el-form-item__label {
     width: 105px !important;
   }
@@ -471,6 +480,9 @@ html {
   }
 
   /* tab签 */
+  .el-dialog__wrapper .el-dialog .el-tabs {
+    width: 270px !important;
+  }
   .el-tabs .el-tabs__content .el-form-item__label {
     width: auto !important;
   }

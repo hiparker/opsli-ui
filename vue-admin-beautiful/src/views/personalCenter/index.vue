@@ -1,24 +1,13 @@
 <template>
   <div class="personalCenter-container">
 
-    <el-row :gutter="10" class="hidden-md-and-up">
-      <el-tabs tab-position="top">
+    <el-row :gutter="10">
+      <el-tabs :tab-position="tabPosition">
         <el-tab-pane label="基本设置">
-          <profile-base/>
+          <profile-base ref="profile-base"/>
         </el-tab-pane>
         <el-tab-pane label="安全设置">
-          <profile-security/>
-        </el-tab-pane>
-      </el-tabs>
-    </el-row>
-
-    <el-row :gutter="10" class="hidden-sm-and-down">
-      <el-tabs tab-position="left">
-        <el-tab-pane label="基本设置">
-          <profile-base/>
-        </el-tab-pane>
-        <el-tab-pane label="安全设置">
-          <profile-security/>
+          <profile-security ref="profile-security"/>
         </el-tab-pane>
       </el-tabs>
     </el-row>
@@ -34,13 +23,34 @@
     name: "PersonalCenter",
     components: { ProfileBase, ProfileSecurity },
     data() {
-      return {};
+      return {
+        tabPosition: "top",
+        screenWidth: null,  //屏幕尺寸
+      };
     },
     created() {
-
+    },
+    mounted () {
+      this.screenWidth = document.body.clientWidth
+      window.onresize = () => {   //屏幕尺寸变化就重新赋值
+        return (() => {
+          this.screenWidth = document.body.clientWidth
+        })()
+      }
+    },
+    watch: {
+      screenWidth: {
+        handler: function (val, oldVal) {
+          // 如果大于 992 就显示 宽屏模式
+          if(val >= 992 ){
+            this.tabPosition = "left";
+          }else{
+            this.tabPosition = "top";
+          }
+        },
+      },
     },
     methods: {
-
     },
   };
 </script>
