@@ -151,7 +151,7 @@
         list: [],
         imageList: [],
         listLoading: true,
-        layout: "total, sizes, prev, pager, next, jumper",
+        layout: "total, prev, pager, next, sizes, jumper",
         total: 0,
         background: true,
         selectRows: "",

@@ -150,7 +150,7 @@
         userInfo: null,
         list: null,
         listLoading: true,
-        layout: "total, sizes, prev, pager, next, jumper",
+        layout: "total, prev, pager, next, sizes, jumper",
         total: 0,
         currentRow: null,
         elementLoadingText: "正在加载...",

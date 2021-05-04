@@ -10,77 +10,81 @@
     center
     @close="close"
   >
-    <div class="tenantManagement-container">
-      <vab-query-form>
-        <vab-query-form-left-panel :span="24">
-          <el-form :inline="true" :model="queryForm" @submit.native.prevent>
-            <el-form-item>
-              <el-input
-                v-model.trim="queryForm.id_EQ"
-                placeholder="请输入租户ID"
-                clearable
-              />
-            </el-form-item>
-            <el-form-item>
-              <el-input
-                v-model.trim="queryForm.tenantName_LIKE"
-                placeholder="请输入租户名称"
-                clearable
-              />
-            </el-form-item>
-            <el-form-item>
-              <el-button
-                icon="el-icon-search"
-                type="primary"
-                @click="queryData"
-              >
-                查询
-              </el-button>
-            </el-form-item>
-          </el-form>
-        </vab-query-form-left-panel>
-      </vab-query-form>
+    <div class="adaptive-container">
+      <div class="tenantManagement-container">
+        <vab-query-form>
+          <vab-query-form-left-panel :span="24">
+            <el-form :inline="true" :model="queryForm" @submit.native.prevent>
+              <el-form-item>
+                <el-input
+                  v-model.trim="queryForm.id_EQ"
+                  placeholder="请输入租户ID"
+                  clearable
+                />
+              </el-form-item>
+              <el-form-item>
+                <el-input
+                  v-model.trim="queryForm.tenantName_LIKE"
+                  placeholder="请输入租户名称"
+                  clearable
+                />
+              </el-form-item>
+              <el-form-item>
+                <el-button
+                  icon="el-icon-search"
+                  type="primary"
+                  @click="queryData"
+                >
+                  查询
+                </el-button>
+              </el-form-item>
+            </el-form>
+          </vab-query-form-left-panel>
+        </vab-query-form>
 
-      <el-table
-        v-loading="listLoading"
-        :data="list"
-        :element-loading-text="elementLoadingText"
-        highlight-current-row
-        @current-change="setCurrent"
-      >
-        <el-table-column show-overflow-tooltip label="序号" width="95">
-          <template slot-scope="scope">
-            {{ (queryForm.pageNo - 1) * queryForm.pageSize + scope.$index + 1 }}
-          </template>
-        </el-table-column>
+        <el-table
+          v-loading="listLoading"
+          :data="list"
+          :element-loading-text="elementLoadingText"
+          highlight-current-row
+          @current-change="setCurrent"
+        >
+          <el-table-column show-overflow-tooltip label="序号" width="95">
+            <template slot-scope="scope">
+              {{
+                (queryForm.pageNo - 1) * queryForm.pageSize + scope.$index + 1
+              }}
+            </template>
+          </el-table-column>
 
-        <el-table-column
-          show-overflow-tooltip
-          prop="id"
-          label="租户ID"
-        ></el-table-column>
+          <el-table-column
+            show-overflow-tooltip
+            prop="id"
+            label="租户ID"
+          ></el-table-column>
 
-        <el-table-column
-          show-overflow-tooltip
-          prop="tenantName"
-          label="租户名称"
-        ></el-table-column>
+          <el-table-column
+            show-overflow-tooltip
+            prop="tenantName"
+            label="租户名称"
+          ></el-table-column>
 
-        <el-table-column
-          show-overflow-tooltip
-          prop="remark"
-          label="备注"
-        ></el-table-column>
-      </el-table>
-      <el-pagination
-        background
-        :current-page="queryForm.pageNo"
-        :page-size="queryForm.pageSize"
-        :layout="layout"
-        :total="total"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-      ></el-pagination>
+          <el-table-column
+            show-overflow-tooltip
+            prop="remark"
+            label="备注"
+          ></el-table-column>
+        </el-table>
+        <el-pagination
+          background
+          :current-page="queryForm.pageNo"
+          :page-size="queryForm.pageSize"
+          :layout="layout"
+          :total="total"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+        ></el-pagination>
+      </div>
     </div>
 
     <div slot="footer" class="dialog-footer">
@@ -101,7 +105,7 @@
       return {
         list: null,
         listLoading: true,
-        layout: "total, sizes, prev, pager, next, jumper",
+        layout: "total, prev, pager, next, sizes, jumper",
         total: 0,
         selectRows: "",
         elementLoadingText: "正在加载...",

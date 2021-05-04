@@ -9,55 +9,62 @@
     append-to-body
     @close="close"
   >
-    <div class="icon-container">
-      <el-row :gutter="20">
-        <el-col :span="24">
-          <el-divider content-position="left">点击图标即可复制</el-divider>
-        </el-col>
-        <el-col :span="24">
-          <el-form :inline="true" label-width="80px" @submit.native.prevent>
-            <el-form-item label="图标名称">
-              <el-input v-model="queryForm.title"></el-input>
-            </el-form-item>
-            <el-form-item label-width="0">
-              <el-button native-type="submit" type="primary" @click="queryData">
-                搜索
-              </el-button>
-            </el-form-item>
-          </el-form>
-        </el-col>
+    <div class="adaptive-container">
+      <div class="icon-container">
+        <el-row :gutter="20">
+          <el-col>
+            <el-divider content-position="left">点击图标即可复制</el-divider>
+          </el-col>
+          <el-col>
+            <el-form :inline="true" label-width="80px" @submit.native.prevent>
+              <el-form-item label="图标名称">
+                <el-input v-model="queryForm.title"></el-input>
+              </el-form-item>
+              <el-form-item label-width="0">
+                <el-button
+                  native-type="submit"
+                  type="primary"
+                  @click="queryData"
+                >
+                  搜索
+                </el-button>
+              </el-form-item>
+            </el-form>
+          </el-col>
 
-        <el-col
-          v-for="(item, index) in queryIcon"
-          :key="index"
-          :xs="6"
-          :sm="8"
-          :md="3"
-          :lg="2"
-          :xl="2"
-        >
-          <el-card
-            shadow="hover"
-            style="cursor: pointer"
-            @click.native="handleCopyIcon(index, $event)"
+          <el-col
+            v-for="(item, index) in queryIcon"
+            :key="index"
+            :xs="6"
+            :sm="8"
+            :md="3"
+            :lg="2"
+            :xl="2"
           >
-            <vab-icon :icon="['fas', item]" />
-          </el-card>
-          <div class="icon-text">{{ item }}</div>
-        </el-col>
-        <el-col :span="24">
-          <el-pagination
-            :background="background"
-            :current-page="queryForm.pageNo"
-            :page-size="queryForm.pageSize"
-            :page-sizes="[72, 144, 216, 288]"
-            :layout="layout"
-            :total="total"
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-          ></el-pagination>
-        </el-col>
-      </el-row>
+            <el-card
+              shadow="hover"
+              style="cursor: pointer"
+              @click.native="handleCopyIcon(index, $event)"
+            >
+              <vab-icon :icon="['fas', item]" />
+            </el-card>
+            <div class="icon-text">{{ item }}</div>
+          </el-col>
+          <el-col>
+            <el-pagination
+              background
+              :current-page="queryForm.pageNo"
+              :page-size="queryForm.pageSize"
+              :page-sizes="[72, 144, 216, 288]"
+              :pager-count="4"
+              :layout="layout"
+              :total="total"
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+            ></el-pagination>
+          </el-col>
+        </el-row>
+      </div>
     </div>
     <div slot="footer" class="dialog-footer">
       <el-button @click="close">取 消</el-button>
@@ -67,7 +74,6 @@
 </template>
 
 <script>
-  import clip from "@/utils/clipboard";
   import { getIconList } from "@/router/mock/icon";
 
   export default {
@@ -75,9 +81,8 @@
     data() {
       return {
         copyText: "",
-        layout: "total, sizes, prev, pager, next, jumper",
+        layout: "prev, pager, next, jumper",
         total: 0,
-        background: true,
         height: 0,
         selectRows: "",
         elementLoadingText: "正在加载...",

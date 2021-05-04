@@ -8,79 +8,81 @@
     class="role-management-perms"
     @close="close"
   >
-    <div class="roleManagement-container">
-      <vab-query-form>
-        <vab-query-form-right-panel :span="24">
-          <el-form :inline="true" :model="queryForm" @submit.native.prevent>
-            <el-form-item>
-              <el-input
-                v-model.trim="queryForm.roleCode_EQ"
-                placeholder="请输入角色编号"
-                clearable
-              />
-            </el-form-item>
-            <el-form-item>
-              <el-input
-                v-model.trim="queryForm.roleName_LIKE"
-                placeholder="请输入角色名称"
-                clearable
-              />
-            </el-form-item>
-            <el-form-item>
-              <el-button
-                icon="el-icon-search"
-                type="primary"
-                @click="queryData"
-              >
-                查询
-              </el-button>
-            </el-form-item>
-          </el-form>
-        </vab-query-form-right-panel>
-      </vab-query-form>
+    <div class="adaptive-container">
+      <div class="roleManagement-container">
+        <vab-query-form>
+          <vab-query-form-right-panel :span="24">
+            <el-form :inline="true" :model="queryForm" @submit.native.prevent>
+              <el-form-item>
+                <el-input
+                  v-model.trim="queryForm.roleCode_EQ"
+                  placeholder="请输入角色编号"
+                  clearable
+                />
+              </el-form-item>
+              <el-form-item>
+                <el-input
+                  v-model.trim="queryForm.roleName_LIKE"
+                  placeholder="请输入角色名称"
+                  clearable
+                />
+              </el-form-item>
+              <el-form-item>
+                <el-button
+                  icon="el-icon-search"
+                  type="primary"
+                  @click="queryData"
+                >
+                  查询
+                </el-button>
+              </el-form-item>
+            </el-form>
+          </vab-query-form-right-panel>
+        </vab-query-form>
 
-      <el-table
-        ref="rolesTable"
-        v-loading="listLoading"
-        :data="list"
-        :element-loading-text="elementLoadingText"
-        row-key="id"
-        @select="setSelectRows"
-        @select-all="setSelectRows"
-      >
-        <!-- 复选框 -->
-        <el-table-column
-          show-overflow-tooltip
-          type="selection"
-        ></el-table-column>
+        <el-table
+          ref="rolesTable"
+          v-loading="listLoading"
+          :data="list"
+          :element-loading-text="elementLoadingText"
+          row-key="id"
+          @select="setSelectRows"
+          @select-all="setSelectRows"
+        >
+          <!-- 复选框 -->
+          <el-table-column
+            show-overflow-tooltip
+            type="selection"
+          ></el-table-column>
 
-        <el-table-column
-          show-overflow-tooltip
-          prop="roleCode"
-          label="角色编号"
-        ></el-table-column>
+          <el-table-column
+            show-overflow-tooltip
+            prop="roleCode"
+            label="角色编号"
+          ></el-table-column>
 
-        <el-table-column
-          show-overflow-tooltip
-          prop="roleName"
-          label="角色名称"
-        ></el-table-column>
+          <el-table-column
+            show-overflow-tooltip
+            prop="roleName"
+            label="角色名称"
+          ></el-table-column>
 
-        <el-table-column
-          show-overflow-tooltip
-          prop="remark"
-          label="备注"
-        ></el-table-column>
-      </el-table>
+          <el-table-column
+            show-overflow-tooltip
+            prop="remark"
+            label="备注"
+          ></el-table-column>
+        </el-table>
 
-      <el-pagination
-        background
-        :current-page="queryForm.pageNo"
-        :page-size="queryForm.pageSize"
-        :layout="layout"
-        :total="total"
-        @current-change="handleCurrentChange"
-      ></el-pagination>
+        <el-pagination
+          background
+          :current-page="queryForm.pageNo"
+          :page-size="queryForm.pageSize"
+          :layout="layout"
+          :total="total"
+          @current-change="handleCurrentChange"
+        ></el-pagination>
+      </div>
     </div>
 
     <div slot="footer" class="dialog-footer">

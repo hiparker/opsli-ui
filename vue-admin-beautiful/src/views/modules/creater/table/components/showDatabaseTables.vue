@@ -7,38 +7,38 @@
     @close="close"
   >
 
-  <div class="adaptive-container">
+    <div class="adaptive-container">
 
-    <el-table
-      v-loading="listLoading"
-      :data="list"
-      :element-loading-text="elementLoadingText"
-      @selection-change="setSelectRows"
-    >
+      <el-table
+        v-loading="listLoading"
+        :data="list"
+        :element-loading-text="elementLoadingText"
+        @selection-change="setSelectRows"
+      >
 
-      <el-table-column show-overflow-tooltip type="selection"></el-table-column>
+        <el-table-column show-overflow-tooltip type="selection"></el-table-column>
 
-      <el-table-column show-overflow-tooltip label="序号" width="80">
-        <template slot-scope="scope">
-          {{scope.$index + 1}}
-        </template>
-      </el-table-column>
+        <el-table-column show-overflow-tooltip label="序号" width="80">
+          <template slot-scope="scope">
+            {{scope.$index + 1}}
+          </template>
+        </el-table-column>
 
-      <el-table-column
-        show-overflow-tooltip
-        prop="tableName"
-        label="表名称"
-        width="240"
-      ></el-table-column>
+        <el-table-column
+          show-overflow-tooltip
+          prop="tableName"
+          label="表名称"
+          width="240"
+        ></el-table-column>
 
-      <el-table-column
-        show-overflow-tooltip
-        prop="tableComments"
-        label="描述"
-      ></el-table-column>
+        <el-table-column
+          show-overflow-tooltip
+          prop="tableComments"
+          label="描述"
+        ></el-table-column>
 
-    </el-table>
-  </div>
+      </el-table>
+    </div>
 
     <div slot="footer" class="dialog-footer">
       <el-button @click="close">取 消</el-button>

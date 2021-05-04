@@ -25,29 +25,19 @@
     data() {
       return {
         tabPosition: "top",
-        screenWidth: null,  //屏幕尺寸
       };
     },
     created() {
     },
-    mounted () {
-      this.screenWidth = document.body.clientWidth
-      window.onresize = () => {   //屏幕尺寸变化就重新赋值
-        return (() => {
-          this.screenWidth = document.body.clientWidth
-        })()
-      }
-    },
     watch: {
-      screenWidth: {
-        handler: function (val, oldVal) {
-          // 如果大于 992 就显示 宽屏模式
-          if(val >= 992 ){
-            this.tabPosition = "left";
-          }else{
-            this.tabPosition = "top";
-          }
-        },
+      //监听屏幕宽度变化
+      '$store.state.realTime.screenWidth':function(val, oldVal){
+        // 如果大于 992 就显示 宽屏模式
+        if(val >= 992 ){
+          this.tabPosition = "left";
+        }else{
+          this.tabPosition = "top";
+        }
       },
     },
     methods: {

@@ -146,7 +146,7 @@
         izLock: "0",
         list: null,
         listLoading: true,
-        layout: "total, sizes, prev, pager, next, jumper",
+        layout: "total, prev, pager, next, sizes, jumper",
         total: 0,
         elementLoadingText: "正在加载...",
         dictType: {

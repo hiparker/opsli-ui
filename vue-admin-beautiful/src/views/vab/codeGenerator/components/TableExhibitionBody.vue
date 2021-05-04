@@ -17,7 +17,7 @@
     </el-table>
     <el-pagination
       background
-      layout="total, sizes, prev, pager, next, jumper"
+      layout="total, prev, pager, next, sizes, jumper"
       :total="1000"
     ></el-pagination>
   </div>

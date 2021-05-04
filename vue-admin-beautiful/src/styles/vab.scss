@@ -291,6 +291,7 @@ html {
 .el-dialog__body,
 .el-dialog__footer {
   display: grid;
+  overflow: hidden;
 }
 
 /* 下拉提示菜单 */

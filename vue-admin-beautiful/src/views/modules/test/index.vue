@@ -145,6 +145,7 @@
 
       </el-table-column>
     </el-table>
+
     <el-pagination
       background
       :current-page="queryForm.pageNo"
@@ -166,6 +167,7 @@
   import Import from "./components/TestManagementImport";
 
   import { vueButtonClickBan } from "@/utils";
+
   import {isNull} from "@/utils/validate";
 
   export default {
@@ -175,7 +177,7 @@
       return {
         list: null,
         listLoading: true,
-        layout: "total, sizes, prev, pager, next, jumper",
+        layout: "total, prev, pager, next, sizes, jumper",
         total: 0,
         selectRows: "",
         elementLoadingText: "正在加载...",
