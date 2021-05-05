@@ -282,6 +282,13 @@ html {
 }
 
 /** 自定义支持 **/
+html body .el-image-viewer__mask, html body .v-modal {
+  background-color: rgba(0,0,0,.5);
+  opacity: .6;
+  -webkit-backdrop-filter: blur(10px);
+  /* backdrop-filter: blur(10px); */
+}
+
 .input-btn-choose {
   position: absolute;
   top: 0;
@@ -355,9 +362,11 @@ html {
     width: 105px !important;
   }
 
-  .el-dialog__wrapper .el-dialog .el-dialog__body .el-select,
-  .el-input {
-    width: 100% !important;
+  .el-dialog__wrapper .el-dialog .el-dialog__body {
+    .el-select,
+    .el-input {
+      width: 100% !important;
+    }
   }
 
   /* tab签 */
@@ -367,9 +376,11 @@ html {
   .el-tabs .el-tabs__content .el-form-item__label {
     width: 105px !important;
   }
-  .el-tabs .el-tabs__content .el-select,
-  .el-input {
-    width: 100% !important;
+  .el-tabs .el-tabs__content {
+    .el-select,
+    .el-input {
+      width: 100% !important;
+    }
   }
 
   /* 抽屉 */
@@ -395,9 +406,11 @@ html {
     width: 105px !important;
   }
 
-  .el-dialog__wrapper .el-dialog .el-dialog__body .el-select,
-  .el-input {
-    width: 100% !important;
+  .el-dialog__wrapper .el-dialog .el-dialog__body {
+    .el-select,
+    .el-input {
+      width: 100% !important;
+    }
   }
 
   /* tab签 */
@@ -407,9 +420,11 @@ html {
   .el-tabs .el-tabs__content .el-form-item__label {
     width: 105px !important;
   }
-  .el-tabs .el-tabs__content .el-select,
-  .el-input {
-    width: 100% !important;
+  .el-tabs .el-tabs__content {
+    .el-select,
+    .el-input {
+      width: 100% !important;
+    }
   }
 
   /* 抽屉 */
@@ -435,9 +450,11 @@ html {
     width: 105px !important;
   }
 
-  .el-dialog__wrapper .el-dialog .el-dialog__body .el-select,
-  .el-input {
-    width: 100% !important;
+  .el-dialog__wrapper .el-dialog .el-dialog__body {
+    .el-select,
+    .el-input {
+      width: 100% !important;
+    }
   }
 
   /* tab签 */
@@ -447,9 +464,11 @@ html {
   .el-tabs .el-tabs__content .el-form-item__label {
     width: 105px !important;
   }
-  .el-tabs .el-tabs__content .el-select,
-  .el-input {
-    width: 100% !important;
+  .el-tabs .el-tabs__content {
+    .el-select,
+    .el-input {
+      width: 100% !important;
+    }
   }
 
   /* 抽屉 */
@@ -475,9 +494,11 @@ html {
     width: auto !important;
   }
 
-  .el-dialog__wrapper .el-dialog .el-dialog__body .el-select,
-  .el-input {
-    width: 100% !important;
+  .el-dialog__wrapper .el-dialog .el-dialog__body {
+    .el-select,
+    .el-input {
+      width: 100% !important;
+    }
   }
 
   /* tab签 */
@@ -487,9 +508,11 @@ html {
   .el-tabs .el-tabs__content .el-form-item__label {
     width: auto !important;
   }
-  .el-tabs .el-tabs__content .el-select,
-  .el-input {
-    width: 100% !important;
+  .el-tabs .el-tabs__content {
+    .el-select,
+    .el-input {
+      width: 100% !important;
+    }
   }
 
   /* 抽屉 */
