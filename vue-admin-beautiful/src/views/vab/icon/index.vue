@@ -60,7 +60,7 @@ export default {
   data() {
     return {
       copyText: "",
-      layout: "total, prev, pager, next, sizes, jumper",
+      layout: "total, sizes, prev, pager, next, jumper",
       total: 0,
       background: true,
       height: 0,

@@ -636,7 +636,7 @@
         list: [],
         columnListLoading: true,
         columnSettingListLoading: true,
-        layout: "total, prev, pager, next, sizes, jumper",
+        layout: "total, sizes, prev, pager, next, jumper",
         selectRows: "",
         elementLoadingText: "正在加载...",
       };
