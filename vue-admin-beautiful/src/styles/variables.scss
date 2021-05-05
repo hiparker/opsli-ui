@@ -9,11 +9,11 @@ $base-color-default: #1890ff;
 //默认层级
 $base-z-index: 999;
 //横向布局纵向布局时菜单背景色
-$base-menu-background: #001529;
+$base-menu-background: #282c34;
 //菜单文字颜色
-$base-menu-color: hsla(0, 0%, 100%, 0.95);
+$base-menu-color: rgba(255, 255, 255, 0.95);
 //菜单选中文字颜色
-$base-menu-color-active: hsla(0, 0%, 100%, 0.95);
+$base-menu-color-active: rgba(255, 255, 255, 0.95);
 //菜单选中背景色
 $base-menu-background-active: $base-color-default;
 //标题颜色
