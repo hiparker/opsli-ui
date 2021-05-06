@@ -137,7 +137,7 @@
 </template>
 
 <script>
-  import { getList, doDelete, doDeleteAll } from "@/api/roleManagement";
+  import { getList, doDelete, doDeleteAll } from "@/api/sys/role/roleManagement";
   import Edit from "./components/RoleManagementEdit";
   import Perms from "./components/RoleManagementPerms";
   import {isNull} from "@/utils/validate";

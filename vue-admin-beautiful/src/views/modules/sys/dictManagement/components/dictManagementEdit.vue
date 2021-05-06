@@ -50,7 +50,7 @@
 </template>
 
 <script>
-  import { doInsert, doUpdate } from "@/api/dictManagement";
+  import { doInsert, doUpdate } from "@/api/sys/dict/dictManagement";
   import {isGeneral, isGeneralWithChinese, isNotNull, getMsg} from "@/utils/valiargs";
 
   export default {

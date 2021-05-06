@@ -93,9 +93,9 @@
 </template>
 
 <script>
-  import { getList } from "@/api/roleManagement";
+  import { getList } from "@/api/sys/role/roleManagement";
   import { isNull } from "@/utils/validate";
-  import { getRoleIdsByUserId, doSetRoles } from "@/api/userManagement";
+  import { getRoleIdsByUserId, doSetRoles } from "@/api/sys/user/userManagement";
 
   export default {
     name: "UserManagementRoles",

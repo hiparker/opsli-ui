@@ -12,6 +12,7 @@
     <el-col>
       <el-input v-model="filterText" placeholder="输入关键字过滤" />
       <el-tree
+        v-if="dialogVisible"
         ref="menuTree"
         v-loading="chooseLoading"
         :data="menuData"
@@ -37,7 +38,7 @@
 </template>
 
 <script>
-  import { getTreeChooseLazy } from "@/api/menuManagement";
+  import { getTreeChooseLazy } from "@/api/sys/menu/menuManagement";
 
   export default {
     name: "MenuManagementChoose",

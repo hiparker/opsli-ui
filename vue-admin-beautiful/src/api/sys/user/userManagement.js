@@ -1,5 +1,4 @@
 import request from "@/utils/request";
-import { tokenName } from "@/config/settings";
 
 export function getUserInfo(data) {
   return request({

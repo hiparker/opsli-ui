@@ -129,7 +129,7 @@
 </template>
 
 <script>
-  import { getList, doDelete} from "@/api/dictDetailManagement";
+  import { getList, doDelete} from "@/api/sys/dict/dictDetailManagement";
   import { isNull } from "@/utils/validate";
   import { getAccessToken } from "@/utils/accessToken";
   import { getUserInfo } from "@/api/user";

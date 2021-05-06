@@ -40,7 +40,7 @@
 </template>
 
 <script>
-  import { doDownloadTemplate, doImportExcel } from "@/api/testManagement";
+  import { doDownloadTemplate, doImportExcel } from "@/api/test/testManagement";
   import { isNull } from "@/utils/validate";
   import { random } from "@/utils";
 

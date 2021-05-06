@@ -137,7 +137,7 @@
 </template>
 
 <script>
-  import { getList, doDelete } from "@/api/dictManagement";
+  import { getList, doDelete } from "@/api/sys/dict/dictManagement";
   import { isNull } from "@/utils/validate";
   import dictDetail from "./components/dictDetail"
   import Edit from "./components/dictManagementEdit"

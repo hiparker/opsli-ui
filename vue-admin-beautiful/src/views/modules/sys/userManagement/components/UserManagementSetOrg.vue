@@ -65,7 +65,7 @@
 </template>
 
 <script>
-  import { getOrgByUserId, doSetOrg } from "@/api/userManagement";
+  import { getOrgByUserId, doSetOrg } from "@/api/sys/user/userManagement";
   import { isNull} from "@/utils/validate";
   import Org from "@/components/opsli/org/org";
 

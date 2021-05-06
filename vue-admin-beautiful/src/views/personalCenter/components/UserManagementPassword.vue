@@ -45,7 +45,7 @@
 </template>
 
 <script>
-  import { doUpdatePassword } from "@/api/userManagement";
+  import { doUpdatePassword } from "@/api/sys/user/userManagement";
   import { isNull, isPassword } from "@/utils/validate";
 
   export default {

@@ -56,7 +56,7 @@
 </template>
 
 <script>
-  import { doInsert, doUpdate } from "@/api/dictDetailManagement";
+  import { doInsert, doUpdate } from "@/api/sys/dict/dictDetailManagement";
   import { isName, isNull} from "@/utils/validate";
 
   export default {

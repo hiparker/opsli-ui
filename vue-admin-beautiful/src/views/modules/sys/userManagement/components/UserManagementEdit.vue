@@ -106,7 +106,7 @@
 </template>
 
 <script>
-  import { doInsert, doUpdate } from "@/api/userManagement";
+  import { doInsert, doUpdate } from "@/api/sys/user/userManagement";
   import { getAccessToken } from "@/utils/accessToken";
   import { getUserInfo } from "@/api/user";
   import Tenant from "@/components/opsli/tenant/tenant";

@@ -255,7 +255,7 @@
     getJVMInfo,
     getMemInfo,
     getSystemInfo,
-  } from "@/api/monitorManagement";
+  } from "@/api/sys/monitor/monitorManagement";
   import { isNull } from "@/utils/validate";
 
   export default {

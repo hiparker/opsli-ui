@@ -173,7 +173,7 @@
 </template>
 
 <script>
-  import {doInsert, doUpdate, get, getTree} from "@/api/menuManagement";
+  import {doInsert, doUpdate, get, getTree} from "@/api/sys/menu/menuManagement";
   import Icon from "@/components/opsli/icon/icon";
   import MenuManagementChoose from "@/components/opsli/menu/MenuManagementChoose";
   import { deepClone } from "@/utils/clone";
@@ -212,6 +212,7 @@
         ],
         parentMenu: {},
         genParentId: "",
+        oldParentId: "",
         form: {
           icon:"",
           // 设置默认值
@@ -275,18 +276,27 @@
           this.title = "编辑";
           this.form = Object.assign({}, row);
         }
+        this.oldParentId = this.form.parentId;
         this.dialogFormVisible = true;
         // 加载上级菜单数据
         this.fetchData();
       },
       close() {
         this.dialogFormVisible = false;
-        this.$refs["form"].resetFields();
-        this.form = this.$options.data().form;
+
+        // 刷新标签
+        if(!isNull(this.oldParentId)){
+          this.$emit("refreshNodeBy", this.oldParentId);
+        }
         if(!isNull(this.genParentId)){
           this.$emit("refreshNodeBy", this.genParentId);
         }
         this.$emit("refreshNodeBy",this.form.parentId);
+
+        this.$refs["form"].resetFields();
+        this.form = this.$options.data().form;
+        this.oldParentId = "";
+        this.genParentId = "";
       },
       save() {
         this.$refs["form"].validate(async (valid) => {
@@ -307,10 +317,15 @@
               }
             }
 
+            // 刷新标签
+            if(!isNull(this.oldParentId)){
+              this.$emit("refreshNodeBy", this.oldParentId);
+            }
             if(!isNull(this.genParentId)){
               this.$emit("refreshNodeBy", this.genParentId);
             }
-            await this.$emit("refreshNodeBy",this.form.parentId);
+            this.$emit("refreshNodeBy", this.form.parentId);
+
             this.close();
           } else {
             return false;

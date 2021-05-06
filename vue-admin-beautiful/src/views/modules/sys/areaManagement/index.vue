@@ -72,7 +72,7 @@
 </template>
 
 <script>
-  import { getTree, doDelete } from "@/api/areaManagement";
+  import { getTree, doDelete } from "@/api/sys/area/areaManagement";
   import Edit from "./components/AreaManagementEdit";
   import {isNull} from "@/utils/validate";
 

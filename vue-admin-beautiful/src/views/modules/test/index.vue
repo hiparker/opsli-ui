@@ -162,7 +162,7 @@
 </template>
 
 <script>
-  import { getList, doDelete, doDeleteAll, doExportExcel } from "@/api/testManagement";
+  import { getList, doDelete, doDeleteAll, doExportExcel } from "@/api/test/testManagement";
   import Edit from "./components/TestManagementEdit";
   import Import from "./components/TestManagementImport";
 

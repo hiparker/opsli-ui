@@ -263,8 +263,8 @@
 
 <script>
 
-  import { getList, doDelete, doDeleteAll, doResetPasswordById, doEnableAccount } from "@/api/userManagement";
-  import { getTreeLazyByUser } from "@/api/orgManagement";
+  import { getList, doDelete, doDeleteAll, doResetPasswordById, doEnableAccount } from "@/api/sys/user/userManagement";
+  import { getTreeLazyByUser } from "@/api/sys/org/orgManagement";
   import Edit from "./components/UserManagementEdit";
   import Roles from "./components/UserManagementRoles";
   import SetOrg from "./components/UserManagementSetOrg";

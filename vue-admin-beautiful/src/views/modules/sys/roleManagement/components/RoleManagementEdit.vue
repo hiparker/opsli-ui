@@ -68,9 +68,9 @@
 </template>
 
 <script>
-  import { doInsert, doUpdate } from "@/api/roleManagement";
+  import { doInsert, doUpdate } from "@/api/sys/role/roleManagement";
   import { isNull} from "@/utils/validate";
-  import {isGeneral, isGeneralWithChinese, isNotNull, getMsg} from "@/utils/valiargs";
+  import {isGeneral, isGeneralWithChinese, getMsg} from "@/utils/valiargs";
 
   import { getAccessToken } from "@/utils/accessToken";
   import { getUserInfo } from "@/api/user";

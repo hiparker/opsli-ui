@@ -4,10 +4,10 @@
     :visible.sync="dialogVisible"
     :destroy-on-close="true"
     width="450px"
-    @close="close"
     center
     append-to-body
     class="org-grid-select"
+    @close="close"
   >
     <el-col>
       <el-input v-model="filterText" placeholder="输入关键字过滤" />
@@ -25,20 +25,20 @@
         node-key="id"
         default-expand-all
       >
-      <span slot-scope="{ node, data }" class="vab-custom-tree-node">
-        <span class="vab-tree-item">
-          {{ node.label }}
-          <el-tag v-if="data.orgType === '1' ">
-            {{ $getDictNameByValue('org_type', data.orgType) }}
-          </el-tag>
-          <el-tag v-if="data.orgType === '2' " type="warning">
-            {{ $getDictNameByValue('org_type', data.orgType) }}
-          </el-tag>
-          <el-tag v-if="data.orgType === '3' " type="success">
-            {{ $getDictNameByValue('org_type', data.orgType) }}
-          </el-tag>
+        <span slot-scope="{ node, data }" class="vab-custom-tree-node">
+          <span class="vab-tree-item">
+            {{ node.label }}
+            <el-tag v-if="data.orgType === '1'">
+              {{ $getDictNameByValue("org_type", data.orgType) }}
+            </el-tag>
+            <el-tag v-if="data.orgType === '2'" type="warning">
+              {{ $getDictNameByValue("org_type", data.orgType) }}
+            </el-tag>
+            <el-tag v-if="data.orgType === '3'" type="success">
+              {{ $getDictNameByValue("org_type", data.orgType) }}
+            </el-tag>
+          </span>
         </span>
-      </span>
       </el-tree>
     </el-col>
 
@@ -50,8 +50,8 @@
 </template>
 
 <script>
-  import { isNull} from "@/utils/validate";
-  import { getGridTree } from "@/api/orgManagement";
+  import { isNull } from "@/utils/validate";
+  import { getGridTree } from "@/api/sys/org/orgManagement";
 
   /**
    * 组织结构类型
@@ -65,7 +65,7 @@
    *
    */
   export default {
-    name: "orgSelect",
+    name: "OrgSelect",
     data() {
       return {
         orgType: "",
@@ -82,28 +82,29 @@
         dialogVisible: false,
       };
     },
-    mounted() {
-      this.dict.org_type = this.$getDictList("org_type")
-    },
     watch: {
       filterText(val) {
         this.$refs["orgTree"].filter(val);
       },
     },
+    mounted() {
+      this.dict.org_type = this.$getDictList("org_type");
+    },
     methods: {
       showOrg(row) {
-        if(isNull(row) || isNull(row.orgType)){
+        if (isNull(row) || isNull(row.orgType)) {
           this.$baseMessage("未设置组织机构类型", "error");
           return;
         }
-        if(isNull(row) || isNull(row.parentId)){
+        if (isNull(row) || isNull(row.parentId)) {
           this.$baseMessage("未设置上级ID", "error");
           return;
         }
 
         this.parentId = row.parentId;
         this.orgType = row.orgType;
-        this.dialogTitle = "选择"+this.$getDictNameByValue('org_type', this.orgType);
+        this.dialogTitle =
+          "选择" + this.$getDictNameByValue("org_type", this.orgType);
 
         // 加载数据
         this.fetchData();
@@ -120,9 +121,9 @@
       async save() {
         // 获得当前所有选中节点ID
         let node = this.$refs["orgTree"].getCurrentNode();
-        if(isNull(node) || this.orgType !== node.orgType){
-          let title = this.$getDictNameByValue('org_type', this.orgType);
-          this.$baseMessage("请选择"+title, "error");
+        if (isNull(node) || this.orgType !== node.orgType) {
+          let title = this.$getDictNameByValue("org_type", this.orgType);
+          this.$baseMessage("请选择" + title, "error");
           return;
         }
 
@@ -132,23 +133,20 @@
       // 获得菜单数据
       async fetchData() {
         this.listLoading = true;
-        const { data } = await getGridTree({ parentId: this.parentId});
+        const { data } = await getGridTree({ parentId: this.parentId });
         this.orgData = data;
       },
       // 节点过滤操作
       filterNode(value, data) {
         if (!value) return true;
-          return data.orgName.indexOf(value) !== -1;
+        return data.orgName.indexOf(value) !== -1;
       },
 
       // ===================
       // 数组去重
-      unique (arr) {
-        return Array.from(new Set(arr))
+      unique(arr) {
+        return Array.from(new Set(arr));
       },
-
-
     },
-
   };
 </script>

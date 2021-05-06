@@ -31,7 +31,7 @@
 </template>
 
 <script>
-  import {doInsert, doUpdate} from "@/api/areaManagement";
+  import {doInsert, doUpdate} from "@/api/sys/area/areaManagement";
   import { deepClone } from "@/utils/clone";
   import { isNull } from "@/utils/validate";
   import { isNumber, isGeneralWithChinese, getMsg} from "@/utils/valiargs";

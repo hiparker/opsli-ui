@@ -147,7 +147,7 @@
 </template>
 
 <script>
-  import { getList, doDelete } from "@/api/logsManagement";
+  import { getList, doDelete } from "@/api/sys/logs/logsManagement";
   import { isNull } from "@/utils/validate";
   import { formateDate } from "@/utils/format";
 

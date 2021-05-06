@@ -43,7 +43,7 @@
 </template>
 
 <script>
-  import { doInsert, doUpdate } from "@/api/testManagement";
+  import { doInsert, doUpdate } from "@/api/test/testManagement";
   import { isName, isNull} from "@/utils/validate";
 
   export default {

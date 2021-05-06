@@ -30,7 +30,7 @@
 </template>
 
 <script>
-  import { doInsert, doUpdate } from "@/api/tenantManagement";
+  import { doInsert, doUpdate } from "@/api/sys/tenant/tenantManagement";
   import { isName, isNull} from "@/utils/validate";
 
   export default {

@@ -8,8 +8,6 @@ export function getList(data) {
   });
 }
 
-
-
 export function doDelete(data) {
   return request({
     url: "/api/v1/sys/logs/emptyByOneMonth",

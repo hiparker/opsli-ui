@@ -2,7 +2,7 @@ import request from "@/utils/request";
 
 export function getList(data) {
   return request({
-    url: "/api/v1/sys/dict/findPage",
+    url: "/api/v1/sys/role/findPage",
     method: "get",
     params: data,
   });
@@ -10,7 +10,7 @@ export function getList(data) {
 
 export function doInsert(data) {
   return request({
-    url: "/api/v1/sys/dict/insert",
+    url: "/api/v1/sys/role/insert",
     method: "post",
     data,
   });
@@ -18,7 +18,7 @@ export function doInsert(data) {
 
 export function doUpdate(data) {
   return request({
-    url: "/api/v1/sys/dict/update",
+    url: "/api/v1/sys/role/update",
     method: "post",
     data,
   });
@@ -26,7 +26,7 @@ export function doUpdate(data) {
 
 export function doDelete(data) {
   return request({
-    url: "/api/v1/sys/dict/del",
+    url: "/api/v1/sys/role/del",
     method: "post",
     params: data,
   });
@@ -34,24 +34,24 @@ export function doDelete(data) {
 
 export function doDeleteAll(data) {
   return request({
-    url: "/api/v1/sys/dict/delAll",
+    url: "/api/v1/sys/role/delAll",
     method: "post",
     params: data,
   });
 }
 
-export function getDictListByCodeParams(data) {
-  return{
-    url: "/api/v1/sys/dict/getDictListByCode",
+export function doGetPerms(data) {
+  return request({
+    url: "/api/v1/sys/role/perms/getPerms",
     method: "get",
     params: data,
-  };
+  });
 }
 
-export function getDictListByCode(data) {
+export function doSetPerms(data) {
   return request({
-    url: "/api/v1/sys/dict/getDictListByCode",
-    method: "get",
-    params: data,
+    url: "/api/v1/sys/role/perms/setPerms",
+    method: "post",
+    data,
   });
 }

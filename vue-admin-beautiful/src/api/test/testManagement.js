@@ -1,7 +1,4 @@
 import request from "@/utils/request";
-const { tokenName, baseURL } = require("@/config/settings");
-import { getAccessToken } from "@/utils/accessToken";
-import { isNull } from "@/utils/validate";
 import { downloadFileByData } from "@/utils/download";
 
 export function getList(data) {
@@ -11,7 +8,6 @@ export function getList(data) {
     params: data,
   });
 }
-
 
 export function doInsert(data) {
   return request({
@@ -67,7 +63,6 @@ export function doExportExcel(data) {
   downloadFileByData(requestURL, data);
 }
 
-
 /**
  * 导入Excel
  * @returns file
@@ -79,9 +74,8 @@ export function doImportExcel(data) {
     // 最长超时时间 50秒
     timeout: 50000,
     headers: {
-      'Content-Type': 'multipart/form-data'
+      "Content-Type": "multipart/form-data",
     },
     data,
   });
 }
-

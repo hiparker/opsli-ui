@@ -101,7 +101,7 @@
 </template>
 
 <script>
-  import { getTree, doDelete } from "@/api/orgManagement";
+  import { getTree, doDelete } from "@/api/sys/org/orgManagement";
   import Edit from "./components/OrgManagementEdit";
 
   export default {

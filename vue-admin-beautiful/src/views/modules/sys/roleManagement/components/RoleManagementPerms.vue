@@ -47,8 +47,8 @@
 
 <script>
   import { isNull} from "@/utils/validate";
-  import { getMenuAndPermsTree } from "@/api/menuManagement";
-  import { doGetPerms, doSetPerms } from "@/api/roleManagement";
+  import { getMenuAndPermsTree } from "@/api/sys/menu/menuManagement";
+  import { doGetPerms, doSetPerms } from "@/api/sys/role/roleManagement";
 
   export default {
     name: "RoleManagementPerms",

@@ -1,6 +1,5 @@
 import request from "@/utils/request";
 
-
 export function getTree(data) {
   return request({
     url: "/api/v1/sys/area/findTree",

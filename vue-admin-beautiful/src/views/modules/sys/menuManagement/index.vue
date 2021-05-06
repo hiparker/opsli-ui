@@ -145,7 +145,7 @@
 </template>
 
 <script>
-  import { getTreeLazy, doDelete } from "@/api/menuManagement";
+  import { getTreeLazy, doDelete } from "@/api/sys/menu/menuManagement";
   import Edit from "./components/MenuManagementEdit";
   import {isNull} from "@/utils/validate";
 

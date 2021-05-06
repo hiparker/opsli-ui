@@ -129,7 +129,7 @@
 </template>
 
 <script>
-  import { getList, doDelete, doDeleteAll, doEnableTenant } from "@/api/tenantManagement";
+  import { getList, doDelete, doDeleteAll, doEnableTenant } from "@/api/sys/tenant/tenantManagement";
   import Edit from "./components/TenantManagementEdit";
   import {isNull} from "@/utils/validate";
 

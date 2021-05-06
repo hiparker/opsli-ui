@@ -81,7 +81,7 @@
 </template>
 
 <script>
-  import {doInsert, doUpdate} from "@/api/orgManagement";
+  import {doInsert, doUpdate} from "@/api/sys/org/orgManagement";
   import { deepClone } from "@/utils/clone";
   import { isNull } from "@/utils/validate";
   import { isNotNull, isGeneral , isGeneralWithChinese, getMsg } from "@/utils/valiargs";
