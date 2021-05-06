@@ -351,7 +351,7 @@
       },
       // 菜单类型更改
       menuTypeChange(type){
-        const menuType = "3";
+        const menuType = "1";
         const buttonType = "2";
         const outreachType = "3";
         // 菜单
