@@ -255,7 +255,7 @@
       },
       showParentMenu(){
         this.$refs["menu-management-choose"]
-          .showMenuChoose(this.from.id);
+          .showMenuChoose(this.form.id);
       },
       showIcon(){
         this.$refs["icon"].showIcon();
