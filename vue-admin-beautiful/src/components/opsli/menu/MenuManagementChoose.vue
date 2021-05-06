@@ -27,7 +27,7 @@
         node-key="id"
         lazy
         :load="loadNode"
-      ></el-tree>
+      />
     </el-col>
 
     <div slot="footer" class="dialog-footer">
@@ -38,12 +38,13 @@
 </template>
 
 <script>
-  import { getTreeChooseLazy } from "@/api/sys/menu/menuManagement";
+  import { getTreeChooseLazy } from "@/api/system/menu/menuManagement";
 
   export default {
     name: "MenuManagementChoose",
     data() {
       return {
+        selfId: "",
         menuId: "",
         menuData: [],
         filterText: "",
@@ -65,13 +66,15 @@
       },
     },
     methods: {
-      showMenuChoose(row) {
+      showMenuChoose(id) {
+        this.selfId = id;
         this.dialogVisible = true;
       },
       close() {
         this.dialogVisible = false;
         this.tmpTreeData = {};
         this.menuData = [];
+        this.selfId = "";
       },
       // 保存权限
       async save() {
@@ -84,7 +87,10 @@
       async loadNode(treeNode, resolve) {
         const nodeData = treeNode.data;
         // 获得树数据
-        const { data } = await getTreeChooseLazy({ parentId: nodeData.id });
+        const { data } = await getTreeChooseLazy({
+          parentId: nodeData.id,
+          id: this.selfId,
+        });
         this.tmpTreeData[nodeData.id] = { treeNode, resolve };
         resolve(data);
       },
@@ -92,7 +98,9 @@
       // 获得菜单数据
       async fetchData() {
         this.chooseLoading = true;
-        const { data } = await getTreeChooseLazy();
+        const { data } = await getTreeChooseLazy({
+          id: this.selfId,
+        });
         this.menuData = data;
         setTimeout(() => {
           this.chooseLoading = false;
