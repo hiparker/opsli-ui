@@ -89,7 +89,7 @@ module.exports = {
   //vertical布局时默认展开的菜单path，使用逗号隔开建议只展开一个
   defaultOopeneds: ["/vab"],
   //需要加loading层的请求，防止重复提交
-  debounce: ["doEdit"],
+  debounce: ["insert", "update", "delete"],
   //需要自动注入并加载的模块
   providePlugin: { maptalks: "maptalks", "window.maptalks": "maptalks" },
   //npm run build时是否自动生成7z压缩包
