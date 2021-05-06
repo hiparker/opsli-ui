@@ -351,10 +351,11 @@
       },
       // 菜单类型更改
       menuTypeChange(type){
+        const menuType = "3";
         const buttonType = "2";
         const outreachType = "3";
-        // 外链
-        if(outreachType === type){
+        // 菜单
+        if(menuType === type){
           this.form.permissions = null;
         }
         // 按钮
