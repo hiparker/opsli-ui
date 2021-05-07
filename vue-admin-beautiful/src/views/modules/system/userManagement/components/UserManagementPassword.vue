@@ -45,7 +45,7 @@
 </template>
 
 <script>
-  import { doUpdatePassword } from "@/api/system/user/userManagement";
+  import { doUpdatePasswordById } from "@/api/system/user/userManagement";
   import { isNull, isPassword } from "@/utils/validate";
 
   export default {
@@ -73,6 +73,7 @@
 
       return {
         form: {
+          userId: "",
           oldPassword: "",
           newPassword: "",
           verifyPassword: "",
@@ -94,24 +95,25 @@
     },
     created() {},
     methods: {
-      showUpdatePassword() {
+      showUpdatePassword(row) {
         this.title = "修改密码";
+        this.form.userId = row.id;
         this.dialogFormVisible = true;
       },
       close() {
+        this.dialogFormVisible = false;
+        this.form.userId = "";
         this.form.oldPassword = "";
         this.form.newPassword = "";
         this.form.verifyPassword = "";
-        this.dialogFormVisible = false;
       },
       save() {
         this.$refs["form"].validate(async (valid) => {
           if (valid) {
             // 修改密码
-            const { success, msg } = await doUpdatePassword(this.form);
+            const { success, msg } = await doUpdatePasswordById(this.form);
             if(success){
               this.$baseMessage(msg, "success");
-              await this.$emit("fetchData");
             }
             this.close();
           } else {

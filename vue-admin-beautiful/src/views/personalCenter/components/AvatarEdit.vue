@@ -73,7 +73,7 @@
 </template>
 <script>
   import { VueCropper } from 'vue-cropper'
-  import { doUpdateAvatar } from '@/api/sys/user/userManagement'
+  import { doUpdateAvatar } from '@/api/system/user/userManagement'
   import axios from "axios";
   import {baseURL, requestTimeout } from "@/config/settings";
   import store from "@/store";

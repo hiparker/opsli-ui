@@ -1,6 +1,6 @@
 export function getPublicKey() {
   return {
-    url: "/sys/publicKey",
+    url: "/system/publicKey",
     method: "get",
   };
 }

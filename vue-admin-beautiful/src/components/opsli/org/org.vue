@@ -51,7 +51,7 @@
 
 <script>
   import { isNull } from "@/utils/validate";
-  import { getGridTree } from "@/api/sys/org/orgManagement";
+  import { getGridTree } from "@/api/system/org/orgManagement";
 
   /**
    * 组织结构类型

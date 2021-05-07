@@ -95,7 +95,7 @@
 </template>
 
 <script>
-  import { getList } from "@/api/sys/tenant/tenantManagement";
+  import { getList } from "@/api/system/tenant/tenantManagement";
   import { isNull } from "@/utils/validate";
 
   export default {

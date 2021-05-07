@@ -10,7 +10,7 @@ export async function login(data) {
   }
 
   return request({
-    url: "/sys/login",
+    url: "/system/login",
     method: "post",
     data,
   });
@@ -18,7 +18,7 @@ export async function login(data) {
 
 export function getSlipCount(data) {
   return request({
-    url: "/sys/slipCount",
+    url: "/system/slipCount",
     method: "get",
     params: data,
   });
@@ -26,7 +26,7 @@ export function getSlipCount(data) {
 
 export function getUserInfo(accessToken) {
   return request({
-    url: "/api/v1/sys/user/getInfo",
+    url: "/api/v1/system/user/getInfo",
     method: "get",
     headers: {
       [tokenName]: accessToken,
@@ -36,7 +36,7 @@ export function getUserInfo(accessToken) {
 
 export function getUserOrg(accessToken) {
   return request({
-    url: "/api/v1/sys/user/getOrg",
+    url: "/api/v1/system/user/getOrg",
     method: "get",
     headers: {
       [tokenName]: accessToken,
@@ -46,7 +46,7 @@ export function getUserOrg(accessToken) {
 
 export function logout() {
   return request({
-    url: "/sys/logout",
+    url: "/system/logout",
     method: "post",
   });
 }

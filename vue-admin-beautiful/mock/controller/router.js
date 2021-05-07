@@ -42,19 +42,19 @@ const data = [
       {
         path: "userManagement",
         name: "UserManagement",
-        component: "views/modules/sys/userManagement/index",
+        component: "views/modules/system/userManagement/index",
         meta: { title: "用户管理" },
       },
       {
         path: "roleManagement",
         name: "RoleManagement",
-        component: "views/modules/sys/roleManagement/index",
+        component: "views/modules/system/roleManagement/index",
         meta: { title: "角色管理" },
       },
       {
         path: "menuManagement",
         name: "MenuManagement",
-        component: "views/modules/sys/menuManagement/index",
+        component: "views/modules/system/menuManagement/index",
         meta: { title: "菜单管理", badge: "New" },
       },
     ],

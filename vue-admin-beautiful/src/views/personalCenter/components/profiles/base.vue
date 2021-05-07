@@ -167,7 +167,7 @@
   import { getAccessToken } from "@/utils/accessToken";
   import { getUserInfo, getUserOrg } from "@/api/user";
   import { isEmail, isName, isNull, isPhone} from "@/utils/validate";
-  import { doUpdateSelf } from "@/api/sys/user/userManagement";
+  import { doUpdateSelf } from "@/api/system/user/userManagement";
   import AvatarEdit from "../AvatarEdit";
   import { mapGetters } from "vuex";
   const { baseURL } = require("@/config/settings");

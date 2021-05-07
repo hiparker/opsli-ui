@@ -1,7 +1,7 @@
 import { storage, baseURL } from "@/config/settings";
 import { isNull } from "@/utils/validate";
 import cookie from "js-cookie";
-import { getDictListByCodeParams } from "@/api/sys/dict/dictManagement";
+import { getDictListByCodeParams } from "@/api/system/dict/dictManagement";
 import { ajax } from "@/utils/request";
 
 // 缓存前缀 方便统一删除处理
