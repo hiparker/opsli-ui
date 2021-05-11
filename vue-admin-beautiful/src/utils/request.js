@@ -4,6 +4,7 @@ import {
   baseURL,
   contentType,
   debounce,
+  rowLockCode,
   invalidCode,
   noPermissionCode,
   requestTimeout,
@@ -42,12 +43,25 @@ const needLoading = (config) => {
  */
 const handleCode = (code, msg) => {
   switch (code) {
+    case rowLockCode:
+      // 触发行锁
+      Vue.prototype.$baseConfirm(
+        msg || `后端接口${code}异常，是否刷新页面重试？`,
+        null,
+        async () => {
+          location.reload();
+        }
+      );
+      break;
     case invalidCode:
       Vue.prototype.$baseMessage(msg || `后端接口${code}异常`, "error");
       store.dispatch("user/resetAccessToken").catch(() => {});
       if (loginInterception) {
         location.reload();
       }
+
+      // 清除字典数据
+      Vue.prototype.$clearDictList();
       break;
     case noPermissionCode:
       store.dispatch("user/resetAccessToken").catch(() => {});

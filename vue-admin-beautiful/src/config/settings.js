@@ -72,6 +72,8 @@ module.exports = {
   successCode: [200, 0],
   //登录失效code
   invalidCode: 402,
+  //行锁更新异常code
+  rowLockCode: 10100,
   //无权限code
   noPermissionCode: 401,
   //是否显示在页面高亮错误 生产环境不需要显示 errorLog
