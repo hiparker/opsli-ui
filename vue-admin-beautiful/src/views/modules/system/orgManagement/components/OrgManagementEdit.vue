@@ -214,7 +214,6 @@
         this.base.parentCode = "";
         this.base.parentType = null;
         this.dict.org_type = [];
-        this.$emit("fetchData");
       },
       save() {
         this.$refs["form"].validate(async (valid) => {

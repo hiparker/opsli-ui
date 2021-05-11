@@ -680,7 +680,6 @@
         this.dict.field_type = null;
         this.list = [];
         this.activeName = 'column';
-        this.$emit("fetchData");
       },
       save() {
         // 验证form 表单

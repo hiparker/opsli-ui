@@ -162,7 +162,6 @@
         this.dialogFormVisible = false;
         this.$refs["form"].resetFields();
         this.form = this.$options.data().form;
-        this.$emit("fetchData");
       },
       save() {
         this.$refs["form"].validate(async (valid) => {

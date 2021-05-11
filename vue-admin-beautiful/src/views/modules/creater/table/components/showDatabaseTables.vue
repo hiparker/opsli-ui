@@ -78,7 +78,6 @@ import { doImportTables, getTables} from "@/api/creater/tableManagement";
         this.dialogFormVisible = false;
         this.title = "";
         this.list = [];
-        this.$emit("fetchData");
       },
       async save(){
         if (this.selectRows.length > 0) {
