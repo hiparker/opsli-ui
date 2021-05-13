@@ -85,6 +85,8 @@ const actions = {
       commit("setUsername", realName);
       if (avatar) {
         commit("setAvatar", avatar);
+      } else {
+        commit("setAvatar", "");
       }
       return state.permissions;
     } else {
