@@ -285,15 +285,6 @@
       close() {
         this.dialogFormVisible = false;
 
-        // 刷新标签
-        if(!isNull(this.oldParentId)){
-          this.$emit("refreshNodeBy", this.oldParentId);
-        }
-        if(!isNull(this.genParentId)){
-          this.$emit("refreshNodeBy", this.genParentId);
-        }
-        this.$emit("refreshNodeBy",this.form.parentId);
-
         this.$refs["form"].resetFields();
         this.form = this.$options.data().form;
         this.oldParentId = "";
