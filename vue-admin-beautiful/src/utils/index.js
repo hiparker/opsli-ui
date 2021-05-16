@@ -332,8 +332,7 @@ export function buttonClickBan(el, second) {
           // 设置按钮倒计时
           textSpan.innerText = btnText + " (" + (second - i) + ")";
           if (i === second) {
-            // 解除按钮
-            el.classList.remove("is-disabled");
+            // 解除按钮            el.classList.remove("is-disabled");
             el.style["pointer-events"] = "auto";
             // 设置按钮倒计时
             textSpan.innerText = btnText;
