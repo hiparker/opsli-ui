@@ -316,6 +316,7 @@ export function buttonClickBan(el, second) {
 
   // 设置当前按钮禁用
   el.classList.add("is-disabled");
+  el.style["pointer-events"] = "none";
 
   // 获得当前按钮文字
   let textSpan = el.querySelector("span");
@@ -333,6 +334,7 @@ export function buttonClickBan(el, second) {
           if (i === second) {
             // 解除按钮
             el.classList.remove("is-disabled");
+            el.style["pointer-events"] = "auto";
             // 设置按钮倒计时
             textSpan.innerText = btnText;
           }
