@@ -7,14 +7,14 @@ import { isNull } from "@/utils/validate";
  * @returns {boolean}
  */
 export default {
-  install (Vue, options) {
+  install(Vue, options) {
     Vue.prototype.$perms = function (perms) {
       let permsArray = $store.getters["user/perms"];
       let ret = false;
-      if(!isNull(permsArray)){
+      if (!isNull(permsArray)) {
         ret = permsArray.includes(perms);
       }
       return ret;
-    }
-  }
-}
+    };
+  },
+};

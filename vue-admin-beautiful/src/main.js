@@ -19,12 +19,11 @@ import "./plugins";
 Vue.config.productionTip = false;
 
 // 添加全局权限验证
-Vue.use($perms)
+Vue.use($perms);
 // 添加全局字典
-Vue.use($dict)
+Vue.use($dict);
 // 添加全局公钥
-Vue.use($publicKey)
-
+Vue.use($publicKey);
 
 new Vue({
   el: "#vue-admin-beautiful",
