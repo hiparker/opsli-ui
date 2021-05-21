@@ -7,28 +7,53 @@ const privateKey =
   "MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAJqTLKryt+SYq8oHZ/PeFR64Pq2A9qsKZmZFzU6gvkQ37JeCFCYMitxmF7AtlktSktB3dPdxHEppbfSdY1+i140eAqMZga7j4FmjIdnyW1OauiVgaimJLAEyE7uTAAPggrU9kdqgXbA8hIffm5tu6DKRq/t1NpYEO42S/IGK/yoxAgMBAAECgYEAiWu+klwm0LxKPdpHuK7/58e1MVst8PHWB6aW2AhgHxX46NlkQE92RGsfNCnTLDPFAkCxZCrTE/SXJJmn9yY2qoS26OV0PbTGajk96M8lDi9JSmWCNV1eywPecObSyvtPd5jaPtq2jkgNY/hHJjH6kV7UAFZuaSK7jxskfq7uR2ECQQDPfmGjPiMc65+LE9U7jC4LokyUi1yCgN6AY5MgF6fkxUVJD2mtl9BqRK7qE0OnsRb0NzID3PSfa7aA2I0Rlsj/AkEAvrXUBQ6hfuEwD1896qpSJUr7tLidby/3jYwSoewuydDT2duDc2ZCz4/U/1NpxSxWT10ZZi2ExsFZn/3PDylczwJARA3oijkcHSUu69eybVh51bkCswnOasNHtwZxv+niWEdXhTH38EbFxcUHNaDh5MNRiwH7dobm+M7EShg8lJNHEwJAclRdU97OkFr9zeliHCGZd4P5XAFlWHfgJ7p2nR4Teqe3qZ6Aspj2qqpmnd7qxOrsn02H4YqeU+0sBs9I56T7XwJAAg8wHrh/FAPY96mAya0bpv6zm/7bave17vs+8B+fhBEHHuvetfv8Xi/RkXL0rjE4LaTHefoUbZPNbIhNYiN0CQ==";
 
 /**
- * @copyright chuzhixin 1204505056@qq.com
- * @description RSA加密
+ * 最长加密长度
+ * @type {number}
+ */
+const MAX_ENCRYPT_BLOCK = 117;
+/**
+ * 最长解码长度
+ * @type {number}
+ */
+const MAX_DECRYPT_BLOCK = 128;
+
+/**
+ * @description RSA加密(支持长字符加密)
  * @param data
  * @returns {Promise<{param: PromiseLike<ArrayBuffer>}|*>}
  */
 export async function encryptedData(data) {
+  // 获得公钥
   let publicKey = Vue.prototype.$getPublicKey();
   if (isNull(publicKey)) {
     return data;
   }
+
   const encrypt = new JSEncrypt();
   encrypt.setPublicKey(
     `-----BEGIN PUBLIC KEY-----${publicKey}-----END PUBLIC KEY-----`
   );
-  return {
-    encryptData: encrypt.encrypt(JSON.stringify(data)),
-  };
+  let bufTmp = "",
+    hexTmp = "",
+    result = "";
+  let offSet = 0;
+  const buffer = Buffer.from(JSON.stringify(data));
+  const inputLen = buffer.length;
+  while (inputLen - offSet > 0) {
+    if (inputLen - offSet > MAX_ENCRYPT_BLOCK) {
+      bufTmp = buffer.slice(offSet, offSet + MAX_ENCRYPT_BLOCK);
+    } else {
+      bufTmp = buffer.slice(offSet, inputLen);
+    }
+    hexTmp = encrypt.encrypt(bufTmp.toString());
+    result += atob(hexTmp);
+    offSet += MAX_ENCRYPT_BLOCK;
+  }
+  return btoa(result);
 }
 
 /**
- * @copyright chuzhixin 1204505056@qq.com
- * @description RSA解密
+ * @description RSA解密(支持长字符解密)
  * @param data
  * @returns {PromiseLike<ArrayBuffer>}
  */
@@ -37,6 +62,21 @@ export function decryptedData(data) {
   decrypt.setPrivateKey(
     `-----BEGIN RSA PRIVATE KEY-----${privateKey}-----END RSA PRIVATE KEY-----`
   );
-
-  return decrypt.decrypt(JSON.stringify(data));
+  let bufTmp = "",
+    hexTmp = "",
+    result = "";
+  let offSet = 0;
+  const buffer = atob(data);
+  const inputLen = buffer.length;
+  while (inputLen - offSet > 0) {
+    if (inputLen - offSet > MAX_DECRYPT_BLOCK) {
+      bufTmp = buffer.slice(offSet, offSet + MAX_DECRYPT_BLOCK);
+    } else {
+      bufTmp = buffer.slice(offSet, inputLen);
+    }
+    hexTmp = decrypt.decrypt(btoa(bufTmp));
+    result += hexTmp;
+    offSet += MAX_DECRYPT_BLOCK;
+  }
+  return JSON.parse(result);
 }

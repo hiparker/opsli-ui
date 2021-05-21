@@ -6,9 +6,12 @@ import { loginRSA, tokenName } from "@/config/settings";
 
 export async function login(data) {
   if (loginRSA) {
-    data = await encryptedData(data);
+    // 加密数据
+    let encrypted = await encryptedData(data);
+    data = {
+      encryptData: encrypted,
+    };
   }
-
   return request({
     url: "/system/login",
     method: "post",
