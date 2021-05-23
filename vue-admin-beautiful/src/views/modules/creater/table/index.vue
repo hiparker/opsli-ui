@@ -11,6 +11,13 @@
         > 添加 </el-button>
 
         <el-button
+          v-if="$perms('deve_creater_insert')"
+          icon="el-icon-plus"
+          type="primary"
+          @click="handleInsertNew"
+        > 添加新 </el-button>
+
+        <el-button
           v-if="$perms('deve_creater_import')"
           icon="el-icon-plus"
           type="primary"
@@ -179,6 +186,8 @@
 
     <edit ref="edit" @fetchData="fetchData"></edit>
 
+    <new-edit ref="new-edit" @fetchData="fetchData"></new-edit>
+
     <show-database-tables ref="show-database-tables" @fetchData="fetchData"></show-database-tables>
 
     <gen-create ref="gen-create"></gen-create>
@@ -195,13 +204,14 @@
   import { getList, doDelete, doDeleteAll, doSync, doCreateMenu } from "@/api/creater/tableManagement";
   import { isNull } from "@/utils/validate";
   import Edit from "./components/TableEdit";
+  import NewEdit from "./components/edit/TableNewEdit.vue";
   import MenuManagementChoose from "@/components/opsli/menu/MenuManagementChoose";
   import ShowDatabaseTables from "./components/showDatabaseTables";
   import GenCreate from "./components/GenCreate";
 
   export default {
     name: "CreateTableManagement",
-    components: {GenCreate, Edit,ShowDatabaseTables,MenuManagementChoose },
+    components: {GenCreate, Edit, NewEdit, ShowDatabaseTables,MenuManagementChoose },
     data() {
       return {
         list: null,
@@ -224,12 +234,15 @@
       setSelectRows(val) {
         this.selectRows = val;
       },
+      handleInsertNew() {
+        this.$refs["new-edit"].showEdit();
+      },
       handleInsert() {
         this.$refs["edit"].showEdit();
       },
       handleUpdate(row) {
         if (row.id) {
-          this.$refs["edit"].showEdit(row);
+          this.$refs["new-edit"].showEdit(row);
         }
       },
       handleImport() {

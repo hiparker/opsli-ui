@@ -3,7 +3,7 @@
     :title="title"
     :visible.sync="dialogFormVisible"
     :close-on-click-modal="false"
-    width="1220px"
+    width="90% !important"
     @close="close"
   >
     <el-form ref="form" :model="form" :rules="rules" label-width="105px">
@@ -490,12 +490,13 @@
 </template>
 
 <script>
-  import Sortable from "sortablejs";
-  import { deepClone } from "@/utils/clone";
-  import { doInsert, doUpdate, getSubList} from "@/api/creater/tableManagement";
-  import {isCode, isNull} from "@/utils/validate";
+import { uuid } from "@/utils";
+import Sortable from "sortablejs";
+import {deepClone} from "@/utils/clone";
+import {doInsert, doUpdate, getSubList} from "@/api/creater/tableManagement";
+import {isCode, isNull} from "@/utils/validate";
 
-  export default {
+export default {
     name: "CreateTableManagementEdit",
     components: { Sortable },
     data() {
@@ -717,7 +718,7 @@
                         }
                       }
 
-                      if(columnList == null || columnList.length === 0){
+                      if(columnList.length === 0){
                         tmpForm.columnList = null;
                       }else{
                         tmpForm.columnList = columnList;
@@ -772,8 +773,7 @@
 
       // 数据库类型发生改动
       jdbcTypeChange(newValue){
-        let oldValue = this.$refs.jdbcType.value;
-        this.form.jdbcType = oldValue;
+        this.form.jdbcType = this.$refs.jdbcType.value;
         this.$baseConfirm("更换数据库类型将会清空当前已设字段，你确定要更换吗", null, () => {
           // 改为新值
           this.form.jdbcType = newValue;
@@ -876,7 +876,7 @@
           temp = deepClone(this.columnFormTemp);
         }
 
-        temp.id = "temp_" + this.uuid()
+        temp.id = "temp_" + uuid()
         if(this.list == null || this.list.length === 0){
           temp.sort = 0;
         } else {
@@ -986,20 +986,6 @@
         })
       },
 
-      // 获取uuid
-      uuid() {
-        const s = [];
-        const hexDigits = "0123456789abcdef";
-        for (let i = 0; i < 36; i++) {
-          s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
-        }
-        s[14] = "4";
-        s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1);
-        s[8] = s[13] = s[18] = s[23];
-        this.uuidA = s.join("");
-        return this.uuidA;
-      },
-
       // 请求数据
       async fetchData() {
         this.columnListLoading = true;
@@ -1013,11 +999,7 @@
             // 处理数据
             // 设置禁止修改字段 （如果有树表 则 parent_id 字段不允许任何修改）
             for (let i = 0; i < this.list.length; i++) {
-              if(this.list[i].fieldName !== this.treeName){
-                this.list[i].disabled = false;
-              }else{
-                this.list[i].disabled = true;
-              }
+              this.list[i].disabled = this.list[i].fieldName === this.treeName;
 
               if(!isNull(this.list[i].izPk)){
                 this.list[i].izPk = parseInt(this.list[i].izPk);

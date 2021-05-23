@@ -186,7 +186,6 @@
             const paramsData = doCreateJson(this.form);
             paramsData.params[tokenName] = getAccessToken();
 
-            //let url = window.URL.createObjectURL("https://www.baidu.com")
             let link = document.createElement('a');
             link.style.display = 'none';
             link.href = this.urlAddParams(baseURL+paramsData.url, paramsData.params);
@@ -195,34 +194,8 @@
             document.body.appendChild(link);
             link.click();
             //释放URL对象所占资源
-            //window.URL.revokeObjectURL(url)
             //用完即删
             document.body.removeChild(link);
-            return;
-
-            doCreate(this.form).then(data => {
-                if (!data) {
-                  this.$baseMessage(`下载内容为空`,'error');
-                  return
-                }
-
-                let url = window.URL.createObjectURL(new Blob([data]))
-                let link = document.createElement('a')
-                link.style.display = 'none'
-                link.href = url
-                link.setAttribute('target', '_blank');
-
-                document.body.appendChild(link)
-                link.click()
-                //释放URL对象所占资源
-                window.URL.revokeObjectURL(url)
-                //用完即删
-                document.body.removeChild(link)
-
-                this.close();
-            }).catch(err => {
-              console.log('err: ', err)
-            });
           }
         });
       },

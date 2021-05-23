@@ -18,6 +18,7 @@
 <script>
   import ProfileBase from "./components/profiles/base";
   import ProfileSecurity from "./components/profiles/security";
+  import $store from "@/store";
 
   export default {
     name: "PersonalCenter",
@@ -28,10 +29,17 @@
       };
     },
     created() {
+      // 如果大于 992 就显示 宽屏模式
+      this.screenWidth($store.state.realTime.screenWidth)
     },
     watch: {
       //监听屏幕宽度变化
       '$store.state.realTime.screenWidth':function(val, oldVal){
+        this.screenWidth(val);
+      },
+    },
+    methods: {
+      screenWidth(val){
         // 如果大于 992 就显示 宽屏模式
         if(val >= 992 ){
           this.tabPosition = "left";
@@ -39,8 +47,6 @@
           this.tabPosition = "top";
         }
       },
-    },
-    methods: {
     },
   };
 </script>
