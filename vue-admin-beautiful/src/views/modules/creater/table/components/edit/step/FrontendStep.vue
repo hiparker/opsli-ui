@@ -120,7 +120,6 @@
 <script>
   import StepFooter from "./footer/StepFooter"
   import {deepClone} from "@/utils/clone";
-  import Sortable from "sortablejs";
   import {isCode, isNull} from "@/utils/validate";
 
   export default {
