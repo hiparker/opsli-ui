@@ -70,39 +70,16 @@
   import { formateDate } from "@/utils/format";
   import { isNull } from "@/utils/validate";
   import {
-    isNotNull,
-    isNumber,
-    isMoney,
-    isGeneralWithChinese,
-    getMsg,
-  } from "@/utils/valiargs";
+    validateIsNotNull,
+    validateIsInteger,
+    validateIsMoney,
+    validateIsGeneralWithChinese,
+  } from "@/utils/validateRlue";
 
   export default {
     name: "TestUserManagementEdit",
     data() {
-      const validate_name_isGeneralWithChinese = (rule, value, callback) => {
-        if (!isGeneralWithChinese(value)) {
-          callback(new Error(getMsg("isGeneralWithChinese")));
-        } else {
-          callback();
-        }
-      };
 
-      const validate_money_isMoney = (rule, value, callback) => {
-        if (!isMoney(value)) {
-          callback(new Error(getMsg("isMoney")));
-        } else {
-          callback();
-        }
-      };
-
-      const validate_age_isNumber = (rule, value, callback) => {
-        if (!isNumber(value)) {
-          callback(new Error(getMsg("isNumber")));
-        } else {
-          callback();
-        }
-      };
 
       return {
         form: {
@@ -115,7 +92,7 @@
             {
               required: false,
               trigger: "blur",
-              validator: validate_name_isGeneralWithChinese,
+              validator: validateIsGeneralWithChinese,
             },
           ],
           money: [
@@ -123,7 +100,7 @@
             {
               required: false,
               trigger: "blur",
-              validator: validate_money_isMoney,
+              validator: validateIsMoney,
             },
           ],
           age: [
@@ -131,7 +108,7 @@
             {
               required: false,
               trigger: "blur",
-              validator: validate_age_isNumber,
+              validator: validateIsInteger,
             },
           ],
           birth: [{ required: true, trigger: "blur", message: "生日非空" }],

@@ -408,7 +408,7 @@
     doTestSend,
   } from "@/api/system/set/setManagement";
   import { isNull } from "@/utils/validate";
-  import {getMsg, isNumber, isUrl} from "@/utils/valiargs";
+  import {getMsg, isInteger, isUrl} from "@/utils/valiargs";
 
 
   export default {
@@ -417,9 +417,9 @@
     },
     data() {
 
-      const validate_optionCode_isNumber = (rule, value, callback) => {
-        if (!isNumber(value)) {
-          callback(new Error(getMsg("isNumber")));
+      const validate_optionCode_isInteger = (rule, value, callback) => {
+        if (!isInteger(value)) {
+          callback(new Error(getMsg("isInteger")));
         } else {
           callback();
         }

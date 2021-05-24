@@ -51,27 +51,14 @@
 
 <script>
   import { doInsert, doUpdate } from "@/api/system/dict/dictManagement";
-  import {isGeneral, isGeneralWithChinese, isNotNull, getMsg} from "@/utils/valiargs";
-
+  import { isNotNull } from "@/utils/valiargs";
+  import {
+    validateIsGeneral,
+    validateIsGeneralWithChinese,
+  } from "@/utils/validateRlue";
   export default {
     name: "DictManagementEdit",
     data() {
-
-      const validateCode = (rule, value, callback) => {
-        if (!isGeneral(value)) {
-          callback(new Error(getMsg("isGeneral")));
-        } else {
-          callback();
-        }
-      };
-      const validateName = (rule, value, callback) => {
-        if (!isGeneralWithChinese(value)) {
-          callback(new Error(getMsg("isGeneralWithChinese")));
-        } else {
-          callback();
-        }
-      };
-
       return {
         form: {
           izLock: '0',
@@ -82,11 +69,11 @@
         rules: {
           typeCode: [
             { required: true, trigger: "blur", message: "请输入编号" },
-            { required: false, trigger: "blur", validator: validateCode },
+            { required: false, trigger: "blur", validator: validateIsGeneral },
           ],
           typeName: [
             { required: true, trigger: "blur", message: "请输入名称" },
-            { required: false, trigger: "blur", validator: validateName },
+            { required: false, trigger: "blur", validator: validateIsGeneralWithChinese },
           ],
         },
         title: "",

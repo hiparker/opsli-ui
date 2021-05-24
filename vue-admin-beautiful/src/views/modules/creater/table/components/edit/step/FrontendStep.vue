@@ -2,6 +2,7 @@
   <div v-show="active === flag" class="step-main">
     <div class="step-content">
       <el-form ref="tableForm" :model="{'tableForm': tableFormCurr}" >
+
         <el-table
           v-loading="vLoading"
           :data="tableFormCurr"
@@ -12,9 +13,23 @@
 
           <el-table-column
             show-overflow-tooltip
+            label="拖动"
+            width="60"
+            align="center"
+          >
+            <template slot-scope="scope">
+              <el-button icon="el-icon-d-caret"
+                         class="move-btn"
+                         circle
+              ></el-button>
+            </template>
+          </el-table-column>
+
+          <el-table-column
+            show-overflow-tooltip
             prop="fieldName"
             label="字段名称"
-            width="200"
+            min-width="200"
           >
             <template slot-scope="scope">
               <el-form-item
@@ -52,23 +67,22 @@
 
           <el-table-column
             show-overflow-tooltip
-            prop="validateType"
-            label="验证类别"
-            width="280"
+            prop="showType"
+            label="展示方式"
+            min-width="140"
           >
             <template slot-scope="scope">
               <el-form-item
-                :prop="'tableForm.'+scope.$index+'.validateType'"
-                :rules="columnRules.validateType"
+                :prop="'tableForm.'+scope.$index+'.showType'"
                 class="el-form-item-table"
               >
-                <el-select v-model="scope.row.validateType" placeholder="请选择"
-                           default-first-option="" filterable
-                           multiple collapse-tags
+                <el-select v-model="scope.row.showType" placeholder="请选择"
+                           default-first-option="" filterable clearable
                            :disabled="scope.row.disabled"
+                           @change="showTypeChange(scope.row)"
                            style="width: 100%" >
                   <el-option
-                    v-for="item in dictCurr.validate_type"
+                    v-for="item in dictCurr.show_type"
                     :key="item.dictValue"
                     :label="item.dictName"
                     :value="item.dictValue"
@@ -80,22 +94,77 @@
 
           <el-table-column
             show-overflow-tooltip
-            prop="izDesensitized"
-            label="数据脱敏"
-            width="80"
+            prop="izShowList"
+            label="列表显示"
+            min-width="80"
           >
             <template slot-scope="scope">
               <el-form-item
-                :prop="'tableForm.'+scope.$index+'.izDesensitized'"
+                :prop="'tableForm.'+scope.$index+'.izShowList'"
                 class="el-form-item-table"
               >
                 <el-switch
-                  v-model="scope.row.izDesensitized"
+                  v-model="scope.row.izShowList"
                   :active-value="1"
                   :inactive-value="0"
-                  :disabled="scope.row.disabled"
+                  :disabled="scope.row.disabled || scope.row.showType === null || scope.row.showType === ''"
+                  @change="izShowListChange(scope.row)"
                 >
                 </el-switch>
+              </el-form-item>
+            </template>
+          </el-table-column>
+
+          <el-table-column
+            show-overflow-tooltip
+            prop="izShowForm"
+            label="表单显示"
+            min-width="80"
+          >
+            <template slot-scope="scope">
+              <el-form-item
+                :prop="'tableForm.'+scope.$index+'.izShowForm'"
+                class="el-form-item-table"
+              >
+                <el-switch
+                  v-model="scope.row.izShowForm"
+                  :active-value="1"
+                  :inactive-value="0"
+                  :disabled="scope.row.disabled || scope.row.showType === null || scope.row.showType === ''"
+                >
+                </el-switch>
+              </el-form-item>
+            </template>
+          </el-table-column>
+
+          <el-table-column
+            show-overflow-tooltip
+            prop="queryType"
+            label="检索类别"
+            min-width="140"
+          >
+            <template slot-scope="scope">
+              <el-form-item
+                :prop="'tableForm.'+scope.$index+'.queryType'"
+                class="el-form-item-table"
+              >
+                <!-- 如果为 2 3 字典和日期, 或者 不在列表显示 的话 禁止手动选择 -->
+                <el-select v-model="scope.row.queryType" placeholder="请选择(可空)"
+                           default-first-option="" clearable
+                           collapse-tags
+
+                           :disabled="scope.row.disabled || scope.row.showType === '2'
+                                      || scope.row.showType === '3' || scope.row.showType === '4'
+                                      || scope.row.izShowList === null || scope.row.izShowList === 0
+                                      "
+                           style="width: 100%" >
+                  <el-option
+                    v-for="item in dictCurr.query_type"
+                    :key="item.dictValue"
+                    :label="item.dictName"
+                    :value="item.dictValue"
+                  ></el-option>
+                </el-select>
               </el-form-item>
             </template>
           </el-table-column>
@@ -118,13 +187,14 @@
   </div>
 </template>
 <script>
+  import Sortable from "sortablejs";
   import StepFooter from "./footer/StepFooter"
   import {deepClone} from "@/utils/clone";
   import {isCode, isNull} from "@/utils/validate";
 
   export default {
     name: "FrontendStep",
-    components: { StepFooter },
+    components: { Sortable, StepFooter },
     props: {
       active: {
         type: Number,
@@ -171,51 +241,12 @@
     },
     data() {
 
-      const validateDictCode = (rule, value, callback) => {
-        let index = parseInt(rule.field.split(".")[1]);
-        if(index !== null && index !== undefined){
-          let listTmp = this.list[index];
-          if(listTmp !== null && listTmp !== undefined){
-            let showType = listTmp.showType;
-            // 如果同行是字典 那么 字典编号就必须非空
-            if(showType === "2"){
-              if (isNull(value)) {
-                callback(new Error("请输入字典编号"));
-              } else if (!isCode(value)) {
-                callback(new Error("编号只能为字母、数字或下划线"));
-              } else {
-                callback();
-              }
-            }
-          }
-        }
-        callback();
-      };
-
-      const validateQueryType = (rule, value, callback) => {
-        let index = parseInt(rule.field.split(".")[1]);
-        if(index !== null && index !== undefined){
-          let listTmp = this.list[index];
-          if(listTmp !== null && listTmp !== undefined){
-            let showListFlag = listTmp.izShowList;
-            if(showListFlag === 1){
-              if (isNull(value)) {
-                callback(new Error("请选择检索类型"));
-              } else {
-                callback();
-              }
-            }
-          }
-        }
-        callback();
-      };
-
       return {
         // 标示
-        flag: 3,
+        flag: 2,
+        dictCurr: [],
         baseFormCurr: {},
         tableFormCurr: [],
-
         columnRules: {
 
         },
@@ -233,6 +264,9 @@
       this.baseFormCurr = deepClone(this.baseForm);
       this.tableFormCurr = deepClone(this.tableForm);
       this.dictCurr = deepClone(this.dict);
+
+      // 表拖动
+      this.rowDrop();
     },
     watch: {
       baseForm(newV,oldV) {
@@ -246,9 +280,78 @@
       },
     },
     methods: {
+      // 生成方案
+      showTypeChange(el){
+        if(!isNull(el)){
+          if(isNull(el.showType)){
+            el.izShowForm = 0;
+            el.izShowList = 0;
+            el.queryType = "";
+          }else{
+            // 如果是 字典 则需要把 Java类型强制改为 String 且不可改
+            if(el.showType === "2"){
+              el.javaType = "String";
+            }
+          }
+          this.izShowListChange(el);
+        }
+      },
+      // 列表显示
+      izShowListChange(el){
+        if(!isNull(el)){
+          // 在列表显示
+          if(el.izShowList === 1){
+            // 字典
+            if(el.showType === "2"){
+              el.queryType = "EQ";
+            }
+            // 日期
+            else if(el.showType === "3" || el.showType === "4"){
+              el.queryType = "RANGE";
+            }
+          }else{
+            el.queryType = "";
+          }
+        }
+      },
+
+      // ===============================
+
       // 行选中
       setSelectRows(val) {
         this.selectRows = val;
+      },
+      //行拖拽
+      rowDrop() {
+        const tbody = this.$refs["tableForm"].$el
+          .querySelector(".el-table__body-wrapper tbody");
+        const _this = this
+        Sortable.create(tbody, {
+          // 只能纵向拖动
+          axis: "y",
+          // 限制触发事件只能某个元素可以触发
+          handle: ".move-btn",
+          // 如果设置成true，则被拖拽的元素在返回新位置时，会有一个动画效果。
+          revert: true,
+          // 如果设置成true，则元素被拖动到页面边缘时，会自动滚动。
+          scroll: true,
+          onEnd({oldIndex, newIndex}) {
+            _this.tableFormCurr[oldIndex].sort = newIndex;
+
+            // 如果是 从后往前 移动 则 当前项改为newIndex 而 原newIndex 往后的所有内容全部向后顺产移动
+            if(oldIndex > newIndex){
+              for (let i = oldIndex; i > newIndex; i--) {
+                _this.tableFormCurr[i-1].sort = i;
+              }
+            }
+            // 如果是 从前往后 移动 则 当前项改为newIndex 而 原newIndex 往后的所有内容全部向前顺产移动
+            else{
+              for (let i = oldIndex; i < newIndex; i++) {
+                _this.tableFormCurr[i+1].sort = i;
+              }
+            }
+          }
+        })
       },
     },
   };

@@ -49,27 +49,14 @@
 
   import { formateDate } from "@/utils/format";
   import { isNull } from "@/utils/validate";
-  import { isNotNull, isGeneral, isGeneralWithChinese,  getMsg} from "@/utils/valiargs";
+  import {
+    validateIsGeneral,
+    validateIsGeneralWithChinese,
+  } from "@/utils/validateRlue";
 
   export default {
     name: "SysOptionsManagementEdit",
     data() {
-
-      const validate_optionCode_isGeneral = (rule, value, callback) => {
-        if (!isGeneral(value)) {
-          callback(new Error(getMsg("isGeneral")));
-        } else {
-          callback();
-        }
-      };
-
-      const validate_optionName_isGeneralWithChinese = (rule, value, callback) => {
-        if (!isGeneralWithChinese(value)) {
-          callback(new Error(getMsg("isGeneralWithChinese")));
-        } else {
-          callback();
-        }
-      };
 
       return {
         formStatus: true,
@@ -81,11 +68,11 @@
         rules: {
           optionCode: [
             { required: true, trigger: "blur", message: "参数编号非空" },
-            { required: false, trigger: "blur", validator: validate_optionCode_isGeneral },
+            { required: false, trigger: "blur", validator: validateIsGeneral },
           ],
           optionName: [
             { required: true, trigger: "blur", message: "参数名称非空" },
-            { required: false, trigger: "blur", validator: validate_optionName_isGeneralWithChinese },
+            { required: false, trigger: "blur", validator: validateIsGeneralWithChinese },
           ],
         },
         title: "",

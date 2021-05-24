@@ -2,22 +2,50 @@
 
 const msgMap = {
   isNotNull: "不能为空",
-  isGeneral: "只能为字母、数字或下划线",
-  isGeneralWithChinese: "只能为汉字、字母、数字和下划线",
-  isNumber: "只能为纯数字",
+  isInteger: "只能为纯数字",
   isDecimal: "小数浮点格式不正确",
+  isPrimes: "不是质数",
   isLetter: "只能纯字母",
   isUpperCase: "只能为大写字母",
   isLowerCase: "只能为小写字母",
-  isIpv4: "IP地址不正确",
+  isIp: "IP地址不正确",
+  isIpv4: "IPV4地址不正确",
+  isIpv6: "IPV6地址不正确",
   isMoney: "金额格式不正确",
   isEmail: "邮箱格式不正确",
   isMobile: "手机号格式不正确",
   isCitizenid: "身份证格式不正确",
+  isChinese: "只能汉字",
+  isGeneral: "只能为字母、数字或下划线",
+  isGeneralWithChinese: "只能为汉字、字母、数字和下划线",
+  isZipCode: "邮编地址不正确",
+  isUrl: "URL地址不正确",
   isMac: "MAC地址不正确",
   isPlateNumber: "中国车牌号不正确",
-  isUrl: "URL地址不正确",
+  isSecurityPassword: "密码至少包含大小写字母、数字、特殊字符，且不少于6位",
 };
+
+/**
+ * @description 判断是否为空
+ * @returns {boolean}
+ * @param val
+ */
+export function isNull(val) {
+  /**
+   * 判断是否为空
+   *  val
+   * @returns
+   */
+  return (
+    val === undefined ||
+    val == null ||
+    val === "" ||
+    val === "" ||
+    val === "undefined" ||
+    val === "null" ||
+    val === "NULL"
+  );
+}
 
 /**
  * @description 不能为空
@@ -53,13 +81,13 @@ export function isGeneral(str) {
 }
 
 /**
- * @description 判断是否为数字
+ * @description 判断是否为整数
  * @param str
  * @returns {boolean}
  */
-export function isNumber(str) {
+export function isInteger(str) {
   str = str + "";
-  const reg = /^[0-9]*$/;
+  const reg = /^-?[1-9]\d*$/;
   return reg.test(str);
 }
 
@@ -70,8 +98,26 @@ export function isNumber(str) {
  */
 export function isDecimal(str) {
   str = str + "";
-  const reg = /^(\d+(?:\.\d+)?)$/;
+  const reg = /^(-?\d+)(\.\d+)?$/;
   return reg.test(str);
+}
+
+/**
+ * @description 判断是否是质数
+ * @param str
+ * @returns {boolean}
+ */
+export function isPrimes(str) {
+  if (!isInteger(str)) {
+    return false;
+  }
+  const n = parseInt(str);
+  for (let i = 2; i <= Math.sqrt(n); i++) {
+    if (n % i === 0) {
+      return false;
+    }
+  }
+  return true;
 }
 
 /**
@@ -119,6 +165,26 @@ export function isIpv4(str) {
 }
 
 /**
+ * @description 判断是否是Ipv6
+ * @param str
+ * @returns {boolean}
+ */
+export function isIpv6(str) {
+  str = str + "";
+  const reg = /^(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]+|::(ffff(:0{1,4})?:)?((25[0-5]|(2[0-4]|1?[0-9])?[0-9])\.){3}(25[0-5]|(2[0-4]|1?[0-9])?[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1?[0-9])?[0-9])\.){3}(25[0-5]|(2[0-4]|1?[0-9])?[0-9]))$/;
+  return reg.test(str);
+}
+
+/**
+ * @description 判断是否是Ip
+ * @param str
+ * @returns {boolean}
+ */
+export function isIp(str) {
+  return isIpv4(str) || isIp(str);
+}
+
+/**
  * @description 判断是否是金额
  * @param str
  * @returns {boolean}
@@ -159,17 +225,6 @@ export function isMobile(str) {
 export function isCitizenid(str) {
   str = str + "";
   const reg = /^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/;
-  return reg.test(str);
-}
-
-/**
- * @description 判断是否是邮编
- * @param str
- * @returns {boolean}
- */
-export function isZipcode(str) {
-  str = str + "";
-  const reg = /^[1-9]\d{5}(?!\d)$/;
   return reg.test(str);
 }
 
@@ -218,6 +273,17 @@ export function isMac(str) {
 }
 
 /**
+ * @description 判断是是否是邮编
+ * @param str
+ * @returns {boolean}
+ */
+export function isZipCode(str) {
+  str = str + "";
+  const reg = /^(0[1-7]|1[0-356]|2[0-7]|3[0-6]|4[0-7]|5[0-7]|6[0-7]|7[0-5]|8[0-9]|9[0-8])\d{4}|99907[78]$/;
+  return reg.test(str);
+}
+
+/**
  * @description 判断是中国车牌
  * @param str
  * @returns {boolean}
@@ -229,10 +295,21 @@ export function isPlateNumber(str) {
 }
 
 /**
- * 获得Msg
+ * @description 密码至少包含大小写字母、数字、特殊字符，且不少于6位
  * @param str
  * @returns {boolean}
  */
+export function isSecurityPassword(str) {
+  const reg = /^\S*(?=\S{6,})(?=\S*\d)(?=\S*[A-Z])(?=\S*[a-z])(?=\S*[!@#$%^&*?.])\S*$/;
+  return reg.test(str);
+}
+
+/**
+ * 获得Msg
+ * @returns {boolean}
+ * @param key
+ */
 export function getMsg(key) {
-  return msgMap[key];
+  const msg = msgMap[key];
+  return isNotNull(msg) ? msg : "未知异常信息";
 }

@@ -110,74 +110,23 @@
   import { getAccessToken } from "@/utils/accessToken";
   import { getUserInfo } from "@/api/user";
   import Tenant from "@/components/opsli/tenant/tenant";
-  import {isCode, isPhone, isName, isNull, isPassword, isEmail} from "@/utils/validate";
+  import { isNull } from "@/utils/validate";
+  import {
+    validateIsGeneral,
+    validateIsMobile,
+    validateIsGeneralWithChinese,
+    validateIsSecurityPassword,
+    validateIsEmail
+  } from "@/utils/validateRlue";
 
   export default {
     name: "UserManagementEdit",
     components: { Tenant },
     data() {
 
-      const validateUsername = (rule, value, callback) => {
-        if (isNull(value)) {
-          callback(new Error("用户名不能为空"));
-        } else if (!isCode(value)) {
-          callback(new Error('用户名只能为字母、数字或下划线'));
-        } else {
-          callback();
-        }
-      };
-
-      const validatePassword = (rule, value, callback) => {
-        if (isNull(value)) {
-          callback(new Error('请输入密码'));
-        } else if (!isPassword(value)) {
-          callback(new Error("密码至少包含大小写字母，数字，且不少于6位"));
-        } else {
-          callback();
-        }
-      };
-
       const validateVerifyPassword = (rule, value, callback) => {
-        if (isNull(value)) {
-          callback(new Error('请再次输入密码'));
-        } else if (value !== this.form.password) {
+        if (value !== this.form.password) {
           callback(new Error('两次输入密码不一致'));
-        } else {
-          callback();
-        }
-      };
-
-      const validateRealName = (rule, value, callback) => {
-        if (isNull(value)) {
-          callback(new Error("请输入昵称"));
-        } else if (!isName(value)) {
-          callback(new Error("请输入正确的昵称格式"));
-        } else {
-          callback();
-        }
-      };
-
-      const validateNo = (rule, value, callback) => {
-        if (isNull(value)) {
-          callback(new Error('请输入工号'));
-        } else if (!isCode(value)) {
-          callback(new Error('工号只能为字母、数字或下划线'));
-        } else {
-          callback();
-        }
-      };
-
-      const validateMobile = (rule, value, callback) => {
-        if (!isNull(value) && !isPhone(value)) {
-          callback(new Error('请输入正确的手机号格式'));
-        } else {
-          callback();
-        }
-      };
-
-      const validateEmail = (rule, value, callback) => {
-        if (!isNull(value) && !isEmail(value)) {
-          callback(new Error('请输入正确的邮箱格式'));
         } else {
           callback();
         }
@@ -195,25 +144,30 @@
         },
         rules: {
           username: [
-            { required: true, trigger: "blur", validator: validateUsername },
+            { required: true, trigger: "blur", message: "请输入用户名" },
+            { required: false, trigger: "blur", validator: validateIsGeneral },
           ],
           password: [
-            { required: true, trigger: "blur", validator: validatePassword },
+            { required: true, trigger: "blur", message: "请输入密码" },
+            { required: false, trigger: "blur", validator: validateIsSecurityPassword },
           ],
           verifyPassword: [
-            { required: true, trigger: "blur", validator: validateVerifyPassword },
+            { required: true, trigger: "blur", message: "请再次输入密码" },
+            { required: false, trigger: "blur", validator: validateVerifyPassword },
           ],
           realName: [
-            { required: true, trigger: "blur", validator: validateRealName },
+            { required: true, trigger: "blur", message: "请输入昵称" },
+            { required: false, trigger: "blur", validator: validateIsGeneralWithChinese() },
           ],
           no: [
-            { required: true, trigger: "blur", validator: validateNo },
+            { required: true, trigger: "blur", message: "请输入工号" },
+            { required: true, trigger: "blur", validator: validateIsGeneral },
           ],
           mobile: [
-            { required: false, trigger: "blur", validator: validateMobile },
+            { required: false, trigger: "blur", validator: validateIsMobile },
           ],
           email: [
-            { required: false, trigger: "blur", validator: validateEmail },
+            { required: false, trigger: "blur", validator: validateIsEmail },
           ],
         },
         title: "",

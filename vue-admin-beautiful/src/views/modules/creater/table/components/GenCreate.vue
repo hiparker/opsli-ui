@@ -69,7 +69,12 @@
 
 <script>
   import {getCreaterLogs, doCreate, doCreateJson} from "@/api/creater/tableManagement";
-  import { isGeneralWithChinese, isLetter, isNotNull} from "@/utils/valiargs";
+  import { isNotNull} from "@/utils/valiargs";
+  import {
+    validateIsNotNull,
+    validateIsLetter,
+    validateIsGeneralWithChinese,
+  } from "@/utils/validateRlue";
   import {title} from "@/config/settings";
   import { getAccessToken } from "@/utils/accessToken";
   const { baseURL, tokenName } = require("@/config/settings");
@@ -78,31 +83,6 @@
   export default {
     name: "GenCreate",
     data() {
-
-      const validateName = (rule, value, callback) => {
-        if (!isGeneralWithChinese(value)) {
-          callback(new Error("只能是英文、数字、汉字或下划线"));
-        } else {
-          callback();
-        }
-      };
-
-      const validateModule = (rule, value, callback) => {
-        if (!isLetter(value)) {
-          callback(new Error("只能是纯字母"));
-        } else {
-          callback();
-        }
-      };
-
-      const validateSubModule = (rule, value, callback) => {
-        if (isNotNull(value) && !isLetter(value)) {
-          callback(new Error("只能是纯字母"));
-        } else {
-          callback();
-        }
-      };
-
       const validatePackageName = (rule, value, callback) => {
         const reg = /^(?!\.)(?!.*?\.$)[a-zA-Z.]+$/;
         if( !reg.test(value) ) {
@@ -128,11 +108,11 @@
         rules: {
           codeTitle: [
             { required: true, trigger: "blur", message: "请输入代码标题" },
-            { required: true, trigger: "blur", validator: validateName },
+            { required: true, trigger: "blur", validator: validateIsGeneralWithChinese },
           ],
           codeTitleBrief: [
             { required: true, trigger: "blur", message: "请输入代码标题简介" },
-            { required: true, trigger: "blur", validator: validateName },
+            { required: true, trigger: "blur", validator: validateIsGeneralWithChinese },
           ],
           packageName: [
             { required: true, trigger: "blur", message: "请输入包路径" },
@@ -140,14 +120,14 @@
           ],
           moduleName: [
             { required: true, trigger: "blur", message: "请输入模块名" },
-            { required: true, trigger: "blur", validator: validateModule },
+            { required: true, trigger: "blur", validator: validateIsLetter },
           ],
           subModuleName: [
-            { required: false, trigger: "blur", validator: validateSubModule },
+            { required: false, trigger: "blur", validator: validateIsLetter },
           ],
           authorName: [
             { required: true, trigger: "blur", message: "请输入作者信息" },
-            { required: true, trigger: "blur", validator: validateName },
+            { required: true, trigger: "blur", validator: validateIsGeneralWithChinese },
           ],
         },
         title: "",

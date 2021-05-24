@@ -34,26 +34,16 @@
   import {doInsert, doUpdate} from "@/api/system/area/areaManagement";
   import { deepClone } from "@/utils/clone";
   import { isNull } from "@/utils/validate";
-  import { isNumber, isGeneralWithChinese, getMsg} from "@/utils/valiargs";
+  import {
+    validateIsInteger,
+    validateIsGeneralWithChinese,
+  } from "@/utils/validateRlue";
 
   export default {
     name: "AreaManagementEdit",
     components: { },
     data() {
-      const validateCode = (rule, value, callback) => {
-        if (!isNumber(value)) {
-          callback(new Error(getMsg("isNumber")));
-        } else {
-          callback();
-        }
-      };
-      const validateName = (rule, value, callback) => {
-        if (!isGeneralWithChinese(value)) {
-          callback(new Error(getMsg("isGeneralWithChinese")));
-        } else {
-          callback();
-        }
-      };
+
       return {
         form: {
           version: 0
@@ -62,11 +52,11 @@
         rules: {
           areaCode: [
             { required: true, trigger: "blur", message: "请输入编号" },
-            { required: false, trigger: "blur", validator: validateCode },
+            { required: false, trigger: "blur", validator: validateIsInteger },
           ],
           areaName: [
             { required: true, trigger: "blur", message: "请输入名称" },
-            { required: false, trigger: "blur", validator: validateName },
+            { required: false, trigger: "blur", validator: validateIsGeneralWithChinese },
           ],
         },
         title: "",

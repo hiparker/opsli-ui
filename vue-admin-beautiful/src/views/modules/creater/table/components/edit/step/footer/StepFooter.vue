@@ -1,7 +1,6 @@
 <template>
   <div class="step-footer">
     <div class="dialog-footer">
-      <el-button @click="close">取 消</el-button>
       <el-button
         type="primary"
         :disabled="flag <= minFlag"
@@ -15,6 +14,8 @@
       >
         下一步
       </el-button>
+      <el-button @click="close">取 消</el-button>
+
       <el-button type="primary"
                  :disabled="flag !== maxFlag"
                  @click="handleNext"

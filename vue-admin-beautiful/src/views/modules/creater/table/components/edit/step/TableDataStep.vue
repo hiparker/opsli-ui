@@ -111,7 +111,7 @@
             show-overflow-tooltip
             prop="fieldName"
             label="字段名称"
-            width="200"
+            min-width="200"
           >
             <template slot-scope="scope">
               <el-form-item
@@ -130,7 +130,7 @@
             show-overflow-tooltip
             prop="fieldType"
             label="字段类型"
-            width="180"
+            min-width="180"
           >
             <template slot-scope="scope">
               <el-form-item
@@ -157,7 +157,7 @@
             show-overflow-tooltip
             prop="fieldLength"
             label="字段长度"
-            width="140"
+            min-width="140"
           >
             <template slot-scope="scope">
               <el-form-item
@@ -178,7 +178,7 @@
             show-overflow-tooltip
             prop="fieldPrecision"
             label="字段精度"
-            width="140"
+            min-width="140"
           >
             <template slot-scope="scope">
               <el-form-item
@@ -220,7 +220,7 @@
             show-overflow-tooltip
             prop="izPk"
             label="主键"
-            width="80"
+            min-width="80"
           >
             <template slot-scope="scope">
               <el-form-item
@@ -243,7 +243,7 @@
             show-overflow-tooltip
             prop="izNotNull"
             label="非空"
-            width="80"
+            min-width="80"
           >
             <template slot-scope="scope">
               <el-form-item
@@ -445,6 +445,67 @@
       },
     },
     methods: {
+      // 数据库类型发生改动
+      jdbcTypeChange(newValue){
+        const _this = this;
+        this.tableFormCurr.jdbcType = this.$refs.jdbcType.value;
+        this.$baseConfirm("更换数据库类型将会清空当前已设字段，你确定要更换吗", null, () => {
+          // 改为新值
+          _this.tableFormCurr.jdbcType = newValue;
+          // 加载字典
+          _this.dictCurr.field_type =  _this.$getDictList(_this.baseFormCurr.jdbcType + "_data_type");
+          // 清空已有字段数据
+          _this.tableFormCurr = [];
+        });
+      },
+      // 表类型发生改动
+      tableTypeChange(newValue){
+        if(newValue === '0'){
+          // 删除 parent_id 字段
+          for (let i = this.tableFormCurr.length - 1; i >= 0; i--) {
+            let item = this.tableFormCurr[i];
+            if(item.fieldName === this.treeName) {
+              this.tableFormCurr.splice(i, 1);
+              break;
+            }
+          }
+        } else if(newValue === '1'){
+          // 删除 parent_id 字段
+          for (let i = this.tableFormCurr.length - 1; i >= 0; i--) {
+            let item = this.tableFormCurr[i];
+            if(item.fieldName === this.treeName) {
+              this.tableFormCurr.splice(i, 1);
+              break;
+            }
+          }
+
+          // 增加 parent_id 字段
+          let tmp = deepClone(this.columnFormTemp);
+          tmp.disabled = true;
+          tmp.fieldName = this.treeName;
+          tmp.fieldType = "bigint";
+          tmp.fieldLength = 20;
+          tmp.fieldComments = "上级ID";
+          tmp.javaType = "Integer";
+          tmp.izNotNull = 1;
+          this.columnHandleAdd(tmp);
+        }
+      },
+
+      // 主键改动
+      pKChange(el){
+        if(!isNull(el)){
+          // 如果主键选中 则默认选中不可为空
+          if(el.izPk === 1){
+            el.izNotNull = 1;
+          } else {
+            el.izNotNull = 0;
+          }
+        }
+      },
+
+      // ==============================
+
       // 行添加
       columnHandleAdd(params){
         let temp;
@@ -539,65 +600,6 @@
             }
           }
         })
-      },
-
-      // 数据库类型发生改动
-      jdbcTypeChange(newValue){
-        const _this = this;
-        this.tableFormCurr.jdbcType = this.$refs.jdbcType.value;
-        this.$baseConfirm("更换数据库类型将会清空当前已设字段，你确定要更换吗", null, () => {
-          // 改为新值
-          _this.tableFormCurr.jdbcType = newValue;
-          // 加载字典
-          _this.dictCurr.field_type =  _this.$getDictList(_this.baseFormCurr.jdbcType + "_data_type");
-          // 清空已有字段数据
-          _this.tableFormCurr = [];
-        });
-      },
-      // 表类型发生改动
-      tableTypeChange(newValue){
-        if(newValue === '0'){
-          // 删除 parent_id 字段
-          for (let i = this.tableFormCurr.length - 1; i >= 0; i--) {
-            let item = this.tableFormCurr[i];
-            if(item.fieldName === this.treeName) {
-              this.tableFormCurr.splice(i, 1);
-              break;
-            }
-          }
-        } else if(newValue === '1'){
-          // 删除 parent_id 字段
-          for (let i = this.tableFormCurr.length - 1; i >= 0; i--) {
-            let item = this.tableFormCurr[i];
-            if(item.fieldName === this.treeName) {
-              this.tableFormCurr.splice(i, 1);
-              break;
-            }
-          }
-
-          // 增加 parent_id 字段
-          let tmp = deepClone(this.columnFormTemp);
-          tmp.disabled = true;
-          tmp.fieldName = this.treeName;
-          tmp.fieldType = "bigint";
-          tmp.fieldLength = 20;
-          tmp.fieldComments = "上级ID";
-          tmp.javaType = "Integer";
-          tmp.izNotNull = 1;
-          this.columnHandleAdd(tmp);
-        }
-      },
-
-      // 主键改动
-      pKChange(el){
-        if(!isNull(el)){
-          // 如果主键选中 则默认选中不可为空
-          if(el.izPk === 1){
-            el.izNotNull = 1;
-          } else {
-            el.izNotNull = 0;
-          }
-        }
       },
     },
   };

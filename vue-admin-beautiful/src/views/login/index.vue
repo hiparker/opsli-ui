@@ -94,7 +94,8 @@
 
 <script>
   import { uuid } from "@/utils";
-  import { isNull, isPassword } from "@/utils/validate";
+  import { isNull } from "@/utils/valiargs";
+  import { validateIsSecurityPassword } from "@/utils/validateRlue";
   import { captcha } from "@/api/user";
   export default {
     name: "Login",
@@ -106,30 +107,6 @@
       },
     },
     data() {
-      const validateUsername = (rule, value, callback) => {
-        if (isNull(value)) {
-          callback(new Error("用户名不能为空"));
-        } else {
-          callback();
-        }
-      };
-      const validatePassword = (rule, value, callback) => {
-        if (isNull(value)) {
-          callback(new Error("请输入密码"));
-        } else if (!isPassword(value)) {
-          callback(new Error("密码至少包含大小写字母，数字，且不少于6位"));
-        } else {
-          callback();
-        }
-      };
-      const validateCaptcha = (rule, value, callback) => {
-        if (isNull(value)) {
-          callback(new Error("验证码不能为空"));
-        } else {
-          callback();
-        }
-      };
-
       // UUID
       const currUUID = uuid();
 
@@ -144,25 +121,14 @@
         },
         rules: {
           username: [
-            {
-              required: true,
-              trigger: "blur",
-              validator: validateUsername,
-            },
+            { required: true, trigger: "blur", message: "请输入用户名" },
           ],
           password: [
-            {
-              required: true,
-              trigger: "blur",
-              validator: validatePassword,
-            },
+            { required: true, trigger: "blur", message: "请输入密码" },
+            { required: true, trigger: "blur", validator: validateIsSecurityPassword },
           ],
           captcha: [
-            {
-              required: true,
-              trigger: "blur",
-              validator: validateCaptcha,
-            },
+            { required: true, trigger: "blur", message: "请输入验证码" },
           ],
         },
         captchaFlag: false,
@@ -189,7 +155,7 @@
     mounted() {
       // 自动登录，
       this.form.username = "demo";
-      this.form.password = "Aa123456";
+      this.form.password = "Aa123456.";
       setTimeout(() => {
         this.handleLogin();
       }, 3000);

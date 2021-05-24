@@ -69,38 +69,14 @@
   import { doInsert, doUpdate } from "@/api/gentest/carinfo/TestCarManagement";
   import { formateDate } from "@/utils/format";
   import { isNull } from "@/utils/validate";
-  import { isNotNull, isGeneralWithChinese, getMsg } from "@/utils/valiargs";
+  import {
+    validateIsNotNull,
+    validateIsGeneralWithChinese,
+  } from "@/utils/validateRlue";
 
   export default {
     name: "TestCarManagementEdit",
     data() {
-      const validate_carName_isGeneralWithChinese = (rule, value, callback) => {
-        if (!isGeneralWithChinese(value)) {
-          callback(new Error(getMsg("isGeneralWithChinese")));
-        } else {
-          callback();
-        }
-      };
-
-      const validate_carType_isGeneralWithChinese = (rule, value, callback) => {
-        if (!isGeneralWithChinese(value)) {
-          callback(new Error(getMsg("isGeneralWithChinese")));
-        } else {
-          callback();
-        }
-      };
-
-      const validate_carBrand_isGeneralWithChinese = (
-        rule,
-        value,
-        callback
-      ) => {
-        if (!isGeneralWithChinese(value)) {
-          callback(new Error(getMsg("isGeneralWithChinese")));
-        } else {
-          callback();
-        }
-      };
 
       return {
         form: {
@@ -114,7 +90,7 @@
             {
               required: false,
               trigger: "blur",
-              validator: validate_carName_isGeneralWithChinese,
+              validator: validateIsGeneralWithChinese,
             },
           ],
           carType: [
@@ -122,14 +98,14 @@
             {
               required: false,
               trigger: "blur",
-              validator: validate_carType_isGeneralWithChinese,
+              validator: validateIsGeneralWithChinese,
             },
           ],
           carBrand: [
             {
               required: false,
               trigger: "blur",
-              validator: validate_carBrand_isGeneralWithChinese,
+              validator: validateIsGeneralWithChinese,
             },
           ],
         },

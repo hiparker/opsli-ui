@@ -178,26 +178,16 @@
   import MenuManagementChoose from "@/components/opsli/menu/MenuManagementChoose";
   import { deepClone } from "@/utils/clone";
   import { isNull} from "@/utils/validate";
-  import { isGeneral , isGeneralWithChinese, getMsg} from "@/utils/valiargs";
+  import {
+    validateIsGeneral,
+    validateIsGeneralWithChinese,
+  } from "@/utils/validateRlue";
 
   export default {
     name: "MenuManagementEdit",
     components: {MenuManagementChoose, Icon },
     data() {
-      const validateCode = (rule, value, callback) => {
-        if (!isGeneral(value)) {
-          callback(new Error(getMsg("isGeneral")));
-        } else {
-          callback();
-        }
-      };
-      const validateName = (rule, value, callback) => {
-        if (!isGeneralWithChinese(value)) {
-          callback(new Error(getMsg("isGeneralWithChinese")));
-        } else {
-          callback();
-        }
-      };
+
       return {
         formLoading: true,
         comRestaurants: [
@@ -227,10 +217,10 @@
         rules: {
           menuName: [
             { required: true, trigger: "blur", message: "请输入名称" },
-            { required: false, trigger: "blur", validator: validateName },
+            { required: false, trigger: "blur", validator: validateIsGeneralWithChinese },
           ],
           permissions: [
-            { required: false, trigger: "blur", validator: validateCode },
+            { required: false, trigger: "blur", validator: validateIsGeneral },
           ],
           sortNo: [{ required: true, trigger: "blur", message: "请输入排序" }],
           type: [{ required: true, trigger: "blur", message: "请选择是否类型" }],

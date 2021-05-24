@@ -14,7 +14,6 @@
                   finish-status="finish"
                   :direction="direction" class="steps">
           <el-step title="数据库表设置"></el-step>
-          <el-step title="数据验证设置"></el-step>
           <el-step title="前端展示设置"></el-step>
           <el-step title="后端实体设置"></el-step>
         </el-steps>
@@ -33,20 +32,6 @@
           @close="close"
           @submit="save"
         ></table-data-step>
-
-        <data-verify-step
-          :base-form="baseForm"
-          :table-form="tableForm"
-          :active="active"
-          :min-flag="minFlag"
-          :max-flag="maxFlag"
-          :dict="dict"
-          :v-loading="columnListLoading"
-          @inform-flag="informFlag"
-          @change-step="handleSetStep"
-          @close="close"
-          @submit="save"
-        ></data-verify-step>
 
         <frontend-step
           :base-form="baseForm"
@@ -86,17 +71,15 @@
 <script>
   import $store from "@/store";
   import TableDataStep from "./step/TableDataStep";
-  import DataVerifyStep from "./step/DataVerifyStep";
   import BackendStep from "./step/BackendStep";
   import FrontendStep from "./step/FrontendStep";
-  import {getSubList} from "@/api/creater/tableManagement";
+  import {doInsert, doUpdate, getSubList} from "@/api/creater/tableManagement";
   import {isNull} from "@/utils/validate";
   import {deepClone} from "@/utils/clone";
 
-
   export default {
     name: "CreateTableManagementEdit",
-    components: { TableDataStep, DataVerifyStep, BackendStep, FrontendStep },
+    components: { TableDataStep, BackendStep, FrontendStep },
     data() {
       return {
         direction: "horizontal",
@@ -108,9 +91,8 @@
         baseForm: {
           jdbcType: "mysql",
         },
-        oldBaseForm:{},
         tableForm: [],
-        oldTableForm: [],
+        backupStepData: {}, // 备份步骤数据
         dict: {},
         title: "",
         columnListLoading: true,
@@ -140,9 +122,9 @@
       // 显示
       showEdit(row) {
         if (!row) {
-          this.title = "添加";
+          this.title = "代码生成 - 添加";
         } else {
-          this.title = "编辑";
+          this.title = "代码生成 - 编辑";
           this.baseForm = Object.assign({}, row);
           this.queryForm.id = this.baseForm.id;
         }
@@ -154,9 +136,11 @@
       close() {
         this.dialogFormVisible = false;
         this.active = 1;
+        this.flagArray = this.$options.data().flagArray;
         this.baseForm = this.$options.data().baseForm;
         this.tableForm = this.$options.data().tableForm;
         this.queryForm = this.$options.data().queryForm;
+        this.backupStepData = this.$options.data().backupStepData;
       },
       // 上报Flag号
       informFlag(flag){
@@ -167,33 +151,46 @@
       },
       // 执行步骤
       handleSetStep(active, baseForm, tableForm) {
-        if(this.active+active > this.active){
-          // 备份上一步状态
-          this.oldBaseForm = deepClone(this.baseForm);
-          this.oldTableForm = deepClone(this.tableForm);
+        // 未来选中项
+        const futureActive = this.active + active;
+
+        if(futureActive > this.active){
+          // 记录上次步骤
+          this.backupStepData[this.active] = {
+            baseForm: deepClone(this.baseForm),
+            tableForm: deepClone(this.tableForm),
+          };
 
           if(baseForm){
             this.baseForm = deepClone(baseForm);
           }
-          if(tableForm  && tableForm.length > 0){
+          if(tableForm && tableForm.length > 0){
             const tmpForm = this.$baseLodash.sortBy(tableForm,
               item=>{return item.sort});
             this.tableForm = deepClone(tmpForm);
           }
 
-        }else{
-          // 还原上一步状态
-          const tmpForm = this.$baseLodash.sortBy(this.oldTableForm,
-            item=>{return item.sort});
-          this.tableForm = deepClone(tmpForm);
+        }else {
+          const bygoneActive = this.backupStepData[futureActive];
+          if(bygoneActive){
+            if(bygoneActive.baseForm){
+              this.baseForm = deepClone(bygoneActive.baseForm);
+            }
+            if(bygoneActive.tableForm && bygoneActive.tableForm.length > 0){
+              const tmpForm = this.$baseLodash.sortBy(bygoneActive.tableForm,
+                item=>{return item.sort});
+              this.tableForm = deepClone(tmpForm);
+            }
+          }
         }
 
         // 执行保存操作
-        if(this.active+active > this.maxFlag){
+        if(futureActive > this.maxFlag){
           this.save()
         }else {
-          this.active += active;
+          this.active = futureActive;
 
+          // 执行表格刷新 （需要彻底情况并延迟 才会生效）
           this.columnListLoading = true;
           const tmpTableForm = deepClone(this.tableForm);
           this.tableForm = this.$options.data().tableForm;
@@ -204,11 +201,51 @@
         }
       },
       // 保存
-      save() {
-        console.log(this.baseForm);
-        console.log(this.tableForm);
-        console.log("提交")
-        return;
+      async save() {
+        // 字段数据
+        let tmpForm = deepClone(this.baseForm);
+        // 字段数据
+        let columnList = deepClone(this.tableForm);
+        // 处理数据
+        for (let i = 0; i < columnList.length; i++) {
+          delete columnList[i].disabled;
+          if(!isNull(columnList[i].izPk)){
+            columnList[i].izPk = columnList[i].izPk+"";
+          }
+          if(!isNull(columnList[i].izNotNull)){
+            columnList[i].izNotNull = columnList[i].izNotNull+"";
+          }
+          if(!isNull(columnList[i].izShowList)){
+            columnList[i].izShowList = columnList[i].izShowList+"";
+          }
+          if(!isNull(columnList[i].izShowForm)){
+            columnList[i].izShowForm = columnList[i].izShowForm+"";
+          }
+          if(!isNull(columnList[i].validateType)){
+            columnList[i].validateType = columnList[i].validateType.join(",");
+          }
+        }
+
+        if(columnList.length === 0){
+          tmpForm.columnList = null;
+        }else{
+          tmpForm.columnList = columnList;
+        }
+
+        // 修改
+        if (!isNull(tmpForm.id)) {
+          const { success, msg } = await doUpdate(tmpForm);
+          if(success){
+            this.$baseMessage(msg, "success");
+          }
+        } else {
+          const { success, msg } = await doInsert(tmpForm);
+          if(success){
+            this.$baseMessage(msg, "success");
+          }
+        }
+        this.close();
+        await this.$emit("fetchData");
       },
 
       // =================
@@ -273,6 +310,10 @@
 <style lang="scss">
   .creater-main{
     position: relative;
+
+    .el-form-item-table{
+      margin-top: 22px;
+    }
 
     .creater-el-steps{
       max-height: 160px;

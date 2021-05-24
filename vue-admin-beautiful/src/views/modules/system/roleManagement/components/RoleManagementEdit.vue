@@ -70,7 +70,10 @@
 <script>
   import { doInsert, doUpdate } from "@/api/system/role/roleManagement";
   import { isNull} from "@/utils/validate";
-  import {isGeneral, isGeneralWithChinese, getMsg} from "@/utils/valiargs";
+  import {
+    validateIsGeneral,
+    validateIsGeneralWithChinese,
+  } from "@/utils/validateRlue";
 
   import { getAccessToken } from "@/utils/accessToken";
   import { getUserInfo } from "@/api/user";
@@ -80,21 +83,6 @@
     name: "RoleManagementEdit",
     components: { Tenant },
     data() {
-
-      const validateCode = (rule, value, callback) => {
-        if (!isGeneral(value)) {
-          callback(new Error(getMsg("isGeneral")));
-        } else {
-          callback();
-        }
-      };
-      const validateName = (rule, value, callback) => {
-        if (!isGeneralWithChinese(value)) {
-          callback(new Error(getMsg("isGeneralWithChinese")));
-        } else {
-          callback();
-        }
-      };
 
       return {
         formStatus: true,
@@ -109,11 +97,11 @@
         rules: {
           roleCode: [
             { required: true, trigger: "blur", message: "请输入编号" },
-            { required: false, trigger: "blur", validator: validateCode },
+            { required: false, trigger: "blur", validator: validateIsGeneral },
           ],
           roleName: [
             { required: true, trigger: "blur", message: "请输入名称" },
-            { required: false, trigger: "blur", validator: validateName },
+            { required: false, trigger: "blur", validator: validateIsGeneralWithChinese },
           ],
         },
         title: "",

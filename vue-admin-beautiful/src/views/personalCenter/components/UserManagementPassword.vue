@@ -46,25 +46,16 @@
 
 <script>
   import { doUpdatePassword } from "@/api/system/user/userManagement";
-  import { isNull, isPassword } from "@/utils/validate";
+  import {
+    validateIsSecurityPassword,
+  } from "@/utils/validateRlue";
 
   export default {
     name: "UserManagementPassword",
     data() {
-      const validatePassword = (rule, value, callback) => {
-        if (isNull(value)) {
-          callback(new Error('请输入密码'));
-        } else if (!isPassword(value)) {
-          callback(new Error("密码至少包含大写字母，小写字母，数字，且不少于6位"));
-        } else {
-          callback();
-        }
-      };
 
       const validateVerifyPassword = (rule, value, callback) => {
-        if (isNull(value)) {
-          callback(new Error('请再次输入密码'));
-        } else if (value !== this.form.newPassword) {
+        if (value !== this.form.newPassword) {
           callback(new Error('两次输入密码不一致!'));
         } else {
           callback();
@@ -82,9 +73,11 @@
             { required: true, trigger: "blur", message: "请输入旧密码" },
           ],
           newPassword: [
-            { required: true, trigger: "blur", validator: validatePassword },
+            { required: true, trigger: "blur", message: "请输入密码" },
+            { required: true, trigger: "blur", validator: validateIsSecurityPassword },
           ],
           verifyPassword: [
+            { required: true, trigger: "blur", message: "请再次输入密码" },
             { required: true, trigger: "blur", validator: validateVerifyPassword },
           ],
         },
