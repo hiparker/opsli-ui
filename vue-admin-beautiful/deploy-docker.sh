@@ -2,6 +2,6 @@
 
 npm run build
 
-docker build -t vue-admin-beautiful .
+docker build -t opsli-ui .
 
-docker run --name vue-admin-beautiful --restart=always -p 80:80 -v /var/nginx:/var/data -d vue-admin-beautiful
+docker run --name opsli-ui --restart=always -p 80:80 -v /var/nginx:/var/data -d opsli-ui
