@@ -4,21 +4,21 @@
       <vab-query-form-left-panel :span="10">
 
         <el-button
-          v-if="$perms('deve_creater_insert')"
+          v-if="$perms('dev_generator_insert')"
           icon="el-icon-plus"
           type="primary"
           @click="handleInsert"
         > 添加 </el-button>
 
         <el-button
-          v-if="$perms('deve_creater_import')"
+          v-if="$perms('dev_generator_import')"
           icon="el-icon-plus"
           type="primary"
           @click="handleImport"
         > 从数据库导入 </el-button>
 
         <el-button
-          v-if="$perms('deve_creater_delete')"
+          v-if="$perms('dev_generator_delete')"
           :disabled="!selectRows.length > 0"
           icon="el-icon-delete"
           type="danger"
@@ -26,7 +26,7 @@
         > 批量删除 </el-button>
 
         <el-button
-          v-if="$perms('deve_creater_create')"
+          v-if="$perms('dev_generator_create')"
           :disabled="selectRows.length !== 1"
           icon="el-icon-plus"
           type="warning"
@@ -34,7 +34,7 @@
         > 生成代码 </el-button>
 
         <el-button
-          v-if="$perms('deve_creater_createMenu')"
+          v-if="$perms('dev_generator_createMenu')"
           :disabled="selectRows.length !== 1"
           icon="el-icon-menu"
           type="warning"
@@ -145,19 +145,19 @@
       >
         <template v-slot="scope">
           <el-button
-            v-if="$perms('deve_creater_update')"
+            v-if="$perms('dev_generator_update')"
             type="text"
             @click="handleUpdate(scope.row)"
           > 编辑 </el-button>
 
           <el-button
-            v-if="$perms('deve_creater_delete')"
+            v-if="$perms('dev_generator_delete')"
             type="text"
             @click="handleDelete(scope.row)"
           > 删除 </el-button>
 
           <el-button
-            v-if="$perms('deve_creater_sync')"
+            v-if="$perms('dev_generator_sync')"
             type="text"
             @click="handleSync(scope.row)"
           > 同步 </el-button>
@@ -192,7 +192,7 @@
 </template>
 
 <script>
-  import { getList, doDelete, doDeleteAll, doSync, doCreateMenu } from "@/api/creater/tableManagement";
+  import { getList, doDelete, doDeleteAll, doSync, doCreateMenu } from "@/api/generator/tableManagement";
   import { isNull } from "@/utils/validate";
   import Edit from "./components/edit/TableEdit.vue";
   import MenuManagementChoose from "@/components/opsli/menu/MenuManagementChoose";

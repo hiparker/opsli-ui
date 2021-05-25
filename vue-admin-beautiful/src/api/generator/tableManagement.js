@@ -2,7 +2,7 @@ import request from "@/utils/request";
 
 export function getList(data) {
   return request({
-    url: "/api/v1/creater/table/findPage",
+    url: "/api/v1/generator/table/findPage",
     method: "get",
     params: data,
   });
@@ -10,7 +10,7 @@ export function getList(data) {
 
 export function doInsert(data) {
   return request({
-    url: "/api/v1/creater/table/insert",
+    url: "/api/v1/generator/table/insert",
     method: "post",
     data,
   });
@@ -18,7 +18,7 @@ export function doInsert(data) {
 
 export function doUpdate(data) {
   return request({
-    url: "/api/v1/creater/table/update",
+    url: "/api/v1/generator/table/update",
     method: "post",
     data,
   });
@@ -26,7 +26,7 @@ export function doUpdate(data) {
 
 export function doDelete(data) {
   return request({
-    url: "/api/v1/creater/table/del",
+    url: "/api/v1/generator/table/del",
     method: "post",
     params: data,
   });
@@ -34,7 +34,7 @@ export function doDelete(data) {
 
 export function doDeleteAll(data) {
   return request({
-    url: "/api/v1/creater/table/delAll",
+    url: "/api/v1/generator/table/delAll",
     method: "post",
     params: data,
   });
@@ -44,7 +44,7 @@ export function doDeleteAll(data) {
 
 export function getSubList(data) {
   return request({
-    url: "/api/v1/creater/table/get",
+    url: "/api/v1/generator/table/get",
     method: "get",
     params: data,
   });
@@ -52,7 +52,7 @@ export function getSubList(data) {
 
 export function doSync(data) {
   return request({
-    url: "/api/v1/creater/table/sync",
+    url: "/api/v1/generator/table/sync",
     method: "post",
     params: data,
   });
@@ -60,14 +60,14 @@ export function doSync(data) {
 
 export function getTables() {
   return request({
-    url: "/api/v1/creater/table/getTables",
+    url: "/api/v1/generator/table/getTables",
     method: "get",
   });
 }
 
 export function doImportTables(data) {
   return request({
-    url: "/api/v1/creater/table/importTables",
+    url: "/api/v1/generator/table/importTables",
     method: "post",
     params: data,
   });
@@ -75,9 +75,9 @@ export function doImportTables(data) {
 
 // ===========================================
 
-export function getCreaterLogs(data) {
+export function getGenLogs(data) {
   return request({
-    url: "/api/v1/creater/logs/getByTableId",
+    url: "/api/v1/generator/logs/getByTableId",
     method: "get",
     params: data,
   });
@@ -85,7 +85,7 @@ export function getCreaterLogs(data) {
 
 export function doCreate(data) {
   return request({
-    url: "/api/v1/creater/logs/create",
+    url: "/api/v1/generator/logs/create",
     method: "post",
     // 重要
     responseType: "blob",
@@ -95,7 +95,7 @@ export function doCreate(data) {
 
 export function doCreateMenu(data) {
   return request({
-    url: "/api/v1/creater/logs/createMenu",
+    url: "/api/v1/generator/logs/createMenu",
     method: "post",
     params: data,
   });
@@ -103,7 +103,7 @@ export function doCreateMenu(data) {
 
 export function doCreateJson(data) {
   return {
-    url: "/api/v1/creater/logs/create",
+    url: "/api/v1/generator/logs/create",
     method: "get",
     params: data,
   };

@@ -68,10 +68,9 @@
 </template>
 
 <script>
-  import {getCreaterLogs, doCreate, doCreateJson} from "@/api/creater/tableManagement";
+  import { getGenLogs, doCreateJson} from "@/api/generator/tableManagement";
   import { isNotNull} from "@/utils/valiargs";
   import {
-    validateIsNotNull,
     validateIsLetter,
     validateIsGeneralWithChinese,
   } from "@/utils/validateRlue";
@@ -205,7 +204,7 @@
         return '';
       },
       async fetchData() {
-        const { data } = await getCreaterLogs({tableId: this.form.tableId});
+        const { data } = await getGenLogs({tableId: this.form.tableId});
         if(isNotNull(data)){
           this.form = data;
         }

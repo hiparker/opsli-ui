@@ -7,8 +7,8 @@
     top="4vh"
     @close="close"
   >
-    <div class="creater-main">
-      <div class="creater-el-steps">
+    <div class="generator-main">
+      <div class="generator-el-steps">
         <el-steps :active="active"
                   align-center
                   finish-status="finish"
@@ -21,7 +21,7 @@
         </el-steps>
       </div>
 
-      <div class="creater-steps">
+      <div class="generator-steps">
         <table-data-step
           :base-form="baseForm"
           :table-form="tableForm"
@@ -76,7 +76,7 @@
   import TableDataStep from "./step/TableDataStep";
   import BackendStep from "./step/BackendStep";
   import FrontendStep from "./step/FrontendStep";
-  import {doInsert, doUpdate, getSubList} from "@/api/creater/tableManagement";
+  import {doInsert, doUpdate, getSubList} from "@/api/generator/tableManagement";
   import {isNull} from "@/utils/validate";
   import {deepClone} from "@/utils/clone";
 
@@ -321,18 +321,18 @@
   }
 </script>
 <style lang="scss">
-  .creater-main{
+  .generator-main{
     position: relative;
 
     .el-form-item-table{
       margin-top: 22px;
     }
 
-    .creater-el-steps{
+    .generator-el-steps{
       max-height: 160px;
     }
 
-    .creater-steps{
+    .generator-steps{
       position: relative;
       z-index: 999;
       width: 100%;

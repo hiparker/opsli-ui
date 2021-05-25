@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import { doImportTables, getTables} from "@/api/creater/tableManagement";
+import { doImportTables, getTables} from "@/api/generator/tableManagement";
   import { isNull } from "@/utils/validate";
 
   export default {
