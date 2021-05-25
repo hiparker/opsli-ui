@@ -244,6 +244,7 @@
       return {
         // 标示
         flag: 2,
+        title: "前端展示设置",
         dictCurr: [],
         baseFormCurr: {},
         tableFormCurr: [],
@@ -257,7 +258,7 @@
     },
     created() {
       // 告诉父节点 自己的 flag 编号
-      this.$emit("inform-flag", this.flag);
+      this.$emit("inform-flag", this.flag, this.title);
     },
     mounted() {
       // 拷贝 props

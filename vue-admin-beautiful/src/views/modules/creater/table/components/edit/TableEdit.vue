@@ -13,11 +13,14 @@
                   align-center
                   finish-status="finish"
                   :direction="direction" class="steps">
-          <el-step title="数据库表设置"></el-step>
-          <el-step title="前端展示设置"></el-step>
-          <el-step title="后端实体设置"></el-step>
+          <!-- for 循环展示字段 -->
+          <el-step  v-for="(step, index) in flagObjArray"
+                    :key="index"
+                    :title="step.title"
+          ></el-step>
         </el-steps>
       </div>
+
       <div class="creater-steps">
         <table-data-step
           :base-form="baseForm"
@@ -86,6 +89,7 @@
         active: 1,
         minFlag: 1,
         maxFlag: 1,
+        flagObjArray: [],
         flagArray: [],
         queryForm: {},
         baseForm: {
@@ -143,11 +147,20 @@
         this.backupStepData = this.$options.data().backupStepData;
       },
       // 上报Flag号
-      informFlag(flag){
+      informFlag(flag, title){
+        let temp = {
+          flag: flag,
+          title: title
+        }
+        this.flagObjArray.push(temp);
         this.flagArray.push(flag);
+
+        // 处理数据
         this.minFlag = Math.min.apply(Math, this.flagArray);
         this.maxFlag = Math.max.apply(Math, this.flagArray);
         this.active = this.minFlag;
+        this.flagObjArray = this.$baseLodash.sortBy(this.flagObjArray,
+          item=>{return item.sort});
       },
       // 执行步骤
       handleSetStep(active, baseForm, tableForm) {
