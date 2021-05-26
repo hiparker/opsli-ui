@@ -111,13 +111,7 @@
   import { getUserInfo } from "@/api/user";
   import Tenant from "@/components/opsli/tenant/tenant";
   import { isNull } from "@/utils/validate";
-  import {
-    validateIsGeneral,
-    validateIsMobile,
-    validateIsGeneralWithChinese,
-    validateIsSecurityPassword,
-    validateIsEmail
-  } from "@/utils/validateRlue";
+  import { validatorRule } from "@/utils/validateRlue";
 
   export default {
     name: "UserManagementEdit",
@@ -145,11 +139,11 @@
         rules: {
           username: [
             { required: true, trigger: "blur", message: "请输入用户名" },
-            { required: false, trigger: "blur", validator: validateIsGeneral },
+            { required: false, trigger: "blur", validator: validatorRule.IS_GENERAL },
           ],
           password: [
             { required: true, trigger: "blur", message: "请输入密码" },
-            { required: false, trigger: "blur", validator: validateIsSecurityPassword },
+            { required: false, trigger: "blur", validator: validatorRule.IS_SECURITY_PASSWORD },
           ],
           verifyPassword: [
             { required: true, trigger: "blur", message: "请再次输入密码" },
@@ -157,17 +151,17 @@
           ],
           realName: [
             { required: true, trigger: "blur", message: "请输入昵称" },
-            { required: false, trigger: "blur", validator: validateIsGeneralWithChinese() },
+            { required: false, trigger: "blur", validator: validatorRule.IS_GENERAL_WITH_CHINESE },
           ],
           no: [
             { required: true, trigger: "blur", message: "请输入工号" },
-            { required: true, trigger: "blur", validator: validateIsGeneral },
+            { required: true, trigger: "blur", validator: validatorRule.IS_GENERAL },
           ],
           mobile: [
-            { required: false, trigger: "blur", validator: validateIsMobile },
+            { required: false, trigger: "blur", validator: validatorRule.IS_MOBILE },
           ],
           email: [
-            { required: false, trigger: "blur", validator: validateIsEmail },
+            { required: false, trigger: "blur", validator: validatorRule.IS_EMAIL },
           ],
         },
         title: "",

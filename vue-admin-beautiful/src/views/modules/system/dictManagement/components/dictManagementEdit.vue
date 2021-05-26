@@ -52,10 +52,7 @@
 <script>
   import { doInsert, doUpdate } from "@/api/system/dict/dictManagement";
   import { isNotNull } from "@/utils/valiargs";
-  import {
-    validateIsGeneral,
-    validateIsGeneralWithChinese,
-  } from "@/utils/validateRlue";
+  import { validatorRule } from "@/utils/validateRlue";
   export default {
     name: "DictManagementEdit",
     data() {
@@ -69,11 +66,11 @@
         rules: {
           typeCode: [
             { required: true, trigger: "blur", message: "请输入编号" },
-            { required: false, trigger: "blur", validator: validateIsGeneral },
+            { required: false, trigger: "blur", validator: validatorRule.IS_GENERAL },
           ],
           typeName: [
             { required: true, trigger: "blur", message: "请输入名称" },
-            { required: false, trigger: "blur", validator: validateIsGeneralWithChinese },
+            { required: false, trigger: "blur", validator: validatorRule.IS_GENERAL_WITH_CHINESE },
           ],
         },
         title: "",

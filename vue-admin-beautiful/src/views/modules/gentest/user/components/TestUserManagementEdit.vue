@@ -69,12 +69,7 @@
   import { doInsert, doUpdate } from "@/api/gentest/user/TestUserManagement";
   import { formateDate } from "@/utils/format";
   import { isNull } from "@/utils/validate";
-  import {
-    validateIsNotNull,
-    validateIsInteger,
-    validateIsMoney,
-    validateIsGeneralWithChinese,
-  } from "@/utils/validateRlue";
+  import { validatorRule } from "@/utils/validateRlue";
 
   export default {
     name: "TestUserManagementEdit",
@@ -92,7 +87,7 @@
             {
               required: false,
               trigger: "blur",
-              validator: validateIsGeneralWithChinese,
+              validator: validatorRule.IS_GENERAL_WITH_CHINESE,
             },
           ],
           money: [
@@ -100,7 +95,7 @@
             {
               required: false,
               trigger: "blur",
-              validator: validateIsMoney,
+              validator: validatorRule.IS_MONEY,
             },
           ],
           age: [
@@ -108,7 +103,7 @@
             {
               required: false,
               trigger: "blur",
-              validator: validateIsInteger,
+              validator: validatorRule.IS_INTEGER,
             },
           ],
           birth: [{ required: true, trigger: "blur", message: "生日非空" }],

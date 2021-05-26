@@ -69,10 +69,7 @@
   import { doInsert, doUpdate } from "@/api/gentest/carinfo/TestCarManagement";
   import { formateDate } from "@/utils/format";
   import { isNull } from "@/utils/validate";
-  import {
-    validateIsNotNull,
-    validateIsGeneralWithChinese,
-  } from "@/utils/validateRlue";
+  import { validatorRule } from "@/utils/validateRlue";
 
   export default {
     name: "TestCarManagementEdit",
@@ -90,7 +87,7 @@
             {
               required: false,
               trigger: "blur",
-              validator: validateIsGeneralWithChinese,
+              validator: validatorRule.IS_GENERAL_WITH_CHINESE,
             },
           ],
           carType: [
@@ -98,14 +95,14 @@
             {
               required: false,
               trigger: "blur",
-              validator: validateIsGeneralWithChinese,
+              validator: validatorRule.IS_GENERAL_WITH_CHINESE,
             },
           ],
           carBrand: [
             {
               required: false,
               trigger: "blur",
-              validator: validateIsGeneralWithChinese,
+              validator: validatorRule.IS_GENERAL_WITH_CHINESE,
             },
           ],
         },

@@ -173,15 +173,12 @@
 </template>
 
 <script>
-  import {doInsert, doUpdate, get, getTree} from "@/api/system/menu/menuManagement";
+  import {doInsert, doUpdate, get } from "@/api/system/menu/menuManagement";
   import Icon from "@/components/opsli/icon/icon";
   import MenuManagementChoose from "@/components/opsli/menu/MenuManagementChoose";
   import { deepClone } from "@/utils/clone";
   import { isNull} from "@/utils/validate";
-  import {
-    validateIsGeneral,
-    validateIsGeneralWithChinese,
-  } from "@/utils/validateRlue";
+  import { validatorRule } from "@/utils/validateRlue";
 
   export default {
     name: "MenuManagementEdit",
@@ -217,10 +214,10 @@
         rules: {
           menuName: [
             { required: true, trigger: "blur", message: "请输入名称" },
-            { required: false, trigger: "blur", validator: validateIsGeneralWithChinese },
+            { required: false, trigger: "blur", validator: validatorRule.IS_GENERAL_WITH_CHINESE },
           ],
           permissions: [
-            { required: false, trigger: "blur", validator: validateIsGeneral },
+            { required: false, trigger: "blur", validator: validatorRule.IS_GENERAL },
           ],
           sortNo: [{ required: true, trigger: "blur", message: "请输入排序" }],
           type: [{ required: true, trigger: "blur", message: "请选择是否类型" }],

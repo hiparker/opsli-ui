@@ -49,10 +49,7 @@
 
   import { formateDate } from "@/utils/format";
   import { isNull } from "@/utils/validate";
-  import {
-    validateIsGeneral,
-    validateIsGeneralWithChinese,
-  } from "@/utils/validateRlue";
+  import { validatorRule } from "@/utils/validateRlue";
 
   export default {
     name: "SysOptionsManagementEdit",
@@ -68,11 +65,11 @@
         rules: {
           optionCode: [
             { required: true, trigger: "blur", message: "参数编号非空" },
-            { required: false, trigger: "blur", validator: validateIsGeneral },
+            { required: false, trigger: "blur", validator: validatorRule.IS_GENERAL },
           ],
           optionName: [
             { required: true, trigger: "blur", message: "参数名称非空" },
-            { required: false, trigger: "blur", validator: validateIsGeneralWithChinese },
+            { required: false, trigger: "blur", validator: validatorRule.IS_GENERAL_WITH_CHINESE },
           ],
         },
         title: "",

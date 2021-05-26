@@ -46,9 +46,7 @@
 
 <script>
   import { doUpdatePassword } from "@/api/system/user/userManagement";
-  import {
-    validateIsSecurityPassword,
-  } from "@/utils/validateRlue";
+  import { validatorRule } from "@/utils/validateRlue";
 
   export default {
     name: "UserManagementPassword",
@@ -74,7 +72,7 @@
           ],
           newPassword: [
             { required: true, trigger: "blur", message: "请输入密码" },
-            { required: true, trigger: "blur", validator: validateIsSecurityPassword },
+            { required: true, trigger: "blur", validator: validatorRule.IS_SECURITY_PASSWORD },
           ],
           verifyPassword: [
             { required: true, trigger: "blur", message: "请再次输入密码" },

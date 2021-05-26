@@ -85,10 +85,7 @@
   import { deepClone } from "@/utils/clone";
   import { isNull } from "@/utils/validate";
   import { isNotNull } from "@/utils/valiargs";
-  import {
-    validateIsGeneral,
-    validateIsGeneralWithChinese,
-  } from "@/utils/validateRlue";
+  import { validatorRule } from "@/utils/validateRlue";
   import { getAccessToken } from "@/utils/accessToken";
   import { getUserInfo } from "@/api/user";
   import Tenant from "@/components/opsli/tenant/tenant";
@@ -114,11 +111,11 @@
         rules: {
           orgCode: [
             { required: true, trigger: "blur", message: "请输入编号" },
-            { required: false, trigger: "blur", validator: validateIsGeneral },
+            { required: false, trigger: "blur", validator: validatorRule.IS_GENERAL },
           ],
           orgName: [
             { required: true, trigger: "blur", message: "请输入名称" },
-            { required: false, trigger: "blur", validator: validateIsGeneralWithChinese },
+            { required: false, trigger: "blur", validator: validatorRule.IS_GENERAL_WITH_CHINESE },
           ],
           orgType: [{ required: true, trigger: "blur", message: "请选择类型" }],
           sortNo: [{ required: true, trigger: "blur", message: "请输入排序" }],

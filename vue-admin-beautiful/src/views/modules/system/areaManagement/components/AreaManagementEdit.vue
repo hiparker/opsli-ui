@@ -34,10 +34,7 @@
   import {doInsert, doUpdate} from "@/api/system/area/areaManagement";
   import { deepClone } from "@/utils/clone";
   import { isNull } from "@/utils/validate";
-  import {
-    validateIsInteger,
-    validateIsGeneralWithChinese,
-  } from "@/utils/validateRlue";
+  import { validatorRule } from "@/utils/validateRlue";
 
   export default {
     name: "AreaManagementEdit",
@@ -52,11 +49,11 @@
         rules: {
           areaCode: [
             { required: true, trigger: "blur", message: "请输入编号" },
-            { required: false, trigger: "blur", validator: validateIsInteger },
+            { required: false, trigger: "blur", validator: validatorRule.IS_INTEGER },
           ],
           areaName: [
             { required: true, trigger: "blur", message: "请输入名称" },
-            { required: false, trigger: "blur", validator: validateIsGeneralWithChinese },
+            { required: false, trigger: "blur", validator: validatorRule.IS_GENERAL_WITH_CHINESE },
           ],
         },
         title: "",

@@ -29,7 +29,7 @@ export const constantRoutes = [
         },
       },
     ],
-  }
+  },
 ];
 
 export default { constantRoutes };

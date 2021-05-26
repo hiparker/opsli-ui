@@ -70,10 +70,7 @@
 <script>
   import { getGenLogs, doCreateJson} from "@/api/generator/tableManagement";
   import { isNotNull} from "@/utils/valiargs";
-  import {
-    validateIsLetter,
-    validateIsGeneralWithChinese,
-  } from "@/utils/validateRlue";
+  import { validatorRule } from "@/utils/validateRlue";
   import {title} from "@/config/settings";
   import { getAccessToken } from "@/utils/accessToken";
   const { baseURL, tokenName } = require("@/config/settings");
@@ -107,11 +104,11 @@
         rules: {
           codeTitle: [
             { required: true, trigger: "blur", message: "请输入代码标题" },
-            { required: true, trigger: "blur", validator: validateIsGeneralWithChinese },
+            { required: true, trigger: "blur", validator: validatorRule.IS_GENERAL_WITH_CHINESE },
           ],
           codeTitleBrief: [
             { required: true, trigger: "blur", message: "请输入代码标题简介" },
-            { required: true, trigger: "blur", validator: validateIsGeneralWithChinese },
+            { required: true, trigger: "blur", validator: validatorRule.IS_GENERAL_WITH_CHINESE },
           ],
           packageName: [
             { required: true, trigger: "blur", message: "请输入包路径" },
@@ -119,14 +116,14 @@
           ],
           moduleName: [
             { required: true, trigger: "blur", message: "请输入模块名" },
-            { required: true, trigger: "blur", validator: validateIsLetter },
+            { required: true, trigger: "blur", validator: validatorRule.IS_LETTER },
           ],
           subModuleName: [
-            { required: false, trigger: "blur", validator: validateIsLetter },
+            { required: false, trigger: "blur", validator: validatorRule.IS_LETTER },
           ],
           authorName: [
             { required: true, trigger: "blur", message: "请输入作者信息" },
-            { required: true, trigger: "blur", validator: validateIsGeneralWithChinese },
+            { required: true, trigger: "blur", validator: validatorRule.IS_GENERAL_WITH_CHINESE },
           ],
         },
         title: "",

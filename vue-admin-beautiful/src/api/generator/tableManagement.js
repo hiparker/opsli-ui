@@ -108,3 +108,24 @@ export function doCreateJson(data) {
     params: data,
   };
 }
+
+export function getFieldTypes() {
+  return request({
+    url: "/api/v1/generator/table/getFieldTypes",
+    method: "get",
+  });
+}
+
+export function getJavaFieldTypes() {
+  return request({
+    url: "/api/v1/generator/table/getJavaFieldTypes",
+    method: "get",
+  });
+}
+
+export function getJavaFieldTypesBySafety() {
+  return request({
+    url: "/api/v1/generator/table/getJavaFieldTypesBySafety",
+    method: "get",
+  });
+}

@@ -83,7 +83,6 @@
 
       <el-form ref="tableForm" :model="{'tableForm': tableFormCurr}" >
         <el-table
-          v-loading="vLoading"
           :data="tableFormCurr"
           :element-loading-text="elementLoadingText"
           @selection-change="setSelectRows"
@@ -143,10 +142,10 @@
                            :disabled="scope.row.disabled"
                            style="width: 100%" >
                   <el-option
-                    v-for="item in dictCurr.field_type"
-                    :key="item.dictValue"
-                    :label="item.dictName"
-                    :value="item.dictValue"
+                    v-for="item in baseDictData.fieldList"
+                    :key="item"
+                    :label="item"
+                    :value="item"
                   ></el-option>
                 </el-select>
               </el-form-item>
@@ -279,11 +278,14 @@
   </div>
 </template>
 <script>
-  import {isCode, isNull} from "@/utils/validate";
+  import { isCode, isNull } from "@/utils/validate";
   import StepFooter from "./footer/StepFooter"
-  import {deepClone} from "@/utils/clone";
+  import { deepClone } from "@/utils/clone";
   import Sortable from "sortablejs";
-  import {uuid} from "@/utils";
+  import { uuid } from "@/utils";
+  import { getFieldTypes, getJavaFieldTypesBySafety} from "@/api/generator/tableManagement";
+  import {isNotNull} from "@/utils/valiargs";
+
   export default {
     name: "TableDataStep",
     components: { Sortable, StepFooter },
@@ -324,12 +326,15 @@
           return {};
         },
       },
-      vLoading: {
-        type: Boolean,
+      baseDictData:{
+        type: Object,
         default: () => {
-          return false;
+          return {
+            fieldList: [],
+            JavaFieldMap: {},
+          };
         },
-      },
+      }
     },
     data() {
 
@@ -430,6 +435,9 @@
 
       // 表拖动
       this.rowDrop();
+
+      // 初始化数据
+      this.doGetFieldData();
     },
 
     watch: {
@@ -457,6 +465,9 @@
           _this.dictCurr.field_type =  _this.$getDictList(_this.baseFormCurr.jdbcType + "_data_type");
           // 清空已有字段数据
           _this.tableFormCurr = [];
+
+          // 初始化数据
+          this.doGetFieldData();
         });
       },
       // 表类型发生改动
@@ -506,6 +517,33 @@
       },
 
       // ==============================
+
+      async doGetFieldData(){
+        this.$emit("loading");
+        // 通知父级 锁定当前表
+        this.$emit("inform-data", {
+          fieldList:  await this.doGetFieldTypes(),
+          JavaFieldMap: await this.doGetJavaFieldTypesBySafety(),
+        });
+        this.$emit("unLoading");
+      },
+
+      // 获得 数据类型
+      async doGetFieldTypes(){
+        const {data} = await getFieldTypes();
+        if(isNotNull(data)){
+          return data;
+        }
+        return null;
+      },
+      // 获得 Java 类型 (安全兜底模式)
+      async doGetJavaFieldTypesBySafety(){
+        const {data} = await getJavaFieldTypesBySafety();
+        if(isNotNull(data)){
+          return data;
+        }
+        return null;
+      },
 
       // 行添加
       columnHandleAdd(params){

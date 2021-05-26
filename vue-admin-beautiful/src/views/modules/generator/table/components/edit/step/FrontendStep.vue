@@ -4,7 +4,6 @@
       <el-form ref="tableForm" :model="{'tableForm': tableFormCurr}" >
 
         <el-table
-          v-loading="vLoading"
           :data="tableFormCurr"
           :element-loading-text="elementLoadingText"
           @selection-change="setSelectRows"
@@ -232,10 +231,13 @@
           return {};
         },
       },
-      vLoading: {
-        type: Boolean,
+      baseDictData:{
+        type: Object,
         default: () => {
-          return false;
+          return {
+            fieldList: [],
+            JavaFieldMap: {},
+          };
         },
       },
     },

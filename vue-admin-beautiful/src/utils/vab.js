@@ -35,6 +35,31 @@ const install = (Vue, opts = {}) => {
     }
     return loading;
   };
+  /* 局部加载层 */
+  Vue.prototype.$basePartLoading = (el, index, text) => {
+    if (el === undefined || el === null) {
+      return null;
+    }
+
+    let loading;
+    if (!index) {
+      loading = Loading.service({
+        lock: true,
+        text: text || loadingText,
+        background: "hsla(0,0%,100%,.8)",
+        target: el,
+      });
+    } else {
+      loading = Loading.service({
+        lock: true,
+        text: text || loadingText,
+        spinner: "vab-loading-type" + index,
+        background: "hsla(0,0%,100%,.8)",
+        target: el,
+      });
+    }
+    return loading;
+  };
   /* 全局多彩加载层 */
   Vue.prototype.$baseColorfullLoading = (index, text) => {
     let loading;

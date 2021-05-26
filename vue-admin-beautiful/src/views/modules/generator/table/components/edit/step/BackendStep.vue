@@ -3,7 +3,6 @@
     <div class="step-content">
       <el-form ref="tableForm" :model="{'tableForm': tableFormCurr}" >
         <el-table
-          v-loading="vLoading"
           :data="tableFormCurr"
           :element-loading-text="elementLoadingText"
           @selection-change="setSelectRows"
@@ -81,10 +80,10 @@
                            :disabled="scope.row.disabled || scope.row.showType === '2'"
                            style="width: 100%" >
                   <el-option
-                    v-for="item in dictCurr.java_data_type"
-                    :key="item.dictValue"
-                    :label="item.dictName"
-                    :value="item.dictValue"
+                    v-for="item in baseDictData.JavaFieldMap[scope.row.fieldType]"
+                    :key="item"
+                    :label="item"
+                    :value="item"
                   ></el-option>
                 </el-select>
               </el-form-item>
@@ -224,10 +223,13 @@
           return {};
         },
       },
-      vLoading: {
-        type: Boolean,
+      baseDictData:{
+        type: Object,
         default: () => {
-          return false;
+          return {
+            fieldList: [],
+            JavaFieldMap: {},
+          };
         },
       },
     },

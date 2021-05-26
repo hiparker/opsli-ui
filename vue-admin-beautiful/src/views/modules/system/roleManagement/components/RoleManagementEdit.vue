@@ -70,10 +70,7 @@
 <script>
   import { doInsert, doUpdate } from "@/api/system/role/roleManagement";
   import { isNull} from "@/utils/validate";
-  import {
-    validateIsGeneral,
-    validateIsGeneralWithChinese,
-  } from "@/utils/validateRlue";
+  import { validatorRule } from "@/utils/validateRlue";
 
   import { getAccessToken } from "@/utils/accessToken";
   import { getUserInfo } from "@/api/user";
@@ -97,11 +94,11 @@
         rules: {
           roleCode: [
             { required: true, trigger: "blur", message: "请输入编号" },
-            { required: false, trigger: "blur", validator: validateIsGeneral },
+            { required: false, trigger: "blur", validator: validatorRule.IS_GENERAL },
           ],
           roleName: [
             { required: true, trigger: "blur", message: "请输入名称" },
-            { required: false, trigger: "blur", validator: validateIsGeneralWithChinese },
+            { required: false, trigger: "blur", validator: validatorRule.IS_GENERAL_WITH_CHINESE },
           ],
         },
         title: "",

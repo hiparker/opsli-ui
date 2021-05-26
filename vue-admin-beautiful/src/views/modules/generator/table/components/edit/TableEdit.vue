@@ -23,42 +23,51 @@
 
       <div class="generator-steps">
         <table-data-step
+          :base-dict-data="baseDictData"
           :base-form="baseForm"
           :table-form="tableForm"
           :active="active"
           :min-flag="minFlag"
           :max-flag="maxFlag"
           :dict="dict"
-          :v-loading="columnListLoading"
+          @loading="loading"
+          @un-loading="unLoading"
           @inform-flag="informFlag"
+          @inform-data="informData"
           @change-step="handleSetStep"
           @close="close"
           @submit="save"
         ></table-data-step>
 
         <frontend-step
+          :base-dict-data="baseDictData"
           :base-form="baseForm"
           :table-form="tableForm"
           :active="active"
           :min-flag="minFlag"
           :max-flag="maxFlag"
           :dict="dict"
-          :v-loading="columnListLoading"
+          @loading="loading"
+          @un-loading="unLoading"
           @inform-flag="informFlag"
+          @inform-data="informData"
           @change-step="handleSetStep"
           @close="close"
           @submit="save"
         ></frontend-step>
 
         <backend-step
+          :base-dict-data="baseDictData"
           :base-form="baseForm"
           :table-form="tableForm"
           :active="active"
           :min-flag="minFlag"
           :max-flag="maxFlag"
           :dict="dict"
-          :v-loading="columnListLoading"
+          @loading="loading"
+          @un-loading="unLoading"
           @inform-flag="informFlag"
+          @inform-data="informData"
           @change-step="handleSetStep"
           @close="close"
           @submit="save"
@@ -91,6 +100,7 @@
         maxFlag: 1,
         flagObjArray: [],
         flagArray: [],
+        baseDictData: {},
         queryForm: {},
         baseForm: {
           jdbcType: "mysql",
@@ -99,8 +109,11 @@
         backupStepData: {}, // 备份步骤数据
         dict: {},
         title: "",
-        columnListLoading: true,
         dialogFormVisible: false,
+        target: document.querySelector(".generator-main .generator-steps"),
+        columnListLoading: true,
+        elementLoadingObj: null,
+        elementLoadingText: "正在加载...",
       };
     },
     created() {
@@ -146,6 +159,22 @@
         this.queryForm = this.$options.data().queryForm;
         this.backupStepData = this.$options.data().backupStepData;
       },
+      loading(){
+        this.$nextTick(async () => {
+          if(this.elementLoadingObj){
+            this.elementLoadingObj.close();
+          }
+          // 执行表格刷新 （需要彻底情况并延迟 才会生效）
+          this.elementLoadingObj = this.$basePartLoading(this.target, null, this.elementLoadingText);
+        });
+      },
+      unLoading() {
+        this.$nextTick(() => {
+          if(this.elementLoadingObj){
+            this.elementLoadingObj.close();
+          }
+        });
+      },
       // 上报Flag号
       informFlag(flag, title){
         let temp = {
@@ -164,54 +193,60 @@
       },
       // 执行步骤
       handleSetStep(active, baseForm, tableForm) {
-        // 未来选中项
-        const futureActive = this.active + active;
+        this.$nextTick(() => {
+          // 未来选中项
+          const futureActive = this.active + active;
 
-        if(futureActive > this.active){
-          // 记录上次步骤
-          this.backupStepData[this.active] = {
-            baseForm: deepClone(this.baseForm),
-            tableForm: deepClone(this.tableForm),
-          };
+          if(futureActive > this.active){
+            // 记录上次步骤
+            this.backupStepData[this.active] = {
+              baseForm: deepClone(this.baseForm),
+              tableForm: deepClone(this.tableForm),
+            };
 
-          if(baseForm){
-            this.baseForm = deepClone(baseForm);
-          }
-          if(tableForm && tableForm.length > 0){
-            const tmpForm = this.$baseLodash.sortBy(tableForm,
-              item=>{return item.sort});
-            this.tableForm = deepClone(tmpForm);
-          }
-
-        }else {
-          const bygoneActive = this.backupStepData[futureActive];
-          if(bygoneActive){
-            if(bygoneActive.baseForm){
-              this.baseForm = deepClone(bygoneActive.baseForm);
+            if(baseForm){
+              this.baseForm = deepClone(baseForm);
             }
-            if(bygoneActive.tableForm && bygoneActive.tableForm.length > 0){
-              const tmpForm = this.$baseLodash.sortBy(bygoneActive.tableForm,
+            if(tableForm && tableForm.length > 0){
+              const tmpForm = this.$baseLodash.sortBy(tableForm,
                 item=>{return item.sort});
               this.tableForm = deepClone(tmpForm);
             }
+
+          }else {
+            const bygoneActive = this.backupStepData[futureActive];
+            if(bygoneActive){
+              if(bygoneActive.baseForm){
+                this.baseForm = deepClone(bygoneActive.baseForm);
+              }
+              if(bygoneActive.tableForm && bygoneActive.tableForm.length > 0){
+                const tmpForm = this.$baseLodash.sortBy(bygoneActive.tableForm,
+                  item=>{return item.sort});
+                this.tableForm = deepClone(tmpForm);
+              }
+            }
           }
-        }
 
-        // 执行保存操作
-        if(futureActive > this.maxFlag){
-          this.save()
-        }else {
-          this.active = futureActive;
+          // 执行保存操作
+          if(futureActive > this.maxFlag){
+            this.save()
+          }else {
+            this.active = futureActive;
 
-          // 执行表格刷新 （需要彻底情况并延迟 才会生效）
-          this.columnListLoading = true;
-          const tmpTableForm = deepClone(this.tableForm);
-          this.tableForm = this.$options.data().tableForm;
-          setTimeout(()=>{
-            this.columnListLoading = false;
-            this.tableForm = deepClone(tmpTableForm);
-          },50);
-        }
+            // 执行表格刷新 （需要彻底情况并延迟 才会生效）
+            this.elementLoadingObj = this.$basePartLoading(this.target, null, this.elementLoadingText);
+
+            const tmpTableForm = deepClone(this.tableForm);
+            this.tableForm = this.$options.data().tableForm;
+            setTimeout(()=>{
+              if(this.elementLoadingObj){
+                this.elementLoadingObj.close();
+              }
+
+              this.tableForm = deepClone(tmpTableForm);
+            },50);
+          }
+        });
       },
       // 保存
       async save() {
@@ -263,46 +298,61 @@
 
       // =================
 
+      // 上报数据
+      informData(data){
+        console.log(data);
+        this.baseDictData = data;
+      },
+
       // 请求数据
-      async fetchData() {
-        this.columnListLoading = true;
-        const { data } = await getSubList(this.queryForm);
-        let flag = false;
-        if(!isNull(data)){
-          if(!isNull(data.columnList)){
-            flag = true;
-            // 处理数据
-            // 设置禁止修改字段 （如果有树表 则 parent_id 字段不允许任何修改）
-            for (let i = 0; i < data.columnList.length; i++) {
-              this.tableForm.push(data.columnList[i]);
+      fetchData() {
+        this.$nextTick(async () => {
+          // loading 对象
+          this.target = document.querySelector(".generator-main .generator-steps");
+          this.elementLoadingObj = this.$basePartLoading(this.target, null, this.elementLoadingText);
+          const { data } = await getSubList(this.queryForm);
+          let flag = false;
+          if(!isNull(data)){
+            if(!isNull(data.columnList)){
+              flag = true;
+              // 处理数据
+              // 设置禁止修改字段 （如果有树表 则 parent_id 字段不允许任何修改）
+              for (let i = 0; i < data.columnList.length; i++) {
+                this.tableForm.push(data.columnList[i]);
 
-              if(!isNull(this.tableForm[i].izPk)){
-                this.tableForm[i].izPk = parseInt(this.tableForm[i].izPk);
+                if(!isNull(this.tableForm[i].izPk)){
+                  this.tableForm[i].izPk = parseInt(this.tableForm[i].izPk);
+                }
+                if(!isNull(this.tableForm[i].izNotNull)){
+                  this.tableForm[i].izNotNull = parseInt(this.tableForm[i].izNotNull);
+                }
+                if(!isNull(this.tableForm[i].izShowList)){
+                  this.tableForm[i].izShowList = parseInt(this.tableForm[i].izShowList);
+                }
+                if(!isNull(this.tableForm[i].izShowForm)){
+                  this.tableForm[i].izShowForm = parseInt(this.tableForm[i].izShowForm);
+                }
+                if(!isNull(this.tableForm[i].validateType)){
+                  this.tableForm[i].validateType = this.tableForm[i].validateType.split(",");
+                }
               }
-              if(!isNull(this.tableForm[i].izNotNull)){
-                this.tableForm[i].izNotNull = parseInt(this.tableForm[i].izNotNull);
-              }
-              if(!isNull(this.tableForm[i].izShowList)){
-                this.tableForm[i].izShowList = parseInt(this.tableForm[i].izShowList);
-              }
-              if(!isNull(this.tableForm[i].izShowForm)){
-                this.tableForm[i].izShowForm = parseInt(this.tableForm[i].izShowForm);
-              }
-              if(!isNull(this.tableForm[i].validateType)){
-                this.tableForm[i].validateType = this.tableForm[i].validateType.split(",");
-              }
+
+              setTimeout(() => {
+                if(this.elementLoadingObj){
+                  this.elementLoadingObj.close();
+                }
+              }, 300);
             }
-
+          }
+          if(!flag){
             setTimeout(() => {
-              this.columnListLoading = false;
+              if(this.elementLoadingObj){
+                this.elementLoadingObj.close();
+              }
             }, 300);
           }
-        }
-        if(!flag){
-          setTimeout(() => {
-            this.columnListLoading = false;
-          }, 300);
-        }
+
+        });
       },
 
       /**

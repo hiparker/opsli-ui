@@ -95,7 +95,7 @@
 <script>
   import { uuid } from "@/utils";
   import { isNull } from "@/utils/valiargs";
-  import { validateIsSecurityPassword } from "@/utils/validateRlue";
+  import { validatorRule } from "@/utils/validateRlue";
   import { captcha } from "@/api/user";
   export default {
     name: "Login",
@@ -125,7 +125,7 @@
           ],
           password: [
             { required: true, trigger: "blur", message: "请输入密码" },
-            { required: true, trigger: "blur", validator: validateIsSecurityPassword },
+            { required: true, trigger: "blur", validator: validatorRule.IS_SECURITY_PASSWORD },
           ],
           captcha: [
             { required: true, trigger: "blur", message: "请输入验证码" },
