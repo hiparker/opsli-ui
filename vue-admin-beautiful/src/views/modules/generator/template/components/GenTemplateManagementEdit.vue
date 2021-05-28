@@ -3,7 +3,7 @@
     :title="title"
     :visible.sync="dialogFormVisible"
     :close-on-click-modal="false"
-    width="900px"
+    width="1000px"
     top="4vh"
     @close="close"
   >
@@ -39,18 +39,19 @@
 
       </el-row>
 
+    </el-form>
 
-    <el-divider content-position="left">代码模板</el-divider>
+    <el-divider></el-divider>
 
     <el-row :gutter="10" class="code-editor-row">
       <el-tabs v-model="activeName" >
         <el-tab-pane label="后端" name="0">
-          <el-tabs v-model="editableTabsValue" type="border-card"
+          <el-tabs v-model="backendTabs.active" type="border-card"
                    editable @edit="handleTabsEdit"
-                   style="max-width: 830px !important;min-height: 40px;"
+                   style="max-width: 1000px !important;min-height: 40px;"
           >
             <el-tab-pane
-              v-for="(item, index) in editableTabs"
+              v-for="(item, index) in backendTabs.data"
               :key="index"
               :label="item.fileName"
               :name="item.fileName"
@@ -70,14 +71,36 @@
             </el-tab-pane>
           </el-tabs>
         </el-tab-pane>
-        <el-tab-pane label="前端" name="1">
 
+        <el-tab-pane label="前端" name="1">
+          <el-tabs v-model="frontendTabs.active" type="border-card"
+                   editable @edit="handleTabsEdit"
+                   style="max-width: 1000px !important;min-height: 40px;"
+          >
+            <el-tab-pane
+              v-for="(item, index) in frontendTabs.data"
+              :key="index"
+              :label="item.fileName"
+              :name="item.fileName"
+            >
+              <el-row>
+                <el-col>
+                  <el-form :model="item" label-width="70px" style="padding-right: 0 !important;">
+                    <el-form-item label="路径前缀" >
+                      <el-input v-model="item.path" autocomplete="off"></el-input>
+                    </el-form-item>
+                  </el-form>
+                </el-col>
+                <el-col style="max-height: 450px;overflow-x: hidden;overflow-y: auto">
+                  <code-editor v-model="item.fileContent" @change="changeCode" />
+                </el-col>
+              </el-row>
+            </el-tab-pane>
+          </el-tabs>
         </el-tab-pane>
       </el-tabs>
 
     </el-row>
-
-    </el-form>
 
     <div slot="footer" class="dialog-footer">
       <el-button @click="close">取 消</el-button>
@@ -130,8 +153,6 @@
         },
 
         activeName: "0",
-        editableTabsValue: "",
-        editableTabs: [],
         newTabs:{
           type: "",
           path: "",
@@ -163,14 +184,26 @@
       close() {
         this.dialogFormVisible = false;
         this.$refs["form"].resetFields();
+
         this.form = this.$options.data().form;
-        this.editableTabs = this.$options.data().editableTabs;
+        this.activeName = this.$options.data().activeName;
+        this.backendTabs = this.$options.data().backendTabs;
+        this.frontendTabs = this.$options.data().frontendTabs;
       },
       save() {
         this.$refs["form"].validate(async (valid) => {
           if (valid) {
             let tmp = deepClone(this.form);
-            tmp.detailList = deepClone(this.editableTabs);
+            tmp.detailList = [];
+
+            // 合并数据
+            this.backendTabs.data.forEach((item) => {
+              tmp.detailList.push(item);
+            });
+            this.frontendTabs.data.forEach((item) => {
+              tmp.detailList.push(item);
+            });
+
             // 处理数据
             this.handlerFormData(tmp);
 
@@ -208,8 +241,15 @@
 
       // 修改代码
       changeCode(code) {
-        this.editableTabs.forEach((tab, index) => {
-          if (tab.fileName === this.editableTabsValue) {
+        let tmpTab;
+        if(this.activeName === "0"){
+          tmpTab = this.backendTabs;
+        }else if(this.activeName === "1"){
+          tmpTab = this.frontendTabs;
+        }
+
+        tmpTab.data.forEach((tab) => {
+          if (tab.fileName === tmpTab.active) {
             tab.fileContent = code;
           }
         });
@@ -217,6 +257,13 @@
 
       // Tab组件 新增 和 删除操作
       handleTabsEdit(targetName, action) {
+        let tmpTab;
+        if(this.activeName === "0"){
+          tmpTab = this.backendTabs;
+        }else if(this.activeName === "1"){
+          tmpTab = this.frontendTabs;
+        }
+
         if (action === 'add') {
           this.$basePrompt(
             {
@@ -227,8 +274,8 @@
                   return false;
                 }
                 // 验证
-                if(this.editableTabs && this.editableTabs.length > 0){
-                  for(let item of this.editableTabs){
+                if(tmpTab && tmpTab.data.length > 0){
+                  for(let item of tmpTab.data){
                     if(value === item.fileName){
                       return false;
                     }
@@ -241,15 +288,16 @@
                 let tabData = deepClone(this.newTabs);
                 tabData.type = this.activeName;
                 tabData.fileName = value;
-                this.editableTabs.push(tabData);
-                this.editableTabsValue = value;
+                // 添加数据
+                tmpTab.data.push(tabData);
+                tmpTab.active = value;
               }
             });
         }
         if (action === 'remove') {
           this.$baseConfirm("你确定要删除当前文件吗", null, async () => {
-            let tabs = this.editableTabs;
-            let activeName = this.editableTabsValue;
+            let tabs = tmpTab.data;
+            let activeName = tmpTab.active;
             if (activeName === targetName) {
               tabs.forEach((tab, index) => {
                 if (tab.fileName === targetName) {
@@ -260,8 +308,8 @@
                 }
               });
             }
-            this.editableTabs = tabs.filter(tab => tab.fileName !== targetName);
-            this.editableTabsValue = activeName;
+            tmpTab.data = tabs.filter(tab => tab.fileName !== targetName);
+            tmpTab.active = activeName;
           });
         }
       },
@@ -270,29 +318,20 @@
         this.listLoading = true;
         const { data } = await getDetailListByParentId(this.form.id);
         if(isNotNull(data) && data.length > 0){
-          this.editableTabsValue = data[0].fileName;
-          data.forEach((item, index) => {
-            this.editableTabs.push(item);
-          });
-
           let tmpData = this.$baseLodash.groupBy(data, "type");
           if(tmpData){
-            console.log(tmpData)
-
-            console.log(tmpData["0"])
-
-            // for(let key of tmpData){
-            //   console.log(key)
-            // }
-
-            // // 后端
-            // if(tmpData.type === "0"){
-            //   this.backendTabs.data =
-            // }
-            // // 前端
-            // else if(tmpData.type === "1"){
-            //
-            // }
+            let backendData = tmpData["0"];
+            let frontendData = tmpData["1"];
+            // 后端
+            if(backendData && backendData.length > 0){
+              this.backendTabs.data = backendData;
+              this.backendTabs.active = backendData[0].fileName;
+            }
+            // 前端
+            if(frontendData && frontendData.length > 0){
+              this.frontendTabs.data = frontendData;
+              this.frontendTabs.active = frontendData[0].fileName;
+            }
           }
 
           setTimeout(() => {
