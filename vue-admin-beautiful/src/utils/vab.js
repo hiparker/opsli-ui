@@ -1,6 +1,7 @@
 import { loadingText, messageDuration, title } from "@/config/settings";
 import * as lodash from "lodash";
 import { Loading, Message, MessageBox, Notification } from "element-ui";
+import erd from "element-resize-detector";
 import store from "@/store";
 import { getAccessToken } from "@/utils/accessToken";
 
@@ -8,6 +9,23 @@ const accessToken = store.getters["user/accessToken"];
 const layout = store.getters["settings/layout"];
 
 const install = (Vue, opts = {}) => {
+  /**
+   * 监控组件
+   * @param el el 对象
+   * @param callback 回调函数
+   */
+  Vue.prototype.$erd = (el, callback) => {
+    if (el === undefined || el === null) {
+      return null;
+    }
+
+    // 创建实例带参数
+    let erdUltraFast = erd({
+      strategy: "scroll", //<- For ultra performance.
+    });
+    erdUltraFast.listenTo(el, callback);
+    return erdUltraFast;
+  };
   /* 全局accessToken */
   Vue.prototype.$baseAccessToken = () => {
     return accessToken || getAccessToken();
@@ -139,6 +157,37 @@ const install = (Vue, opts = {}) => {
       });
   };
 
+  /**
+   * 全局Prompt
+   * @param options 参数
+   *          content 内容
+   *          title 标题
+   *          inputValidator 验证器
+   *          inputErrorMessage 错误信息
+   *          callback1 回调1
+   *          callback2 回调2
+   */
+  Vue.prototype.$basePrompt = (options) => {
+    if (options) {
+      MessageBox.prompt(options.content, options.title || "温馨提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        inputValidator: options.inputValidator,
+        inputErrorMessage: options.inputErrorMessage || "验证错误",
+      })
+        .then((value) => {
+          if (options.callback1) {
+            options.callback1(value);
+          }
+        })
+        .catch((value) => {
+          if (options.callback2) {
+            options.callback2(value);
+          }
+        });
+    }
+  };
+
   /* 全局Notification */
   Vue.prototype.$baseNotify = (message, title, type, position) => {
     Notification({
@@ -196,6 +245,26 @@ const install = (Vue, opts = {}) => {
   Vue.prototype.$baseLodash = lodash;
   /* 全局事件总线 */
   Vue.prototype.$baseEventBus = new Vue();
+  /* 元素变化函数 使用方式 v-resize="xxxx" */
+  Vue.directive("resize", {
+    bind(el, binding) {
+      let width = "",
+        height = "";
+      function get() {
+        const style = document.defaultView.getComputedStyle(el);
+        if (width !== style.width || height !== style.height) {
+          binding.value({ width, height });
+        }
+        width = style.width;
+        height = style.height;
+      }
+
+      el.__vueReize__ = setInterval(get, 200);
+    },
+    unbind(el) {
+      clearInterval(el.__vueReize__);
+    },
+  });
 };
 
 if (typeof window !== "undefined" && window.Vue) {

@@ -324,6 +324,13 @@ html body .el-image-viewer__mask, html body .v-modal {
   user-select: none;
 }
 
+.el-tabs__new-tab{
+  /* 调整右侧增加按钮位置 */
+  margin: 10px 10px 10px 10px;
+  color: #48A7FC;
+  border: 1px solid #1890ff;
+}
+
 /* 导入Excel */
 .import-excel .el-upload {
   width: 100%;
