@@ -42,31 +42,39 @@
 
     <el-divider content-position="left">代码模板</el-divider>
 
-    <el-row :gutter="10" class="code-editor-row" style="width: 100%">
-      <el-tabs v-model="editableTabsValue" type="border-card"
-               editable @edit="handleTabsEdit"
-               style="max-width: 830px !important;min-height: 40px;"
-      >
-        <el-tab-pane
-          v-for="(item, index) in editableTabs"
-          :key="index"
-          :label="item.fileName"
-          :name="item.fileName"
-        >
-          <el-row>
-            <el-col>
-              <el-form :model="item" label-width="70px" style="padding-right: 0 !important;">
-                <el-form-item label="路径前缀" >
-                  <el-input v-model="item.path" autocomplete="off"></el-input>
-                </el-form-item>
-              </el-form>
-            </el-col>
-            <el-col style="max-height: 450px;overflow-x: hidden;overflow-y: auto">
-              <code-editor v-model="item.fileContent" @change="changeCode" />
-            </el-col>
-          </el-row>
+    <el-row :gutter="10" class="code-editor-row">
+      <el-tabs v-model="activeName" >
+        <el-tab-pane label="后端" name="0">
+          <el-tabs v-model="editableTabsValue" type="border-card"
+                   editable @edit="handleTabsEdit"
+                   style="max-width: 830px !important;min-height: 40px;"
+          >
+            <el-tab-pane
+              v-for="(item, index) in editableTabs"
+              :key="index"
+              :label="item.fileName"
+              :name="item.fileName"
+            >
+              <el-row>
+                <el-col>
+                  <el-form :model="item" label-width="70px" style="padding-right: 0 !important;">
+                    <el-form-item label="路径前缀" >
+                      <el-input v-model="item.path" autocomplete="off"></el-input>
+                    </el-form-item>
+                  </el-form>
+                </el-col>
+                <el-col style="max-height: 450px;overflow-x: hidden;overflow-y: auto">
+                  <code-editor v-model="item.fileContent" @change="changeCode" />
+                </el-col>
+              </el-row>
+            </el-tab-pane>
+          </el-tabs>
+        </el-tab-pane>
+        <el-tab-pane label="前端" name="1">
+
         </el-tab-pane>
       </el-tabs>
+
     </el-row>
 
     </el-form>
@@ -112,15 +120,24 @@
         title: "",
         dialogFormVisible: false,
 
+        backendTabs:{
+          data: [],
+          active: ""
+        },
+        frontendTabs:{
+          data: [],
+          active: ""
+        },
+
+        activeName: "0",
         editableTabsValue: "",
         editableTabs: [],
         newTabs:{
-          path:"",
+          type: "",
+          path: "",
           fileName: "",
           fileContent: ""
         },
-        erdUltraObj: null,
-        erdUltraFast: null,
       };
     },
     created() {
@@ -222,6 +239,7 @@
               inputErrorMessage: "文件名不可为空 或 该文件已存在！",
               callback1: ({value}) => {
                 let tabData = deepClone(this.newTabs);
+                tabData.type = this.activeName;
                 tabData.fileName = value;
                 this.editableTabs.push(tabData);
                 this.editableTabsValue = value;
@@ -257,7 +275,25 @@
             this.editableTabs.push(item);
           });
 
-          console.log(this.editableTabs)
+          let tmpData = this.$baseLodash.groupBy(data, "type");
+          if(tmpData){
+            console.log(tmpData)
+
+            console.log(tmpData["0"])
+
+            // for(let key of tmpData){
+            //   console.log(key)
+            // }
+
+            // // 后端
+            // if(tmpData.type === "0"){
+            //   this.backendTabs.data =
+            // }
+            // // 前端
+            // else if(tmpData.type === "1"){
+            //
+            // }
+          }
 
           setTimeout(() => {
             this.listLoading = false;
