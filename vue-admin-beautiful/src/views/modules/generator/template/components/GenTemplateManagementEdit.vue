@@ -48,7 +48,7 @@
         <el-tab-pane label="后端" name="0">
           <el-tabs v-model="backendTabs.active" type="border-card"
                    editable @edit="handleTabsEdit"
-                   style="max-width: 1000px !important;min-height: 40px;"
+                   style="max-width: 970px !important;min-height: 40px;"
           >
             <el-tab-pane
               v-for="(item, index) in backendTabs.data"
@@ -75,7 +75,7 @@
         <el-tab-pane label="前端" name="1">
           <el-tabs v-model="frontendTabs.active" type="border-card"
                    editable @edit="handleTabsEdit"
-                   style="max-width: 1000px !important;min-height: 40px;"
+                   style="max-width: 970px !important;min-height: 40px;"
           >
             <el-tab-pane
               v-for="(item, index) in frontendTabs.data"
