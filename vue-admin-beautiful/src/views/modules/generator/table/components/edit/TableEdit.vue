@@ -110,7 +110,7 @@
         dict: {},
         title: "",
         dialogFormVisible: false,
-        target: document.querySelector(".generator-main .generator-steps"),
+        target: null,
         columnListLoading: true,
         elementLoadingObj: null,
         elementLoadingText: "正在加载...",

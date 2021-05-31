@@ -236,11 +236,11 @@
         this.$refs["show-database-tables"].show();
       },
       handleCreate() {
-        const ids = this.selectRows.map((item) => item.id);
-        if(ids === null || ids === undefined || ids.length === 0){
-          return ;
+        const rows = this.selectRows;
+        if(rows === null || rows === undefined || rows.length === 0 || rows.length > 1){
+          return;
         }
-        this.$refs["gen-create"].showEdit(ids[0]);
+        this.$refs["gen-create"].showEdit(rows[0]);
       },
 
       showMenuChoose(){

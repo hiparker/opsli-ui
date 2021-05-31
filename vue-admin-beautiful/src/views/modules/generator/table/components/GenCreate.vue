@@ -6,7 +6,7 @@
     width="800px"
     @close="close"
   >
-    <el-form ref="form" :model="form" :rules="rules" label-width="105px">
+    <el-form ref="form" :model="form" :rules="rules" label-width="105px" class="gen-create">
 
       <el-row :gutter="10" >
         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
@@ -57,6 +57,20 @@
           </el-form-item>
         </el-col>
 
+        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+          <el-form-item label="选择模板" prop="templateId">
+            <el-select v-model="form.templateId" placeholder="请选择模板"
+                       style="width: 100%">
+              <el-option
+                v-for="item in templateList"
+                :key="item.id"
+                :label="item.tempName"
+                :value="item.id"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+
       </el-row>
 
     </el-form>
@@ -69,6 +83,8 @@
 
 <script>
   import { getGenLogs, doCreateJson} from "@/api/generator/tableManagement";
+  import { getList } from "@/api/generator/template/GenTemplateManagement";
+  import { urlAddArgsByData } from "@/utils";
   import { isNotNull} from "@/utils/valiargs";
   import { validatorRule } from "@/utils/validateRlue";
   import {title} from "@/config/settings";
@@ -90,15 +106,18 @@
 
 
       return {
+        templateList: [],
         form: {
           id: '',
           tableId: '',
+          tableType: '',
           codeTitle: '',
           codeTitleBrief: '',
           packageName: '',
           moduleName: '',
           subModuleName: '',
-          authorName: ''
+          authorName: '',
+          templateId: '',
         },
         dict: {},
         rules: {
@@ -125,9 +144,14 @@
             { required: true, trigger: "blur", message: "请输入作者信息" },
             { required: true, trigger: "blur", validator: validatorRule.IS_GENERAL_WITH_CHINESE },
           ],
+          templateId: [
+            { required: true, trigger: "change", message: "请选择模板" },
+          ],
         },
         title: "",
+        target: null,
         dialogFormVisible: false,
+        elementLoadingObj: null,
         pathRestaurants: [
           { value: "org."},
           { value: "org.opsli"},
@@ -136,23 +160,21 @@
         ],
       };
     },
-    created() {
-
-    },
-    mounted() {
-
-    },
     methods: {
-      showEdit(tableId) {
-        this.title = "生成代码";
-        this.form.tableId = tableId;
-        this.dialogFormVisible = true;
-        this.fetchData();
+      showEdit(row) {
+        if(row){
+          this.title = "生成代码";
+          this.form.tableId = row.id;
+          this.form.tableType = row.tableType;
+          this.dialogFormVisible = true;
+          this.fetchData();
+        }
       },
       close() {
         this.dialogFormVisible = false;
         this.$refs["form"].resetFields();
         this.form = this.$options.data().form;
+        this.target = null;
       },
       save() {
         this.$refs["form"].validate(async (valid) => {
@@ -162,9 +184,16 @@
             const paramsData = doCreateJson(this.form);
             paramsData.params[tokenName] = getAccessToken();
 
+            // 转换参数
+            let params = Object.keys(paramsData.params)
+              .map(function (key) {
+                return encodeURIComponent(key) + "=" + encodeURIComponent(paramsData.params[key]);
+              })
+              .join("&");
+
             let link = document.createElement('a');
             link.style.display = 'none';
-            link.href = this.urlAddParams(baseURL+paramsData.url, paramsData.params);
+            link.href = urlAddArgsByData(baseURL+paramsData.url, params);
             link.setAttribute('target', '_blank');
 
             document.body.appendChild(link);
@@ -175,36 +204,39 @@
           }
         });
       },
-      /**
-       * 给URL追加参数
-       * url
-       * parameter 参数名
-       * value  参数值
-       */
-      urlAddParams(url, params){
-        if(isNotNull(url)) {
-          let buf = url;
-          for (let key in params) {
-            let val = params[key];
-
-            if (buf.indexOf("?") > -1) {  //已经有参数
-              buf += "&";
-            } else {
-              buf += "?";
-            }
-            buf += key;
-            buf += '=';
-            buf += val;
-          }
-          return buf.toString();
-        }
-        return '';
-      },
       async fetchData() {
-        const { data } = await getGenLogs({tableId: this.form.tableId});
-        if(isNotNull(data)){
-          this.form = data;
-        }
+        this.$nextTick(async () => {
+          // loading 对象
+          this.target = document.querySelector(".gen-create");
+
+          if(this.elementLoadingObj){
+            this.elementLoadingObj.close();
+          }
+          // 执行表格刷新 （需要彻底情况并延迟 才会生效）
+          this.elementLoadingObj = this.$basePartLoading(this.target, null, this.elementLoadingText);
+
+          {
+            const { data } = await getGenLogs({tableId: this.form.tableId});
+            if(isNotNull(data)){
+              this.form = data;
+            }
+          }
+
+          {
+            const { data } = await getList({tableType_EQ: this.form.tableType});
+            if(isNotNull(data)){
+              this.templateList = data.rows;
+            }
+          }
+
+          setTimeout(() => {
+            if(this.elementLoadingObj){
+              this.elementLoadingObj.close();
+            }
+          }, 300);
+        });
+
+
       },
       pathQuerySearch(queryString, cb) {
         let restaurants = this.pathRestaurants;

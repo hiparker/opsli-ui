@@ -41,14 +41,12 @@
 
     </el-form>
 
-    <el-divider></el-divider>
-
     <el-row :gutter="10" class="code-editor-row">
-      <el-tabs v-model="activeName" >
+      <el-tabs v-model="activeName" type="border-card">
         <el-tab-pane label="后端" name="0">
-          <el-tabs v-model="backendTabs.active" type="border-card"
+          <el-tabs v-model="backendTabs.active" type="card"
                    editable @edit="handleTabsEdit"
-                   style="max-width: 970px !important;min-height: 40px;"
+                   style="max-width: 940px !important;min-height: 40px;"
           >
             <el-tab-pane
               v-for="(item, index) in backendTabs.data"
@@ -73,9 +71,9 @@
         </el-tab-pane>
 
         <el-tab-pane label="前端" name="1">
-          <el-tabs v-model="frontendTabs.active" type="border-card"
+          <el-tabs v-model="frontendTabs.active" type="card"
                    editable @edit="handleTabsEdit"
-                   style="max-width: 970px !important;min-height: 40px;"
+                   style="max-width: 940px !important;min-height: 40px;"
           >
             <el-tab-pane
               v-for="(item, index) in frontendTabs.data"
@@ -343,3 +341,14 @@
     },
   };
 </script>
+<style lang="scss" >
+  .code-editor-row{
+    .el-tabs--border-card{
+      .el-tabs__content{
+        .el-tabs{
+          width: 100% !important;
+        }
+      }
+    }
+  }
+</style>
