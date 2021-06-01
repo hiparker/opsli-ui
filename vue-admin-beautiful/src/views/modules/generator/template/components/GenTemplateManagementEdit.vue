@@ -56,10 +56,29 @@
             >
               <el-row>
                 <el-col>
-                  <el-form :model="item" label-width="70px" style="padding-right: 0 !important;">
-                    <el-form-item label="路径前缀" >
-                      <el-input v-model="item.path" autocomplete="off"></el-input>
-                    </el-form-item>
+                  <el-form :model="item" label-width="105px" style="padding-right: 0 !important;">
+                    <el-col :xs="24" :sm="24" :md="24" :lg="18" :xl="18">
+                      <el-form-item label="路径前缀" >
+                        <el-input v-model="item.path" autocomplete="off"></el-input>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="24" :md="24" :lg="6" :xl="6">
+                      <el-form-item label="忽略文件名" prop="ignoreFileName" >
+                        <el-select
+                          v-model="item.ignoreFileName"
+                          clearable
+                          placeholder="请选择"
+                          style="width: 100%"
+                        >
+                          <el-option
+                            v-for="item in dict.no_yes"
+                            :key="item.dictValue"
+                            :label="item.dictName"
+                            :value="item.dictValue"
+                          ></el-option>
+                        </el-select>
+                      </el-form-item>
+                    </el-col>
                   </el-form>
                 </el-col>
                 <el-col style="max-height: 450px;overflow-x: hidden;overflow-y: auto">
@@ -83,10 +102,29 @@
             >
               <el-row>
                 <el-col>
-                  <el-form :model="item" label-width="70px" style="padding-right: 0 !important;">
-                    <el-form-item label="路径前缀" >
-                      <el-input v-model="item.path" autocomplete="off"></el-input>
-                    </el-form-item>
+                  <el-form :model="item" label-width="105px" style="padding-right: 0 !important;">
+                    <el-col :xs="24" :sm="24" :md="24" :lg="18" :xl="18">
+                      <el-form-item label="路径前缀" >
+                        <el-input v-model="item.path" autocomplete="off"></el-input>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="24" :md="24" :lg="6" :xl="6">
+                      <el-form-item label="忽略文件名" prop="ignoreFileName" label-width="105px">
+                        <el-select
+                          v-model="item.ignoreFileName"
+                          clearable
+                          placeholder="请选择"
+                          style="width: 100%"
+                        >
+                          <el-option
+                            v-for="item in dict.no_yes"
+                            :key="item.dictValue"
+                            :label="item.dictName"
+                            :value="item.dictValue"
+                          ></el-option>
+                        </el-select>
+                      </el-form-item>
+                    </el-col>
                   </el-form>
                 </el-col>
                 <el-col style="max-height: 450px;overflow-x: hidden;overflow-y: auto">
@@ -101,6 +139,7 @@
     </el-row>
 
     <div slot="footer" class="dialog-footer">
+      <el-button type="info" @click="openEnjoyDoc()">查看模板语法</el-button>
       <el-button @click="close">取 消</el-button>
       <el-button type="primary" @click="save">确 定</el-button>
     </div>
@@ -155,7 +194,8 @@
           type: "",
           path: "",
           fileName: "",
-          fileContent: ""
+          fileContent: "",
+          ignoreFileName: "0"
         },
       };
     },
@@ -164,14 +204,15 @@
     },
     mounted() {
       // 加载字典值
+      this.dict.no_yes = this.$getDictList("no_yes");
       this.dict.table_type = this.$getDictList("table_type");
     },
     methods: {
       showEdit(row) {
         if (!row) {
-          this.title = "添加";
+          this.title = "Enjoy模板引擎 - 添加";
         } else {
-          this.title = "编辑";
+          this.title = "Enjoy模板引擎 - 编辑";
           this.form = Object.assign({}, row);
         }
         this.dialogFormVisible = true;
@@ -311,7 +352,9 @@
           });
         }
       },
-
+      openEnjoyDoc(){
+        window.open("https://jfinal.com/doc/6-1");
+      },
       async fetchData() {
         this.listLoading = true;
         const { data } = await getDetailListByParentId(this.form.id);

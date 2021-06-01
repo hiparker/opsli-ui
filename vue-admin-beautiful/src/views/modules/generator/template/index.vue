@@ -33,6 +33,16 @@
             @click="handleDelete"
         > 批量删除 </el-button>
 
+        <el-button
+          v-if="$perms('generator_template_copy')"
+          :disabled="selectRows.length !== 1"
+          icon="el-icon-download"
+          type="warning"
+          @click="handleCopy"
+        >
+          复制
+        </el-button>
+
       </vab-query-form-left-panel>
       <vab-query-form-right-panel :span="14">
         <el-form :inline="true" :model="queryForm" @submit.native.prevent>
@@ -139,13 +149,17 @@
 
 <script>
 
-  import { getList, doDelete, doDeleteAll, doExportExcel } from "@/api/generator/template/GenTemplateManagement";
+import {getList, doDelete, doDeleteAll, doCopy, doUpdate} from "@/api/generator/template/GenTemplateManagement";
 
   import Edit from "./components/GenTemplateManagementEdit";
 
   import { vueButtonClickBan } from "@/utils";
   import { isNotNull } from "@/utils/valiargs";
   import { formateDate } from "@/utils/format";
+  import {deepClone} from "@/utils/clone";
+  import {
+    isGeneralWithChinese,
+  } from "@/utils/valiargs";
 
   export default {
     name: "GenTemplateManagement",
@@ -212,6 +226,36 @@
       handleUpdate(row) {
         if (row.id) {
           this.$refs["edit"].showEdit(row);
+        }
+      },
+      handleCopy() {
+        let _this = this;
+        let row = this.selectRows[0];
+        if (row && row.id) {
+          this.$basePrompt(
+            {
+              content: "请输入模板名称",
+              title: null,
+              inputValidator: (value) => {
+                if(!value){
+                  return false;
+                }
+                // 验证
+                return isGeneralWithChinese(value);
+              },
+              inputErrorMessage: "模板名称为空 或 只能为汉字、字母、数字和下划线！",
+              callback1: async ({value}) => {
+                const {success, msg} = await doCopy({
+                  id: row.id,
+                  tempName: value
+                });
+                if (success) {
+                  this.$baseMessage(msg, "success");
+                  // 刷新数据
+                  _this.fetchData();
+                }
+              }
+          });
         }
       },
       handleDelete(row) {

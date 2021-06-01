@@ -35,6 +35,14 @@ export function doUpdate(data) {
   });
 }
 
+export function doCopy(data) {
+  return request({
+    url: "/api/v1/generator/template/copy",
+    method: "post",
+    data,
+  });
+}
+
 export function doDelete(data) {
   return request({
     url: "/api/v1/generator/template/del",
