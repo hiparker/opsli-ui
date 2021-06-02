@@ -96,7 +96,7 @@ export const validatorRule = {
    * @param value
    * @param callback
    */
-  IS_UPPERCASE: (rule, value, callback) => {
+  IS_UPPER_CASE: (rule, value, callback) => {
     if (!isUpperCase(value)) {
       callback(new Error(getMsg("isUpperCase")));
     } else {
@@ -109,7 +109,7 @@ export const validatorRule = {
    * @param value
    * @param callback
    */
-  IS_LOWERCASE: (rule, value, callback) => {
+  IS_LOWER_CASE: (rule, value, callback) => {
     if (!isLowerCase(value)) {
       callback(new Error(getMsg("isLowerCase")));
     } else {
