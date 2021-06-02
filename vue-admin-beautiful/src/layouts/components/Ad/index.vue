@@ -23,12 +23,12 @@
         nodeEnv: process.env.NODE_ENV,
         adList: [
           {
-            title: "opsli-boot V1.4.0 正式版本已发布，点我提前体验",
+            title: " OPSLI 快速开发平台 V1.4.0 正式版本已发布，点我提前体验",
             url: "https://www.github.com/hiparker/opsli-boot",
           },
           {
-            title: "欢迎加入 OPSLI 快速开发平台 QQ群：724850675",
-            url: "https://www.opsli.com",
+            title: " 欢迎加入 OPSLI 快速开发平台 QQ群：724850675，点击即可加入",
+            url: "https://qm.qq.com/cgi-bin/qm/qr?k=vp8fo6JtFKlwzkM6xHlaLWYRA90mvLjM&jump_from=webapi",
           },
         ],
       };

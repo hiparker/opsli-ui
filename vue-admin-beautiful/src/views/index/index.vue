@@ -23,11 +23,20 @@
           </a>
         </el-alert>
 
-        <el-alert
-          v-if="noticeList[2]"
-          :title="noticeList[2].title"
-          :closable="noticeList[2].closable"
-        ></el-alert>
+        <el-card shadow="never">
+          <div slot="header">
+            <span>友情链接：</span>
+          </div>
+          <div>
+            <el-link v-for="item in links"
+                     type="primary"
+                     :key="item"
+                     :href="item.href"
+                     target="_blank"
+                     style="margin-right: 10px"
+            >{{item.title}}</el-link>
+          </div>
+        </el-card>
 
       </el-col>
       <el-col :xs="24" :sm="24" :md="12" :lg="6" :xl="6">
@@ -126,7 +135,7 @@
       <el-col :xs="24" :sm="24" :md="24" :lg="11" :xl="11">
         <el-card class="card" shadow="never">
           <div slot="header">
-            <span>更新日志</span>
+            <span>相关支持</span>
             <div style="float: right">部署时间:{{ updateTime }}</div>
           </div>
           <div class="bottom-btn">
@@ -135,7 +144,9 @@
                 免费QQ交流群
               </p>
               <el-image :src="require('@/assets/qq_group.jpg')"></el-image>
-              <a slot="reference" target="_blank">
+              <a slot="reference" target="_blank"
+                 href="https://qm.qq.com/cgi-bin/qm/qr?k=vp8fo6JtFKlwzkM6xHlaLWYRA90mvLjM&jump_from=webapi"
+                >
                 <el-button type="primary">QQ讨论群</el-button>
               </a>
             </el-popover>
@@ -226,45 +237,45 @@
           <table class="table">
             <tr>
               <td style="width: 25%">jdk版本</td>
-              <td style="width: 25%">^1.8</td>
+              <td style="width: 25%">1.8</td>
               <td style="width: 25%">springboot版本</td>
-              <td style="width: 25%">^2.3.0.RELEASE</td>
+              <td style="width: 25%">2.3.3.RELEASE</td>
             </tr>
             <tr>
               <td>mybatis-plus版本</td>
-              <td>^3.4.0</td>
+              <td>3.4.0</td>
               <td>pagehelper版本</td>
-              <td>^1.1.0</td>
+              <td>1.1.0</td>
             </tr>
             <tr>
               <td>druid版本</td>
-              <td>^1.1.17</td>
+              <td>1.1.17</td>
               <td>dynamic版本</td>
-              <td>^2.5.4</td>
+              <td>2.5.4</td>
             </tr>
             <tr>
               <td>shiro-redis版本</td>
-              <td>^3.3.1</td>
+              <td>3.3.1</td>
               <td>jwt版本</td>
-              <td>^3.10.3</td>
+              <td>3.10.3</td>
             </tr>
             <tr>
               <td>ehcache版本</td>
-              <td>^3.9.0</td>
+              <td>3.9.0</td>
               <td>easyexcel版本</td>
-              <td>^2.2.6</td>
+              <td>2.2.6</td>
             </tr>
             <tr>
-              <td>kaptcha版本</td>
-              <td>^0.0.9</td>
+              <td>captcha版本</td>
+              <td>1.6.2</td>
               <td>guava版本</td>
-              <td>^29.0-jre</td>
+              <td>29.0-jre</td>
             </tr>
             <tr>
               <td>enjoy版本</td>
-              <td>^4.9.03</td>
+              <td>4.9.03</td>
               <td>hutool版本</td>
-              <td>^5.5.5</td>
+              <td>5.6.3</td>
             </tr>
           </table>
         </el-card>
@@ -327,7 +338,7 @@
           </div>
           <div style="text-align: center">
             <vab-colorful-icon style="font-size: 140px" icon-class="vab" />
-            <h1 style="font-size: 30px">opsli-boot</h1>
+            <h1 style="font-size: 30px">OPSLI 快速开发平台</h1>
           </div>
           <div v-for="(item, index) in noticeList" :key="index">
             <el-alert
@@ -680,6 +691,32 @@
         reverse: true,
         activities: [],
         noticeList: [],
+        links: [
+          {
+            href: "https://www.opsli.com",
+            title: "OPSLI 官方网站"
+          },
+          {
+            href: "https://wiki.opsli.bedebug.com/",
+            title: "OPSLI 官方文档"
+          },
+          {
+            href: "https://www.hutool.cn/",
+            title: "Hutool 工具"
+          },
+          {
+            href: "http://www.jeeplus.org",
+            title: "jeeplus"
+          },
+          {
+            href: "https://chu1204505056.gitee.io/vue-admin-beautiful-pro/#/index",
+            title: "vue-admin-beautiful-pro"
+          },
+          {
+            href: "https://www.bedebug.com",
+            title: "在码圈"
+          },
+        ],
         //其他信息
         userAgent: navigator.userAgent,
         //卡片图标
@@ -829,6 +866,7 @@
             content: "优化登录步骤，失败次数大于系统规定阈值,开启验证码校验，如果失败大于最大次数则封禁账号",
             timestamp: "2020-12-07",
           },
+          // =================================
           {
             content: "发布1.1.0版",
             timestamp: "2020-12-08",
@@ -849,6 +887,7 @@
             content: "ReView优化 符合阿里规范",
             timestamp: "2020-12-11",
           },
+          // =================================
           {
             content: "发布1.1.1-beta版",
             timestamp: "2020-12-08",
@@ -889,7 +928,7 @@
             content: "发布1.1.2-beta版",
             timestamp: "2020-12-21",
           },
-
+          // =================================
           {
             content: "优化登录失败返回状态",
             timestamp: "2020-12-22",
@@ -978,6 +1017,7 @@
             content: "增加开源伙伴提供的系统监控模块",
             timestamp: "2021-01-17",
           },
+          // =================================
           {
             content: "发布1.2.0版",
             timestamp: "2021-01-18",
@@ -1082,6 +1122,7 @@
             content: "优化接口加密模式，支持在线修改3种非对称加密",
             timestamp: "2021-02-13",
           },
+          // =================================
           {
             content: "发布1.3.0版",
             timestamp: "2021-02-17",
@@ -1134,6 +1175,188 @@
             content: "发布1.3.1 - Beta版",
             timestamp: "2021-03-01",
           },
+          // =================================
+          {
+            content: "后端：优化条件构造器、分页类",
+            timestamp: "2021-03-02",
+          },
+          {
+            content: "后端：阻止用户组织Tree空间冒泡事件",
+            timestamp: "2021-03-03",
+          },
+          {
+            content: "后端：修复ThreadLocal 在Controller可能无法获得Token问题",
+            timestamp: "2021-03-10",
+          },
+          {
+            content: "后端：优化租户修改权限",
+            timestamp: "2021-03-11",
+          },
+          {
+            content: "后端：优化系统逻辑结构",
+            timestamp: "2021-03-13",
+          },
+          {
+            content: "后端：优化TokenAop拦截器",
+            timestamp: "2021-03-15",
+          },
+          {
+            content: "后端：优化TokenAop拦截器",
+            timestamp: "2021-03-15",
+          },
+          {
+            content: "后端：修复手机号更改被清空问题",
+            timestamp: "2021-04-02",
+          },
+          {
+            content: "后端：优化字典类型",
+            timestamp: "2021-04-02",
+          },
+          {
+            content: "后端：新增租户启用接口，一键启用租户",
+            timestamp: "2021-04-02",
+          },
+          {
+            content: "后端：新增租户启用接口",
+            timestamp: "2021-04-02",
+          },
+          {
+            content: "后端：修复参数配置缓存 获得全部 可能数据丢失问题",
+            timestamp: "2021-04-04",
+          },
+          {
+            content: "后端：优化多线程锁等待执行器，消除线程死锁操作隐患",
+            timestamp: "2021-04-08",
+          },
+          {
+            content: "后端：新增树状结构工具类",
+            timestamp: "2021-04-08",
+          },
+
+          {
+            content: "后端：优化用户/租户逻辑",
+            timestamp: "2021-04-09",
+          },
+          {
+            content: "前端：优化个人中心相关显示，更改个人中心不受菜单控制",
+            timestamp: "2021-04-09",
+          },
+          {
+            content: "后端：菜单新增是否总是显示选项",
+            timestamp: "2021-04-09",
+          },
+          {
+            content: "前端：修复Tree控件 及联选择BUG",
+            timestamp: "2021-04-10",
+          },
+          {
+            content: "前端：修复头像更新异常问题",
+            timestamp: "2021-04-19",
+          },
+          {
+            content: "后端：优化菜单模块，菜单可选则上级",
+            timestamp: "2021-04-21",
+          },
+          {
+            content: "后端：新增登录Token续命模式",
+            timestamp: "2021-04-26",
+          },
+          {
+            content: "后端：优化系统健康模块",
+            timestamp: "2021-04-28",
+          },
+          {
+            content: "后端：新增参数配置模块",
+            timestamp: "2021-04-29",
+          },
+          {
+            content: "后端：新增SMTP邮件服务在线配置化",
+            timestamp: "2021-04-29",
+          },
+          {
+            content: "后端：优化文件上传功能，为后续OSS服务做足准备",
+            timestamp: "2021-04-30",
+          },
+          {
+            content: "后端：新增代码生成器反响生成菜单功能",
+            timestamp: "2021-05-04",
+          },
+          {
+            content: "后端：新增用户密码强度检测",
+            timestamp: "2021-05-04",
+          },
+          {
+            content: "前端：修复防抖处理无法正常使用问题",
+            timestamp: "2021-05-04",
+          },
+          {
+            content: "前端：dialog 弹出高斯模糊蒙层",
+            timestamp: "2021-05-06",
+          },
+          {
+            content: "后端：工具类增加初始化异常，防止在未初始化前使用",
+            timestamp: "2021-05-07",
+          },
+          {
+            content: "后端：规范化菜单路径",
+            timestamp: "2021-05-08",
+          },
+          {
+            content: "后端/前端：新增docker和docker-compose部署",
+            timestamp: "2021-05-10",
+          },
+          {
+            content: "后端：优化行锁错误提示",
+            timestamp: "2021-05-11",
+          },
+          {
+            content: "后端：修复前端编辑页面模版取消dialog框，刷新列表BUG",
+            timestamp: "2021-05-11",
+          },
+          {
+            content: "后端：优化 伪穿透过滤器，防止一次直接锁死，给予3次 穿透nil机会",
+            timestamp: "2021-05-12",
+          },
+          {
+            content: "后端(⭐⭐⭐️)：重构非对称加密工具类，抽象为非对称插件",
+            timestamp: "2021-05-18",
+          },
+          {
+            content: "后端：新增对称加密插件",
+            timestamp: "2021-05-18",
+          },
+          {
+            content: "前端(⭐⭐⭐️)：响应式UI兼容 手机、Pad、Pc端",
+            timestamp: "2021-05-19",
+          },
+          {
+            content: "前端：调整主题颜色",
+            timestamp: "2021-05-20",
+          },
+          {
+            content: "后端：优化登录鉴权验证",
+            timestamp: "2021-05-21",
+          },
+          {
+            content: "前端：优化 RSA加解密（支持长字符）",
+            timestamp: "2021-05-21",
+          },
+          {
+            content: "后端：优化Redis反序列化容错性",
+            timestamp: "2021-05-25",
+          },
+          {
+            content: "后端(⭐⭐⭐️)：重构代码生成器",
+            timestamp: "2021-05-31",
+          },
+          {
+            content: "后端：新增代码生成器模版",
+            timestamp: "2021-05-31",
+          },
+          {
+            content: "发布1.4.0 正式版",
+            timestamp: "2021-06-03",
+          },
 
         ];
         data.map((item, index) => {
@@ -1157,12 +1380,6 @@
           {
             title:
               "鸣谢：jeeplus、element-ui、vue-admin-beautiful。",
-            closable: false,
-            type: "success",
-          },
-          {
-            title:
-              "随笔：我一直在寻找开源的真谛，我一直再想什么是开源，我一开始觉得免费就是开源，好像又不是。我理解的开源是：你也开源，我也开源，大家一起贡献，相互帮助。我最担心的事情是：我一个小人物，去伺候一众的伸手党，我想，这不是开源该有的氛围。我还太年轻，不懂什么是格局，我只知道，无私的帮助他人，能给我带来快乐，却不能给我带来收入，当然，有时候，快乐对我来说就已经足够了。可惜我是一个人，没有精力帮助到每一个人，可惜这个世界需要赚钱，才能过上平凡的生活，可惜了我的梦想，这个物欲横流的时代，理想主义的我们，即使内心坚决如铁，也似乎寸步难行。",
             closable: false,
             type: "success",
           },
