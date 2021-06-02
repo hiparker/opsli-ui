@@ -26,14 +26,6 @@
         > 添加 </el-button>
 
         <el-button
-            v-if="$perms('generator_template_delete')"
-            :disabled="!selectRows.length > 0"
-            icon="el-icon-delete"
-            type="danger"
-            @click="handleDelete"
-        > 批量删除 </el-button>
-
-        <el-button
           v-if="$perms('generator_template_copy')"
           :disabled="selectRows.length !== 1"
           icon="el-icon-download"
@@ -265,18 +257,6 @@ import {getList, doDelete, doDeleteAll, doCopy, doUpdate} from "@/api/generator/
             this.$baseMessage(msg, "success");
             await this.fetchData();
           });
-        } else {
-          if (this.selectRows.length > 0) {
-            const ids = this.selectRows.map((item) => item.id).join();
-            this.$baseConfirm("你确定要删除选中项吗", null, async () => {
-              const { msg } = await doDeleteAll({ ids });
-              this.$baseMessage(msg, "success");
-              await this.fetchData();
-            });
-          } else {
-            this.$baseMessage("未选中任何行", "error");
-            return false;
-          }
         }
       },
 

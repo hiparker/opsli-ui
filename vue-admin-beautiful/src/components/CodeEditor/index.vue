@@ -44,6 +44,7 @@
     },
     mounted() {
       this.codeEditor = CodeMirror.fromTextArea(this.$refs.textarea, {
+        autofocus: true,
         styleActiveLine: true, // 高亮选中行
         lineNumbers: true, // 显示行号
         mode: "xml",
