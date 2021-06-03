@@ -124,16 +124,19 @@
                 type="text"
                 @click="handleInsertByParent(scope.row)"
               > 添加下级 </el-button>
+
               <el-button
                 v-if="$perms('system_menu_update')"
                 type="text"
                 @click="handleUpdate(scope.row)"
               > 编辑 </el-button>
+
               <el-button
                 v-if="$perms('system_menu_delete')"
                 type="text"
                 @click="handleDelete(scope.row)"
               > 删除 </el-button>
+
             </template>
           </el-table-column>
         </el-table>
