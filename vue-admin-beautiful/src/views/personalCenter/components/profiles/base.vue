@@ -252,7 +252,7 @@
               const { success, msg } = await doUpdateSelf(this.baseForm);
               if (success) {
                 this.$baseMessage(msg, "success");
-                this.fetchData()
+                await this.fetchData()
               }
             }
           }
