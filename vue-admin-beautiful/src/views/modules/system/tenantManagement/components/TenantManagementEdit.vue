@@ -31,21 +31,11 @@
 
 <script>
   import { doInsert, doUpdate } from "@/api/system/tenant/tenantManagement";
-  import { isName, isNull} from "@/utils/validate";
+  import { validatorRule } from "@/utils/validateRlue";
 
   export default {
     name: "TenantManagementEdit",
     data() {
-
-      const validateName = (rule, value, callback) => {
-        if (isNull(value)) {
-          callback(new Error("请输入名称"));
-        } else if (!isName(value)) {
-          callback(new Error("名称格式不正确"));
-        } else {
-          callback();
-        }
-      };
 
       return {
         form: {
@@ -56,7 +46,8 @@
         dict: {},
         rules: {
           tenantName: [
-            { required: true, trigger: "blur", validator: validateName },
+            { required: true, trigger: "blur", message: "请输入编号" },
+            { required: false, trigger: "blur", validator: validatorRule.IS_GENERAL_WITH_CHINESE },
           ],
         },
         title: "",

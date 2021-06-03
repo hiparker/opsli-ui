@@ -697,7 +697,7 @@
             title: "OPSLI 官方网站"
           },
           {
-            href: "https://wiki.opsli.bedebug.com/",
+            href: "https://wiki.opsli.bedebug.com/docs/opsli/opsli-1c83h9o28e1cm",
             title: "OPSLI 官方文档"
           },
           {

@@ -392,6 +392,90 @@
               </el-button>
             </el-form>
           </el-tab-pane>
+          <el-tab-pane label="又拍云配置" name="upyun-config">
+            <el-form
+              ref="storageUpYunForm"
+              :model="storage.storage_upyun.form"
+              :rules="storage.storage_upyun.rules"
+              label-width="125px"
+            >
+              <el-row :gutter="10">
+                <el-col :xs="22" :sm="22" :md="22" :lg="8" :xl="8">
+                  <el-form-item label="域名" prop="storage_upyun_domain">
+                    <el-input
+                      v-model="storage.storage_upyun.form.storage_upyun_domain"
+                      autocomplete="off"
+                      placeholder="如 http:xxx.com"
+                    ></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+
+              <el-row :gutter="10">
+                <el-col :xs="22" :sm="22" :md="22" :lg="8" :xl="8">
+                  <el-form-item label="路径前缀" prop="storage_upyun_path_prefix">
+                    <el-input
+                      v-model="
+                        storage.storage_upyun.form.storage_upyun_path_prefix
+                      "
+                      autocomplete="off"
+                      placeholder="路径前缀默认为空"
+                    ></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+
+              <el-row :gutter="10">
+                <el-col :xs="22" :sm="22" :md="22" :lg="8" :xl="8">
+                  <el-form-item label="仓库名" prop="storage_upyun_bucket_name">
+                    <el-input
+                      v-model="
+                        storage.storage_upyun.form.storage_upyun_bucket_name
+                      "
+                      autocomplete="off"
+                      placeholder=""
+                    ></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+
+              <el-row :gutter="10">
+                <el-col :xs="22" :sm="22" :md="22" :lg="8" :xl="8">
+                  <el-form-item label="用户名" prop="storage_upyun_username">
+                    <el-input
+                      v-model="
+                        storage.storage_upyun.form.storage_upyun_username
+                      "
+                      autocomplete="off"
+                      placeholder=""
+                    ></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+
+              <el-row :gutter="10">
+                <el-col :xs="22" :sm="22" :md="22" :lg="8" :xl="8">
+                  <el-form-item label="用户名密码" prop="storage_upyun_password">
+                    <el-input
+                      v-model="
+                        storage.storage_upyun.form.storage_upyun_password
+                      "
+                      autocomplete="off"
+                      placeholder=""
+                    ></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+
+              <el-button
+                type="primary"
+                style="margin-top: 50px"
+                @click="save('storageUpYunForm', storage.storage_upyun.form)"
+              >
+                保存
+              </el-button>
+            </el-form>
+          </el-tab-pane>
         </el-tabs>
       </el-tab-pane>
 
@@ -408,30 +492,13 @@
     doTestSend,
   } from "@/api/system/set/setManagement";
   import { isNull } from "@/utils/validate";
-  import {getMsg, isInteger, isUrl} from "@/utils/valiargs";
-
+  import { validatorRule } from "@/utils/validateRlue";
 
   export default {
     name: "SetManagement",
     components: {
     },
     data() {
-
-      const validate_optionCode_isInteger = (rule, value, callback) => {
-        if (!isInteger(value)) {
-          callback(new Error(getMsg("isInteger")));
-        } else {
-          callback();
-        }
-      };
-
-      const validate_optionCode_isUrl = (rule, value, callback) => {
-        if (!isUrl(value)) {
-          callback(new Error(getMsg('isUrl')))
-        } else {
-          callback()
-        }
-      }
 
       return {
         activeName: "def",
@@ -489,7 +556,7 @@
             ],
             email_port: [
               { required: true, trigger: "blur", message: "请输入SMTP端口" },
-              { required: false, trigger: "blur", validator: validate_optionCode_isNumber },
+              { required: false, trigger: "blur", validator: validatorRule.IS_INTEGER },
             ],
             email_account: [
               { required: true, trigger: "blur", message: "请输入邮箱账号" },
@@ -531,11 +598,31 @@
             rules: {
               storage_local_domain: [
                 { required: true, trigger: 'blur', message: '请输入域名' },
-                {
-                  required: false,
-                  trigger: 'blur',
-                  validator: validate_optionCode_isUrl,
-                },
+                { required: false, trigger: 'blur', validator: validatorRule.IS_URL},
+              ],
+            },
+          },
+          storage_upyun: {
+            form: {
+              storage_upyun_domain: '',
+              storage_upyun_path_prefix: '',
+              storage_upyun_bucket_name: '',
+              storage_upyun_username: '',
+              storage_upyun_password: '',
+            },
+            rules: {
+              storage_upyun_domain: [
+                { required: true, trigger: 'blur', message: '请输入域名' },
+                { required: false, trigger: 'blur', validator: validatorRule.IS_URL},
+              ],
+              storage_upyun_bucket_name: [
+                { required: true, trigger: 'blur', message: '请输入仓库名' },
+              ],
+              storage_upyun_username: [
+                { required: true, trigger: 'blur', message: '请输入用户名' },
+              ],
+              storage_upyun_password: [
+                { required: true, trigger: 'blur', message: '请输入密码' },
               ],
             },
           },
@@ -697,6 +784,34 @@
           )
             ? this.baseData.storage_local_domain.optionValue
             : ''
+
+          // 又拍云存储
+          this.storage.storage_upyun.form.storage_upyun_domain = !isNull(
+            this.baseData.storage_upyun_domain
+          )
+            ? this.baseData.storage_upyun_domain.optionValue
+            : ''
+          this.storage.storage_upyun.form.storage_upyun_path_prefix = !isNull(
+            this.baseData.storage_upyun_path_prefix
+          )
+            ? this.baseData.storage_upyun_path_prefix.optionValue
+            : ''
+          this.storage.storage_upyun.form.storage_upyun_bucket_name = !isNull(
+            this.baseData.storage_upyun_bucket_name
+          )
+            ? this.baseData.storage_upyun_bucket_name.optionValue
+            : ''
+          this.storage.storage_upyun.form.storage_upyun_username = !isNull(
+            this.baseData.storage_upyun_username
+          )
+            ? this.baseData.storage_upyun_username.optionValue
+            : ''
+          this.storage.storage_upyun.form.storage_upyun_password = !isNull(
+            this.baseData.storage_upyun_password
+          )
+            ? this.baseData.storage_upyun_password.optionValue
+            : ''
+
 
           setTimeout(() => {
             this.loadingData = false;

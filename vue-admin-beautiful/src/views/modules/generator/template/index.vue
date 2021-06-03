@@ -104,6 +104,12 @@
 
       <el-table-column
         show-overflow-tooltip
+        prop="remark"
+        label="备注"
+      ></el-table-column>
+
+      <el-table-column
+        show-overflow-tooltip
         label="操作"
         width="200"
         v-if="$perms('generator_template_update') || $perms('generator_template_delete')"
@@ -144,11 +150,7 @@
 import {getList, doDelete, doDeleteAll, doCopy, doUpdate} from "@/api/generator/template/GenTemplateManagement";
 
   import Edit from "./components/GenTemplateManagementEdit";
-
-  import { vueButtonClickBan } from "@/utils";
   import { isNotNull } from "@/utils/valiargs";
-  import { formateDate } from "@/utils/format";
-  import {deepClone} from "@/utils/clone";
   import {
     isGeneralWithChinese,
   } from "@/utils/valiargs";
