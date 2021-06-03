@@ -119,11 +119,11 @@
           >
             <template v-slot="scope">
               <!-- 添加下级 只有上级为 菜单是才可以 -->
-              <el-button
-                v-if="$perms('system_menu_insert') && scope.row.type === '1'"
-                type="text"
-                @click="handleInsertByParent(scope.row)"
-              > 添加下级 </el-button>
+<!--              <el-button-->
+<!--                v-if="$perms('system_menu_insert') && scope.row.type === '1'"-->
+<!--                type="text"-->
+<!--                @click="handleInsertByParent(scope.row)"-->
+<!--              > 添加下级 </el-button>-->
 
               <el-button
                 v-if="$perms('system_menu_update')"
