@@ -122,10 +122,13 @@
     },
     methods: {
       showAvatarEdit(row) {
+        let _this = this;
         this.dialogVisible = true;
         this.id = row.id;
-        /* 获取原始头像 */
-        this.options.img = row.avatar;
+        // 其中this.avatar为当前头像
+        this.setAvatarBase64(row.avatar, (base64) => {
+          _this.options.img = base64;
+        });
       },
       close() {
         this.id = null;
@@ -192,7 +195,30 @@
       },
       realTime(data) {
         this.previews = data
-      }
+      },
+      // 设置头像base64
+      setAvatarBase64(src, callback) {
+        let _this = this;
+        let image = new Image();
+        // 处理缓存
+        image.src = src + '?v=' + Math.random();
+        // 支持跨域图片
+        image.crossOrigin = "*";
+        image.onload = function () {
+          let base64 = _this.transBase64FromImage(image);
+          callback && callback(base64);
+        }
+      },
+      // 将网络图片转换成base64格式
+      transBase64FromImage(image) {
+        let canvas = document.createElement("canvas");
+        canvas.width = image.width;
+        canvas.height = image.height;
+        let ctx = canvas.getContext("2d");
+        ctx.drawImage(image, 0, 0, image.width, image.height);
+        // 可选其他值 image/jpeg
+        return canvas.toDataURL("image/png");
+      },
     }
   };
 </script>
