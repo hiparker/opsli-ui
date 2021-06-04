@@ -28,9 +28,9 @@
             <span>友情链接：</span>
           </div>
           <div>
-            <el-link v-for="item in links"
+            <el-link v-for="(item, index) in links"
                      type="primary"
-                     :key="item"
+                     :key="index"
                      :href="item.href"
                      target="_blank"
                      style="margin-right: 10px"
