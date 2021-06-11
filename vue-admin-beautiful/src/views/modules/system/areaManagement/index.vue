@@ -21,7 +21,6 @@
           :data="data"
           :element-loading-text="elementLoadingText"
           row-key="id"
-          border
           :default-expand-all="false"
           lazy
           :load="loadNode"
@@ -39,28 +38,43 @@
           ></el-table-column>
 
           <el-table-column
+            fixed="right"
             show-overflow-tooltip
             label="操作"
-            width="200"
+            width="130"
             v-if="$perms('system_area_insert') || $perms('system_area_update') || $perms('system_area_delete')"
           >
             <template v-slot="scope">
-              <!-- 最低岗位 不允许继续添加下级 -->
-              <el-button
-                v-if="$perms('system_area_insert')"
-                type="text"
-                @click="handleInsertByParent(scope.row)"
-              > 添加下级 </el-button>
+
               <el-button
                 v-if="$perms('system_area_update')"
                 type="text"
                 @click="handleUpdate(scope.row)"
               > 编辑 </el-button>
-              <el-button
-                v-if="$perms('system_area_delete')"
-                type="text"
-                @click="handleDelete(scope.row)"
-              > 删除 </el-button>
+
+              <el-divider direction="vertical"></el-divider>
+
+              <el-dropdown trigger="click">
+                <span class="el-dropdown-link">
+                  更多
+                  <i class="el-icon-arrow-down el-icon--right"></i>
+                </span>
+                <el-dropdown-menu
+                  slot="dropdown"
+                >
+                  <!-- 添加下级 只有上级为 菜单是才可以 -->
+                  <el-dropdown-item
+                    v-if="$perms('system_area_insert')"
+                    @click.native="handleInsertByParent(scope.row)"
+                  >添加下级</el-dropdown-item>
+
+                  <el-dropdown-item
+                    v-if="$perms('system_area_delete')"
+                    @click.native="handleDelete(scope.row)"
+                  >删除</el-dropdown-item>
+
+                </el-dropdown-menu>
+              </el-dropdown>
             </template>
           </el-table-column>
         </el-table>

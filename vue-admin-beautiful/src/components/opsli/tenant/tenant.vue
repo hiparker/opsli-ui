@@ -166,10 +166,11 @@
         if (!isNull(data)) {
           this.list = data.rows;
           this.total = data.total;
-          setTimeout(() => {
-            this.listLoading = false;
-          }, 300);
         }
+
+        setTimeout(() => {
+          this.listLoading = false;
+        }, 300);
       },
     },
   };

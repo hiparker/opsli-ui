@@ -144,23 +144,36 @@
         width="200"
       >
         <template v-slot="scope">
+
           <el-button
             v-if="$perms('dev_generator_update')"
             type="text"
             @click="handleUpdate(scope.row)"
           > 编辑 </el-button>
 
-          <el-button
-            v-if="$perms('dev_generator_delete')"
-            type="text"
-            @click="handleDelete(scope.row)"
-          > 删除 </el-button>
+          <el-divider direction="vertical"></el-divider>
 
-          <el-button
-            v-if="$perms('dev_generator_sync')"
-            type="text"
-            @click="handleSync(scope.row)"
-          > 同步 </el-button>
+          <el-dropdown trigger="click">
+                <span class="el-dropdown-link">
+                  更多
+                  <i class="el-icon-arrow-down el-icon--right"></i>
+                </span>
+            <el-dropdown-menu
+              slot="dropdown"
+            >
+              <!-- 添加下级 只有上级为 菜单是才可以 -->
+              <el-dropdown-item
+                v-if="$perms('dev_generator_sync')"
+                @click.native="handleSync(scope.row)"
+              >同步</el-dropdown-item>
+
+              <el-dropdown-item
+                v-if="$perms('dev_generator_delete')"
+                @click.native="handleDelete(scope.row)"
+              >删除</el-dropdown-item>
+
+            </el-dropdown-menu>
+          </el-dropdown>
 
         </template>
 
@@ -313,10 +326,11 @@
         if(!isNull(data)){
           this.list = data.rows;
           this.total = data.total;
-          setTimeout(() => {
-            this.listLoading = false;
-          }, 300);
         }
+
+        setTimeout(() => {
+          this.listLoading = false;
+        }, 300);
       },
     },
   };

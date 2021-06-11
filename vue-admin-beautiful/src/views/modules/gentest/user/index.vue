@@ -168,7 +168,8 @@
         v-if="$perms('gentest_user_update') || $perms('gentest_user_delete')"
         show-overflow-tooltip
         label="操作"
-        width="200"
+        width="130"
+        fixed="right"
       >
         <template v-slot="scope">
           <el-button
@@ -178,6 +179,9 @@
           >
             编辑
           </el-button>
+
+          <el-divider direction="vertical"></el-divider>
+
           <el-button
             v-if="$perms('gentest_user_delete')"
             type="text"
@@ -382,10 +386,11 @@
         if (isNotNull(data)) {
           this.list = data.rows;
           this.total = data.total;
-          setTimeout(() => {
-            this.listLoading = false;
-          }, 300);
         }
+
+        setTimeout(() => {
+          this.listLoading = false;
+        }, 300);
       },
     },
   };

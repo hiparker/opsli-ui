@@ -6,7 +6,8 @@
     width="800px"
     @close="close"
   >
-    <el-form ref="form" v-loading="formLoading" :model="form" :rules="rules" label-width="105px" class="menuManagement-edit-container">
+    <el-form ref="form" v-loading="formLoading" :model="form" :rules="rules" label-width="105px"
+             class="menuManagement-edit-container">
       <el-row :gutter="10" >
         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
           <el-form-item label="上级菜单" prop="parentId">
@@ -17,6 +18,8 @@
               @click.native="showParentMenu"
             ></el-input>
             <el-button type="primary" icon="el-icon-search"
+                       :disabled="formStatus &&
+                       (edenOldParentId != null && edenOldParentId !== '')"
                        class="input-btn-choose" @click="showParentMenu"></el-button>
           </el-form-item>
         </el-col>
@@ -173,7 +176,7 @@
 </template>
 
 <script>
-  import {doInsert, doUpdate, get } from "@/api/system/menu/menuManagement";
+  import { doInsert, doUpdate, get } from "@/api/system/menu/menuManagement";
   import Icon from "@/components/opsli/icon/icon";
   import MenuManagementChoose from "@/components/opsli/menu/MenuManagementChoose";
   import { deepClone } from "@/utils/clone";
@@ -186,6 +189,7 @@
     data() {
 
       return {
+        formStatus: true,
         formLoading: true,
         comRestaurants: [
           { value: "Layout"},
@@ -199,6 +203,7 @@
         ],
         parentMenu: {},
         genParentId: "",
+        edenOldParentId: "",
         oldParentId: "",
         form: {
           icon:"",
@@ -241,6 +246,10 @@
         this.form.parentId = this.parentMenu.id;
       },
       showParentMenu(){
+        if(this.edenOldParentId && this.formStatus){
+          return;
+        }
+
         this.$refs["menu-management-choose"]
           .showMenuChoose(this.form.id);
       },
@@ -257,13 +266,15 @@
           // 如果上级菜单名称不为空 则显示到标题上
           if(row && !isNull(row.parentName) && !isNull(row.parentId)){
             // 设置上级Id
+            this.edenOldParentId = row.parentId;
             this.form.parentId = row.parentId;
-            this.genParentId = row.genParentId;
           }
         } else {
           this.title = "编辑";
+          this.formStatus = false;
           this.form = Object.assign({}, row);
         }
+
         this.oldParentId = this.form.parentId;
         this.dialogFormVisible = true;
         // 加载上级菜单数据
@@ -271,9 +282,11 @@
       },
       close() {
         this.dialogFormVisible = false;
-
+        this.formLoading = true;
+        this.formStatus = true;
         this.$refs["form"].resetFields();
         this.form = this.$options.data().form;
+        this.edenOldParentId = "";
         this.oldParentId = "";
         this.genParentId = "";
       },
@@ -300,8 +313,8 @@
             if(!isNull(this.oldParentId)){
               this.$emit("refreshNodeBy", this.oldParentId);
             }
-            if(!isNull(this.genParentId)){
-              this.$emit("refreshNodeBy", this.genParentId);
+            if(!isNull(this.parentMenu.parentId)){
+              this.$emit("refreshNodeBy", this.parentMenu.parentId);
             }
             this.$emit("refreshNodeBy", this.form.parentId);
 

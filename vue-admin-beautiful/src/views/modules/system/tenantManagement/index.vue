@@ -94,9 +94,10 @@
       ></el-table-column>
 
       <el-table-column
+        fixed="right"
         show-overflow-tooltip
         label="操作"
-        width="200"
+        width="130"
         v-if="$perms('system_tenant_update') || $perms('system_tenant_delete')"
       >
         <template v-slot="scope">
@@ -105,6 +106,9 @@
             type="text"
             @click="handleUpdate(scope.row)"
           > 编辑 </el-button>
+
+          <el-divider direction="vertical"></el-divider>
+
           <el-button
             v-if="$perms('system_tenant_delete')"
             type="text"
@@ -223,10 +227,11 @@
         if(!isNull(data)){
           this.list = data.rows;
           this.total = data.total;
-          setTimeout(() => {
-            this.listLoading = false;
-          }, 300);
         }
+
+        setTimeout(() => {
+          this.listLoading = false;
+        }, 300);
       },
     },
   };

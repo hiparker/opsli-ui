@@ -4,8 +4,8 @@
     :visible.sync="dialogVisible"
     :destroy-on-close="true"
     :close-on-click-modal="false"
-    width="350px"
-    class="menu-management-choose"
+    width="480px"
+    class="org-single-choose"
     append-to-body
     @close="close"
   >
@@ -13,9 +13,9 @@
       <el-input v-model="filterText" placeholder="输入关键字过滤" />
       <el-tree
         v-if="dialogVisible"
-        ref="menuTree"
+        ref="orgTree"
         v-loading="chooseLoading"
-        :data="menuData"
+        :data="orgData"
         :expand-on-click-node="false"
         :filter-node-method="filterNode"
         :highlight-current="true"
@@ -38,12 +38,13 @@
 </template>
 
 <script>
-  import { getTreeChooseLazy } from "@/api/system/menu/menuManagement";
+  import { getTreeLazy } from "@/api/system/org/orgManagement";
+  import { isNull } from "@/utils/validate";
 
   export default {
-    name: "MenuManagementChoose",
+    name: "OrgSingleChoose",
     props: {
-      value: {
+      parentId: {
         type: String,
         default: () => {
           return null;
@@ -53,64 +54,94 @@
     data() {
       return {
         selfId: "",
-        menuId: "",
-        menuData: [],
+        orgId: "",
+        orgData: [],
+        checkArr: [],
+        params: {},
         filterText: "",
         tmpTreeData: {},
         defaultProps: {
           children: "children",
-          label: "menuName",
+          label: "orgName",
           isLeaf: "isLeaf",
         },
         treeExpandData: ["0"],
-        dialogTitle: "选择菜单",
+        dialogTitle: "选择机构",
         dialogVisible: false,
         chooseLoading: false,
       };
     },
     watch: {
       filterText(val) {
-        this.$refs.menuTree.filter(val);
+        this.$refs.orgTree.filter(val);
       },
     },
     methods: {
-      showMenuChoose(id) {
+      showOrgChoose(id, params) {
         this.selfId = id;
+        this.params = params;
+        this.dialogVisible = true;
+      },
+      showChoose(params) {
+        this.params = params;
+        this.dialogVisible = true;
+      },
+      showCheckChoose(check, params) {
+        this.params = params;
+        this.checkArr.push(check);
         this.dialogVisible = true;
       },
       close() {
         this.dialogVisible = false;
         this.tmpTreeData = {};
-        this.menuData = [];
+        this.orgData = [];
+        this.checkArr = [];
         this.selfId = "";
       },
       // 保存权限
       async save() {
-        const node = this.$refs.menuTree.getCurrentNode();
-        this.$emit("menuChoose", node);
-        this.close();
+        const node = this.$refs.orgTree.getCurrentNode();
+        if (node) {
+          this.$emit("choose", node, this.params);
+          this.close();
+        }
       },
 
       //懒加载时触发
       async loadNode(treeNode, resolve) {
+        let that = this;
         const nodeData = treeNode.data;
         let parentId = nodeData.id;
         if (!parentId) {
-          parentId = this.value;
+          parentId = this.parentId;
         }
         // 获得树数据
-        const { data } = await getTreeChooseLazy({
+        const { data } = await getTreeLazy({
           parentId: parentId,
           id: this.selfId,
         });
+
         this.tmpTreeData[nodeData.id] = { treeNode, resolve };
         resolve(data);
-      },
 
+        // 设置选中数据 原理 选中叶子节点 自动勾选父节点
+        if (!isNull(this.checkArr)) {
+          setTimeout(() => {
+            if (this.checkArr > 0) {
+              this.checkArr.forEach((id) => {
+                let node = that.$refs.orgTree.getNode(id);
+                if (node && !this.$refs.orgTree.getCurrentKey()) {
+                  that.$refs.orgTree.setCurrentKey(id);
+                }
+              });
+            }
+          }, 150);
+        }
+      },
       // 节点过滤操作
       filterNode(value, data) {
         if (!value) return true;
-        return data.name.indexOf(value) !== -1;
+        return data.orgName.indexOf(value) !== -1;
       },
 
       // ===================

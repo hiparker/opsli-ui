@@ -301,6 +301,26 @@ html body .el-image-viewer__mask, html body .v-modal {
   overflow: hidden;
 }
 
+.el-button--small{
+  font-size: 13px;
+}
+.el-dropdown-link {
+  font-size: 13px;
+  color: #409EFF;
+  cursor: pointer;
+}
+.el-icon-arrow-down {
+  font-size: 12px;
+}
+
+.el-button + .el-dropdown {
+  margin-left: 10px;
+}
+
+.el-dropdown + .el-button {
+  margin-left: 10px;
+}
+
 /* 下拉提示菜单 */
 .inline-input-container .inline-input-value {
   overflow: hidden;

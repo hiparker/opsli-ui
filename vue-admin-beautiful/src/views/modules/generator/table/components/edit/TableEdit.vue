@@ -300,7 +300,6 @@
 
       // 上报数据
       informData(data){
-        console.log(data);
         this.baseDictData = data;
       },
 

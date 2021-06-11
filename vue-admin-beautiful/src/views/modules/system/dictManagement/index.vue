@@ -87,27 +87,43 @@
           ></el-table-column>
 
           <el-table-column
+            fixed="right"
             show-overflow-tooltip
             label="操作"
             width="160"
             v-if="$perms('system_dict_update') || $perms('system_dict_delete') || $perms('system_dict_setDict')"
           >
             <template v-slot="scope">
+
               <el-button
                 v-if="$perms('system_dict_update')"
                 type="text"
                 @click="handleUpdate(scope.row)"
               > 编辑 </el-button>
-              <el-button
-                v-if="$perms('system_dict_delete')"
-                type="text"
-                @click="handleDelete(scope.row)"
-              > 删除 </el-button>
-              <el-button
-                v-if="$perms('system_dict_setDict')"
-                type="text"
-                @click="setDict(scope.row)"
-              > 设置字典 </el-button>
+
+              <el-divider direction="vertical"></el-divider>
+
+              <el-dropdown trigger="click">
+                <span class="el-dropdown-link">
+                  更多
+                  <i class="el-icon-arrow-down el-icon--right"></i>
+                </span>
+                <el-dropdown-menu
+                  slot="dropdown"
+                >
+                  <!-- 添加下级 只有上级为 菜单是才可以 -->
+                  <el-dropdown-item
+                    v-if="$perms('system_dict_setDict')"
+                    @click.native="setDict(scope.row)"
+                  >设置字典</el-dropdown-item>
+
+                  <el-dropdown-item
+                    v-if="$perms('system_dict_delete')"
+                    @click.native="handleDelete(scope.row)"
+                  >删除</el-dropdown-item>
+
+                </el-dropdown-menu>
+              </el-dropdown>
             </template>
 
           </el-table-column>
@@ -209,10 +225,11 @@
         if(!isNull(data)){
           this.list = data.rows;
           this.total = data.total;
-          setTimeout(() => {
-            this.listLoading = false;
-          }, 300);
         }
+
+        setTimeout(() => {
+          this.listLoading = false;
+        }, 300);
       },
     },
   };

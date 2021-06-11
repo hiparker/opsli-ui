@@ -3,41 +3,44 @@
     :title="title"
     :visible.sync="dialogFormVisible"
     :close-on-click-modal="false"
-    width="800px"
+    width="850px"
     @close="close"
   >
-    <el-form ref="form" :model="form" :rules="rules" label-width="105px" class="orgManagement-edit-container">
+    <el-form ref="form" v-loading="formLoading" :model="form" :rules="rules" label-width="105px"
+             class="orgManagement-edit-container">
       <el-row :gutter="10" >
+
         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-          <el-form-item label="编号" prop="orgCode">
-            <el-input v-model="form.orgCode" autocomplete="off" ></el-input>
-            <!-- 如果上级编号不为空 则出现提醒 -->
-            <span v-if="base.parentCode !== '' ">
-              添加下级只需要写本级编号，如：user
-            </span>
+          <el-form-item label="上级机构" prop="parentId">
+            <el-input
+              v-model="parentOrg.orgName"
+              :readonly="true"
+              autocomplete="off"
+              @click.native="showParentOrg"
+            ></el-input>
+            <el-button type="primary" icon="el-icon-search"
+                       :disabled="formStatus &&
+                       (edenOldParentId != null && edenOldParentId !== '')"
+                       class="input-btn-choose" @click="showParentOrg"></el-button>
           </el-form-item>
+        </el-col>
+
+        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+            <el-form-item label="编号" prop="orgCode">
+              <el-tooltip class="item" effect="dark"
+                          :content="'自动继承父级编号:    ' + parentOrg.orgCode + '_ '"
+                          placement="top-start" v-model="codeTip" manual
+              >
+                <el-input v-model="form.orgCode"
+                          :disabled="!formStatus">
+                </el-input>
+              </el-tooltip>
+            </el-form-item>
         </el-col>
 
         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
           <el-form-item label="名称" prop="orgName">
             <el-input v-model="form.orgName" autocomplete="off"></el-input>
-          </el-form-item>
-        </el-col>
-
-        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-          <el-form-item label="类型" prop="orgType">
-            <!-- 修改不允许改类型 -->
-            <el-select v-model="form.orgType" placeholder="请选择"
-                       default-first-option=""
-                       :disabled="!formStatus"
-                       style="width: 100%" >
-              <el-option
-                v-for="item in dict.org_type"
-                :key="item.dictValue"
-                :label="item.dictName"
-                :value="item.dictValue"
-              ></el-option>
-            </el-select>
           </el-form-item>
         </el-col>
 
@@ -52,11 +55,20 @@
           </el-form-item>
         </el-col>
 
+        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+          <el-form-item label="备注" prop="remark">
+            <el-input type="textarea" v-model="form.remark" autocomplete="off"></el-input>
+          </el-form-item>
+        </el-col>
+
         <!-- 如果是最顶级类型 切是超级管理员的话 可以设置当前机构对应租户 -->
-        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12" v-if="
-        ((form.id != null && form.id !== '' && form.orgType === '1') ||
-        base.parentType === 0) &&
-        userInfo != null && userInfo.izSuperAdmin">
+        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12"
+          v-if="
+          ((form.id != null && form.id !== '' && form.orgType === '1') ||
+          parentOrg.id === '0') &&
+          userInfo != null && userInfo.izSuperAdmin
+          "
+        >
           <el-form-item label="租户ID" prop="icon">
             <el-input v-model="form.tenantId" autocomplete="off" readonly ></el-input>
             <el-button type="primary" icon="el-icon-search"
@@ -77,32 +89,40 @@
       ref="tenant"
     ></tenant>
 
+    <org-single-choose
+      ref="org-single-choose"
+      @choose="orgSingleChoose"
+    ></org-single-choose>
+
   </el-dialog>
 </template>
 
 <script>
-  import {doInsert, doUpdate} from "@/api/system/org/orgManagement";
+  import { get, doInsert, doUpdate } from "@/api/system/org/orgManagement";
   import { deepClone } from "@/utils/clone";
   import { isNull } from "@/utils/validate";
-  import { isNotNull } from "@/utils/valiargs";
   import { validatorRule } from "@/utils/validateRlue";
   import { getAccessToken } from "@/utils/accessToken";
   import { getUserInfo } from "@/api/user";
+
+  import OrgSingleChoose from "@/components/opsli/org/OrgSingleChoose";
   import Tenant from "@/components/opsli/tenant/tenant";
 
   export default {
     name: "OrgManagementEdit",
-    components: {Tenant },
+    components: {Tenant, OrgSingleChoose },
     data() {
 
       return {
+        codeTip: false,
         userInfo: null,
-        base: {
-          parentCode: "",
-          parentType: ""
-        },
         formStatus: true,
+        genParentId: "",
+        edenOldParentId: "",
+        oldParentId: "",
+        parentOrg: {},
         form: {
+          parentId: "0",
           tenantId:"",
           sortNo: 1,
           version: 0
@@ -117,10 +137,10 @@
             { required: true, trigger: "blur", message: "请输入名称" },
             { required: false, trigger: "blur", validator: validatorRule.IS_GENERAL_WITH_CHINESE },
           ],
-          orgType: [{ required: true, trigger: "blur", message: "请选择类型" }],
           sortNo: [{ required: true, trigger: "blur", message: "请输入排序" }],
         },
         title: "",
+        formLoading: true,
         dialogFormVisible: false,
       };
     },
@@ -140,68 +160,60 @@
       closeTenant(val){
         this.form.tenantId = val.id;
       },
+
+      orgSingleChoose(node){
+        this.parentOrg = node;
+        this.form.parentId = this.parentOrg.id;
+      },
+      // 选择上级机构
+      showParentOrg(){
+        if(this.edenOldParentId && this.formStatus){
+          return;
+        }
+
+        this.$refs["org-single-choose"]
+          .showOrgChoose(this.form.id);
+      },
       showEdit(row) {
         if (isNull(row) || isNull(row.id)) {
-          this.title = "添加";
+          this.title = "添加机构";
           // 如果上级菜单名称不为空 则显示到标题上
           if(!isNull(row) && !isNull(row.parentName) &&
             !isNull(row.parentId) && !isNull(row.parentCode)){
             // 设置上级Id
+            this.edenOldParentId = row.parentId;
             this.form.parentId = row.parentId;
-            this.base.parentCode = row.parentCode;
-            this.title += "  - 上级名称 [ " + row.parentName +" ] - 上级编号 [" + this.base.parentCode + "]";
           }
 
-          if(isNull(row) || isNull(row.parentType)){
-            this.base.parentType = 0;
-          }else{
-            this.base.parentType = parseInt(row.parentType);
-          }
-
-          // 设置字典
-          this.setDictOrgType(true);
         } else {
-          this.title = "编辑";
+          this.title = "编辑机构";
           this.formStatus = false;
           this.form = Object.assign({}, row);
-          this.base.parentType = parseInt(this.form.orgType);
-
-          // 设置字典
-          this.setDictOrgType(false);
         }
 
+        // 设置 编号提醒项
+        if(this.formStatus && this.edenOldParentId){
+          setTimeout(()=>{
+            this.codeTip = true;
+          }, 200);
+        }
+
+        this.oldParentId = this.form.parentId;
+
         this.dialogFormVisible = true;
-      },
-      setDictOrgType(izInsert){
-        let that = this;
-        // 每一次都需要查一次
-        let dictList =  this.$getDictList("org_type")
-        this.dict.org_type = [];
-        // 处理类型 只有大于父级类型的后续类型才可以
-        dictList.forEach(function (val){
-          if(isNotNull(val)){
-            let dictValue = val.dictValue;
-            if(isNotNull(dictValue)){
-              try {
-                let tmp = parseInt(dictValue);
-                if(izInsert && tmp > that.base.parentType && tmp <= that.base.parentType+1){
-                  that.dict.org_type.push(val);
-                }else if(!izInsert && tmp === that.base.parentType){
-                  that.dict.org_type.push(val);
-                }
-              }catch (e){}
-            }
-          }
-        });
+        // 加载上级菜单数据
+        this.fetchData();
       },
       close() {
         this.dialogFormVisible = false;
         this.$refs["form"].resetFields();
         this.form = this.$options.data().form;
+        this.codeTip = false;
         this.formStatus = true;
-        this.base.parentCode = "";
-        this.base.parentType = null;
-        this.dict.org_type = [];
+        this.formLoading = true;
+        this.edenOldParentId = "";
+        this.oldParentId = "";
+        this.genParentId = "";
       },
       save() {
         this.$refs["form"].validate(async (valid) => {
@@ -217,8 +229,8 @@
               }
             } else {
               // 如果上级code不为空 则在新增是 拼上上级code
-              if(!isNull(this.base.parentCode)){
-                tmpForm.orgCode = this.base.parentCode + "_" + tmpForm.orgCode;
+              if(!isNull(this.parentOrg.orgCode)){
+                tmpForm.orgCode = this.parentOrg.orgCode + "_" + tmpForm.orgCode;
               }
               const { success, msg } = await doInsert(tmpForm);
               if(success){
@@ -226,26 +238,41 @@
               }
             }
 
-            await this.$emit("fetchData");
+            // 刷新标签
+            if(!isNull(this.oldParentId)){
+              this.$emit("refreshNodeBy", this.oldParentId);
+            }
+            if(!isNull(this.parentOrg.parentId)){
+              this.$emit("refreshNodeBy", this.parentOrg.parentId);
+            }
+            this.$emit("refreshNodeBy", this.form.parentId);
+
             this.close();
           } else {
             return false;
           }
         });
       },
+      // 获得机构数据
+      async fetchData() {
+        this.formLoading = true;
+        const { data } = await get({id: this.form.parentId});
+        if(data){
+          this.parentOrg = data;
+        }
+
+        setTimeout(() => {
+          this.formLoading = false;
+        }, 300);
+      },
       // 获取当前登录用户数据
       async getUser() {
-        this.listLoading = true;
         let accessToken = getAccessToken();
         const { data } = await getUserInfo(accessToken);
         if(!isNull(data)){
           this.userInfo = Object.assign({}, data);
-          setTimeout(() => {
-            this.listLoading = false;
-          }, 300);
         }
       },
     },
   };
 </script>
-

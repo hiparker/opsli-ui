@@ -7,32 +7,15 @@
           ref="tableTreeData"
           v-loading="treeLoading"
           row-key="id"
-          lazy accordion
-          :data="treeData"
+          :data="orgData"
           :props="defaultProps"
-          :default-expand-all="true"
           :element-loading-text="elementLoadingText"
           :filter-node-method="filterNode"
-          :load="loadNode"
-          :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
           :expand-on-click-node="false"
+          :highlight-current="true"
+          default-expand-all accordion
           @node-click="handleNodeClick"
-        >
-          <span slot-scope="{ node, data }" class="vab-custom-tree-node">
-            <span class="vab-tree-item">
-              {{ node.label }}
-              <el-tag v-if="data.orgType === '1' ">
-                {{ $getDictNameByValue('org_type', data.orgType) }}
-              </el-tag>
-              <el-tag v-if="data.orgType === '2' " type="warning">
-                {{ $getDictNameByValue('org_type', data.orgType) }}
-              </el-tag>
-              <el-tag v-if="data.orgType === '3' " type="success">
-                {{ $getDictNameByValue('org_type', data.orgType) }}
-              </el-tag>
-            </span>
-          </span>
-        </el-tree>
+        />
       </el-col>
       <el-col :xs="24" :sm="24" :md="24" :lg="20" :xl="20">
         <el-collapse-transition>
@@ -74,40 +57,6 @@
               type="primary"
               @click="handleEdit"
             > 添加 </el-button>
-
-            <el-button
-              v-if="$perms('system_user_setRole')"
-              :disabled="selectRows.length !== 1"
-              icon="el-icon-user-solid"
-              type="success"
-              @click="setRoles"
-            > 设置角色 </el-button>
-
-            <el-button
-              v-if="$perms('system_user_setOrg')"
-              :disabled="selectRows.length !== 1"
-              icon="el-icon-s-data"
-              type="success"
-              @click="setOrg"
-            > 设置组织 </el-button>
-
-            <el-button
-              v-if="$perms('system_user_updatePassword')"
-              :disabled="selectRows.length !== 1"
-              icon="el-icon-lock"
-              type="warning"
-              @click="updatePassword"
-            > 修改密码 </el-button>
-
-            <el-button
-              v-if="$perms('system_user_resetPassword')"
-              :disabled="selectRows.length !== 1"
-              icon="el-icon-refresh"
-              type="warning"
-              @click="resetPassword"
-            >
-              重置密码
-            </el-button>
 
             <el-button
               v-if="$perms('system_user_delete')"
@@ -206,7 +155,7 @@
             show-overflow-tooltip
             prop="email"
             label="邮箱"
-            width="140"
+            width="160"
           ></el-table-column>
 
           <el-table-column
@@ -220,13 +169,14 @@
             show-overflow-tooltip
             prop="remark"
             label="备注"
-            width="130"
+            min-width="130"
           ></el-table-column>
 
           <el-table-column
             show-overflow-tooltip
+            fixed="right"
             label="操作"
-            width="200"
+            width="130"
             v-if="$perms('system_user_update') || $perms('system_user_delete')"
           >
             <template v-slot="scope">
@@ -235,11 +185,44 @@
                 type="text"
                 @click="handleEdit(scope.row)"
               > 编辑 </el-button>
-              <el-button
-                v-if="$perms('system_user_delete')"
-                type="text"
-                @click="handleDelete(scope.row)"
-              >  删除 </el-button>
+
+              <el-divider direction="vertical"></el-divider>
+
+              <el-dropdown trigger="click">
+                <span class="el-dropdown-link">
+                  更多
+                  <i class="el-icon-arrow-down el-icon--right"></i>
+                </span>
+                <el-dropdown-menu
+                  slot="dropdown"
+                >
+                  <el-dropdown-item
+                    v-if="$perms('system_user_setOrg')"
+                    @click.native="showOrg(scope.row)"
+                  >授权组织</el-dropdown-item>
+
+                  <el-dropdown-item
+                    v-if="$perms('system_user_setRole')"
+                    @click.native="setRoles(scope.row)"
+                  >授权角色</el-dropdown-item>
+
+                  <el-dropdown-item
+                    v-if="$perms('system_user_updatePassword')"
+                    @click.native="updatePassword(scope.row)"
+                  >修改密码</el-dropdown-item>
+
+                  <el-dropdown-item
+                    v-if="$perms('system_user_resetPassword')"
+                    @click.native="resetPassword(scope.row)"
+                  >重置密码</el-dropdown-item>
+
+                  <el-dropdown-item
+                    v-if="$perms('system_user_delete')"
+                    @click.native="handleDelete(scope.row)"
+                  >删除</el-dropdown-item>
+
+                </el-dropdown-menu>
+              </el-dropdown>
             </template>
           </el-table-column>
         </el-table>
@@ -252,10 +235,15 @@
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
         ></el-pagination>
+
         <edit ref="edit" @fetchData="fetchData"></edit>
         <roles ref="roles"></roles>
         <update-password ref="update-password"></update-password>
-        <set-org ref="set-org"></set-org>
+        <user-management-set-org
+          ref="user-management-set-org"
+          :is-gen="isGen"
+          @choose="orgMoreChoose"
+        ></user-management-set-org>
       </el-col>
     </el-row>
   </div>
@@ -263,19 +251,23 @@
 
 <script>
 
-  import { getList, doDelete, doDeleteAll, doResetPasswordById, doEnableAccount } from "@/api/system/user/userManagement";
-  import { getTreeLazyByUser } from "@/api/system/org/orgManagement";
+  import { getList, doDelete, doDeleteAll, doResetPasswordById,
+    doEnableAccount, doSetOrg, getOrgByUserId } from "@/api/system/user/userManagement";
+  import { getTreeByDefWithUserToLike } from "@/api/system/org/orgManagement";
   import Edit from "./components/UserManagementEdit";
   import Roles from "./components/UserManagementRoles";
-  import SetOrg from "./components/UserManagementSetOrg";
   import UpdatePassword from "./components/UserManagementPassword";
+  import UserManagementSetOrg from "./components/UserManagementSetOrg";
   import { isNull } from "@/utils/validate";
 
   export default {
     name: "UserManagement",
-    components: { Edit,Roles,UpdatePassword,SetOrg },
+    components: { Edit, Roles,
+      UpdatePassword, UserManagementSetOrg
+    },
     data() {
       return {
+        isGen: false,
         list: null,
         listLoading: true,
         layout: "total, sizes, prev, pager, next, jumper",
@@ -289,23 +281,22 @@
           username_EQ: "",
           realName_LIKE: "",
           no_EQ: "",
-          companyId: "",
-          departmentId: "",
-          postId: ""
+          orgIdGroup: "org_all",
         },
 
         // 组织树
         filterText: "",
-        defaultNode: "0",
-        treeData:[],
+        orgData:[],
         defaultProps: {
           children: "children",
           label: "orgName",
+          isLeaf: "isLeaf",
         },
         treeLoading: false,
       };
     },
     created() {
+      this.fetchOrgData();
       this.fetchData();
     },
     watch: {
@@ -314,35 +305,71 @@
       },
     },
     methods: {
-      // 设置组织
-      setOrg() {
-        let row = this.selectRows[0];
-        this.$refs["set-org"].showEdit(row);
+      // 组织选择 回调函数
+      async orgMoreChoose(result, row){
+        if(!row){
+          this.$baseMessage("请选择操作用户", "error");
+        }
+
+        // 执行 设置角色
+        const {success, msg} = await doSetOrg({
+          userId: row.id,
+          defModel: result.defOrg,
+          orgModelList: result.orgList,
+        });
+        if (success) {
+          this.$baseMessage(msg, "success");
+          await this.fetchData();
+        }
+      },
+      // 选择组织机构
+      async showOrg(row){
+        const { data } = await getOrgByUserId({
+          userId: row.id,
+        });
+
+        let defOrgId;
+        let checkOrgIds = [];
+        if(data && data.length >0){
+          data.forEach((item) => {
+            // 1 为是
+            if("1" === item.izDef){
+              defOrgId = item.orgId;
+            }
+            checkOrgIds.push(item.orgId);
+          });
+        }
+
+        this.$refs["user-management-set-org"]
+          .showCheckChoose(checkOrgIds, defOrgId, row);
       },
       // 设置角色
-      setRoles() {
-        let row = this.selectRows[0];
+      setRoles(row) {
+        if(!row){
+          this.$baseMessage("请选择操作用户", "error");
+        }
         this.$refs["roles"].showRole(row);
       },
       // 修改密码
-      updatePassword() {
-        let row = this.selectRows[0];
+      updatePassword(row) {
+        if(!row){
+          this.$baseMessage("请选择操作用户", "error");
+        }
         this.$refs["update-password"].showUpdatePassword(row);
       },
       // 重置密码
-      resetPassword(){
-        let userId;
-        try {
-          userId = this.selectRows[0].id;
-        }catch (e){}
+      resetPassword(row){
+        if(!row){
+          this.$baseMessage("请选择操作用户", "error");
+        }
 
-        if(isNull(userId)){
+        if(isNull(row.id)){
           this.$baseMessage('未选择用户', "error");
           return;
         }
 
         this.$baseConfirm("你确定要重置当前用户密码吗", null, async () => {
-          doResetPasswordById({ userId : userId}).then(ret => {
+          doResetPasswordById({ userId : row.id}).then(ret => {
             // 重置密码
             const { success, msg } = ret;
             if(success){
@@ -420,51 +447,44 @@
         if(!isNull(data)){
           this.list = data.rows;
           this.total = data.total;
-          setTimeout(() => {
-            this.listLoading = false;
-          }, 300);
         }
+
+        setTimeout(() => {
+          this.listLoading = false;
+        }, 300);
+      },
+
+      // 加载组织数据
+      async fetchOrgData() {
+        this.treeLoading = true;
+
+        // 获得树数据
+        const { data } = await getTreeByDefWithUserToLike();
+        if(!isNull(data)){
+          this.orgData = data;
+        }
+
+        setTimeout(() => {
+          this.treeLoading = false;
+        }, 300);
       },
 
       // ============ 组织树
-      handleNodeClick(node){
-        if(!isNull(node)){
-          let orgType = node.orgType;
-          this.queryForm.companyId = "";
-          this.queryForm.departmentId = "";
-          this.queryForm.postId = "";
-
-          // 公司
-          if("1" === orgType){
-            this.queryForm.companyId = node.id;
-          }
-          // 部门
-          else if("2" === orgType){
-            this.queryForm.departmentId = node.id;
-          }
-          // 岗位
-          else if("3" === orgType){
-            this.queryForm.postId = node.id;
-          }
-          // -- 未分组
-          else if("-1" === orgType){
-            this.queryForm.companyId = node.id;
+      handleNodeClick(nodeData){
+        if(!isNull(nodeData)){
+          const nodeId = nodeData.id;
+          // 针对 非 全部 未分组 特殊处理
+          if("org_all" !== nodeId && "org_null" !== nodeId){
+            this.queryForm.orgIdGroup = nodeData.parentIds+","+nodeId;
+          }else {
+            this.queryForm.orgIdGroup = nodeId;
           }
         }
         // 查询数据
         this.queryData();
       },
 
-      //懒加载时触发
-      async loadNode(tree, resolve) {
-        let treeId = this.defaultNode;
-        if(!isNull(tree.data) && !isNull(tree.data.id)){
-          treeId = tree.data.id;
-        }
-        // 获得树数据
-        const { data } = await getTreeLazyByUser({parentId: treeId});
-        resolve(data);
-      },
+
       // 节点过滤操作
       filterNode(value, data) {
         if (!value) return true;

@@ -113,7 +113,7 @@
             if(checkArray != null && checkArray.length > 0){
               checkArray.forEach((id) => {
                 let node = that.$refs.permsTree.getNode(id);
-                if (node.isLeaf) {
+                if (node && node.isLeaf) {
                   that.$refs.permsTree.setChecked(node, true);
                 }
               });

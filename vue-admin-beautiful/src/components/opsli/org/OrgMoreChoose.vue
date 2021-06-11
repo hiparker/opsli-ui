@@ -27,24 +27,7 @@
         default-expand-all
         show-checkbox
         @check-change="checkChange"
-      >
-        <div slot-scope="{ node, data }" class="vab-custom-tree-node">
-          <div class="vab-tree-item">
-            {{ node.label }}
-
-            <!-- 默认标识 -->
-            <el-tag v-if="node.checked && data.def" >默认</el-tag>
-
-            <!-- 设为默认按钮 -->
-            <el-button
-              v-if="node.checked && !data.def"
-              type="text"
-              v-on:click.stop="setDef(node, data)"
-              class="set-def-btn"
-            > 设为默认 </el-button>
-          </div>
-        </div>
-      </el-tree>
+      />
     </el-col>
 
     <div slot="footer" class="dialog-footer">
@@ -55,7 +38,6 @@
 </template>
 
 <script>
-  import { deepClone } from "@/utils/clone";
   import { getTreeByDef } from "@/api/system/org/orgManagement";
   import { isNull } from "@/utils/validate";
 
@@ -75,7 +57,6 @@
         orgId: "",
         orgData: [],
         checkArr: [],
-        defId: "",
         params: {},
         filterText: "",
         tmpTreeData: {},
@@ -85,7 +66,7 @@
           isLeaf: "isLeaf",
         },
         treeExpandData: [],
-        dialogTitle: "授权组织",
+        dialogTitle: "选择机构",
         dialogVisible: false,
         chooseLoading: false,
       };
@@ -111,12 +92,11 @@
         // 加载数据
         this.fetchData();
       },
-      showCheckChoose(checkOrgIds, defOrgId, params) {
+      showCheckChoose(checkArr, params) {
         this.params = params;
-        if(checkOrgIds && checkOrgIds.length > 0){
-          this.checkArr = checkOrgIds;
+        if (checkArr && checkArr.length > 0) {
+          this.checkArr = checkArr;
         }
-        this.defId = defOrgId;
         this.dialogVisible = true;
 
         // 加载数据
@@ -131,33 +111,8 @@
       },
       // 保存权限
       async save() {
-
-        const nodes = deepClone(this.$refs.orgTree.getCheckedNodes());
-        let ret = {
-          defOrg: null,
-          orgList: [],
-        };
-
-        if(nodes && nodes.length > 0){
-          ret.orgList = nodes;
-
-          let flag = false;
-          for(let i=0;i<nodes.length;i++){
-            const node = nodes[i];
-            if(node.def){
-              ret.defOrg = node;
-              flag = true;
-              nodes.splice(i,1);
-              break;
-            }
-          }
-          if(!flag){
-            this.$baseMessage("请设置默认项", "error");
-            return;
-          }
-        }
-
-        this.$emit("choose", ret, this.params);
+        const nodes = this.$refs.orgTree.getCheckedNodes();
+        this.$emit("choose", nodes, this.params);
         this.close();
       },
 
@@ -177,10 +132,6 @@
               this.checkArr.forEach((id) => {
                 let node = that.$refs.orgTree.getNode(id);
                 if (node) {
-                  // 默认项
-                  if(id === this.defId){
-                    node.data.def = true;
-                  }
                   that.$refs.orgTree.setChecked(node, true);
                 }
               });
@@ -189,46 +140,9 @@
         }
       },
 
-      // 刷新节点
-      freshNode(id){
-        let node = this.$refs.orgTree.getNode(id);
-        if(!node){
-          return;
-        }
-        let flag = node.checked;
-        // 刷新数据状态
-        this.$refs.orgTree.setChecked(node, !flag);
-        this.$refs.orgTree.setChecked(node, flag);
-      },
-      // 设置默认
-      setDef(node, data){
-        // 清除之前默认项
-        const nodes = this.$refs.orgTree.getCheckedNodes();
-        if(nodes && nodes.length > 0){
-          for(let i=0;i<nodes.length;i++){
-            const node = nodes[i];
-            if(node.def){
-              node.def = undefined;
-              // 刷新数据状态
-              this.freshNode(node.id);
-              break;
-            }
-          }
-        }
-
-        // 设置自身状态
-        data.def = true;
-        // 刷新数据状态
-        this.freshNode(data.id);
-      },
       // 节点状态发生改变
       checkChange(currNode, currNodeFlag) {
         if (currNode) {
-          // 如果取消勾选 则删除默认项
-          if(!currNodeFlag){
-            currNode.def = undefined;
-            this.freshNode(currNode.id);
-          }
           this.recursionDisableNode(currNode, currNodeFlag, currNode.id);
         }
       },
@@ -266,9 +180,6 @@
               node.lockId = undefined;
             }
 
-            // 清空节点上默认项
-            node.def = undefined;
-
             // 禁用当前按钮
             node.disabled = disable;
             // 默认状态为 未选中 (需要变化一下状态 否则不生效 )
@@ -293,27 +204,3 @@
     },
   };
 </script>
-<style lang="scss" scoped>
-  .org-single-choose{
-    .vab-custom-tree-node{
-      width: 100%;
-
-      .vab-tree-item{
-        position: relative;
-        width: 100%;
-
-        .el-tag--small {
-          height: 18px;
-          line-height: 18px;
-        }
-
-        .set-def-btn {
-          position: absolute;
-          top: 0;
-          right: 0;
-          padding: 0;
-        }
-      }
-    }
-  }
-</style>

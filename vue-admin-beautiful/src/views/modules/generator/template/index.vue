@@ -111,7 +111,7 @@
       <el-table-column
         show-overflow-tooltip
         label="操作"
-        width="200"
+        width="130"
         v-if="$perms('generator_template_update') || $perms('generator_template_delete')"
       >
         <template v-slot="scope">
@@ -120,6 +120,8 @@
             type="text"
             @click="handleUpdate(scope.row)"
           > 编辑 </el-button>
+
+          <el-divider direction="vertical"></el-divider>
 
           <el-button
             v-if="$perms('generator_template_delete')"
@@ -283,10 +285,11 @@ import {getList, doDelete, doDeleteAll, doCopy, doUpdate} from "@/api/generator/
         if(isNotNull(data)){
           this.list = data.rows;
           this.total = data.total;
-          setTimeout(() => {
-            this.listLoading = false;
-          }, 300);
         }
+
+        setTimeout(() => {
+          this.listLoading = false;
+        }, 300);
       },
     },
   };

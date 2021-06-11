@@ -12,12 +12,6 @@
               @click="handleInsert"
             > 添加 </el-button>
 
-            <el-button
-              icon="el-icon-sort"
-              type="primary"
-              @click="handleExpand"
-            > 展开数据 </el-button>
-
           </vab-query-form-left-panel>
         </vab-query-form>
 
@@ -26,40 +20,26 @@
           v-loading="listLoading"
           :data="data"
           :element-loading-text="elementLoadingText"
-          row-key="orgCode"
-          border
+          row-key="id"
           :default-expand-all="false"
-          :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
+          lazy
+          :load="loadNode"
+          :tree-props="defaultProps"
         >
           <el-table-column
             show-overflow-tooltip
             prop="orgCode"
-            label="编号"
+            label="机构唯一编号"
+            min-width="200"
           ></el-table-column>
+
           <el-table-column
             show-overflow-tooltip
             prop="orgName"
-            label="名称"
+            label="机构名称"
+            min-width="150"
           ></el-table-column>
-          <el-table-column
-            show-overflow-tooltip
-            prop="orgType"
-            label="类型"
-          >
-            <template slot-scope="scope">
-              <span>
-                <el-tag v-if="scope.row.orgType === '1' ">
-                  {{ $getDictNameByValue('org_type', scope.row.orgType) }}
-                </el-tag>
-                <el-tag v-if="scope.row.orgType === '2' " type="warning">
-                  {{ $getDictNameByValue('org_type', scope.row.orgType) }}
-                </el-tag>
-                <el-tag v-if="scope.row.orgType === '3' " type="success">
-                  {{ $getDictNameByValue('org_type', scope.row.orgType) }}
-                </el-tag>
-              </span>
-            </template>
-          </el-table-column>
+
           <el-table-column
             show-overflow-tooltip
             prop="sortNo"
@@ -68,41 +48,60 @@
 
           <el-table-column
             show-overflow-tooltip
+            prop="remark"
+            label="备注"
+          ></el-table-column>
+
+          <el-table-column
+            fixed="right"
+            show-overflow-tooltip
             label="操作"
-            width="200"
+            width="130"
             v-if="$perms('system_org_insert') || $perms('system_org_update') || $perms('system_org_delete')"
           >
             <template v-slot="scope">
-              <!-- 最低岗位 不允许继续添加下级 -->
-              <el-button
-                v-if="$perms('system_org_insert')"
-                type="text"
-                @click="handleInsertByParent(scope.row)"
-                :disabled="scope.row.orgType === '3' "
-              > 添加下级 </el-button>
               <el-button
                 v-if="$perms('system_org_update')"
                 type="text"
                 @click="handleUpdate(scope.row)"
               > 编辑 </el-button>
-              <el-button
-                v-if="$perms('system_org_delete')"
-                type="text"
-                @click="handleDelete(scope.row)"
-              > 删除 </el-button>
+
+              <el-divider direction="vertical"></el-divider>
+
+              <el-dropdown trigger="click">
+                <span class="el-dropdown-link">
+                  更多
+                  <i class="el-icon-arrow-down el-icon--right"></i>
+                </span>
+                <el-dropdown-menu
+                  slot="dropdown"
+                >
+                  <el-dropdown-item
+                    v-if="$perms('system_org_insert')"
+                    @click.native="handleInsertByParent(scope.row)"
+                  >添加下级</el-dropdown-item>
+
+                  <el-dropdown-item
+                    v-if="$perms('system_org_delete')"
+                    @click.native="handleDelete(scope.row)"
+                  >删除</el-dropdown-item>
+
+                </el-dropdown-menu>
+              </el-dropdown>
             </template>
           </el-table-column>
         </el-table>
       </el-col>
     </el-row>
 
-    <edit ref="edit" @fetchData="fetchData"></edit>
+    <edit ref="edit" @refreshNodeBy="refreshNodeBy"></edit>
   </div>
 </template>
 
 <script>
-  import { getTree, doDelete } from "@/api/system/org/orgManagement";
+  import { getTreeLazy, doDelete } from "@/api/system/org/orgManagement";
   import Edit from "./components/OrgManagementEdit";
+  import {isNull} from "@/utils/validate";
 
   export default {
     name: "OrgManagement",
@@ -113,9 +112,13 @@
           org_type: this.$getDictList("org_type"),
           no_yes: this.$getDictList("no_yes"),
         },
+        // 0 根目录
+        defaultNode: "0",
+        tmpTreeData: {},
         data: [],
         defaultProps: {
           children: "children",
+          hasChildren: 'hasChildren',
           label: "orgName",
         },
         queryForm: {
@@ -137,6 +140,11 @@
       },
       handleInsertByParent(row) {
         if (row.id) {
+          if(row.parentIds.split(",").length > 3) {
+            this.$baseMessage("组织树深度最大支持4层", "error");
+            return;
+          }
+
           let rowTmp = {};
           // 上级Id
           rowTmp.parentId = row.id;
@@ -144,13 +152,14 @@
           rowTmp.parentName = row.orgName;
           // 上级编号
           rowTmp.parentCode = row.orgCode;
-          // 上级类型
-          rowTmp.parentType = row.orgType;
+
           this.$refs["edit"].showEdit(rowTmp);
         }
       },
       handleUpdate(row) {
+        if(row) {
           this.$refs["edit"].showEdit(row);
+        }
       },
       handleDelete(row) {
         if (row.id) {
@@ -167,24 +176,45 @@
       queryData() {
         this.fetchData();
       },
+
+
       // 获得菜单数据
       async fetchData() {
         this.listLoading = true;
-        const { data } = await getTree(this.queryForm);
+        const { data } = await getTreeLazy({parentId: this.defaultNode});
         this.data = data;
         setTimeout(() => {
           this.listLoading = false;
         }, 300);
       },
 
-
-      // 是否展开table(展开与折叠切换)
-      handleExpand() {
-        this.isExpand = !this.isExpand
-        this.$nextTick(() => {
-          this.forArr(this.data, this.isExpand)
-        })
+      //  刷新数据
+      refreshNodeBy(id){
+        if(isNull(this.tmpTreeData[id])){
+          this.fetchData();
+        }else{
+          // 通过节点id找到对应树节点对象
+          let tree = this.tmpTreeData[id].tree;
+          let treeNode = this.tmpTreeData[id].treeNode;
+          let resolve = this.tmpTreeData[id].resolve;
+          this.loadNode(tree, treeNode, resolve)
+        }
       },
+
+      //懒加载时触发
+      async loadNode(tree, treeNode, resolve) {
+        // 获得树数据
+        const { data } = await getTreeLazy({parentId: tree.id});
+        // 2021-06-07 暂时先重载所有路由 来解决数据冲突问题
+        if(!data || data.length === 0){
+          // 重载所有路由
+          this.$baseEventBus.$emit("reloadRouterView");
+          return;
+        }
+        this.tmpTreeData[tree.id] = {tree, treeNode, resolve};
+        resolve(data);
+      },
+
       // 遍历
       forArr(arr, isExpand) {
         arr.forEach(i => {

@@ -1,8 +1,16 @@
 import request from "@/utils/request";
 
-export function getTreeLazyByUser(data) {
+export function get(data) {
   return request({
-    url: "/api/v1/system/org/findTreeLazyByUser",
+    url: "/api/v1/system/org/get",
+    method: "get",
+    params: data,
+  });
+}
+
+export function getTreeByDefWithUserToLike(data) {
+  return request({
+    url: "/api/v1/system/org/findTreeByDefWithUserToLike",
     method: "get",
     params: data,
   });
@@ -16,17 +24,9 @@ export function getTreeLazy(data) {
   });
 }
 
-export function getGridTree(data) {
+export function getTreeByDef(data) {
   return request({
-    url: "/api/v1/system/org/findGridTree",
-    method: "get",
-    params: data,
-  });
-}
-
-export function getTree(data) {
-  return request({
-    url: "/api/v1/system/org/findTree",
+    url: "/api/v1/system/org/findTreeByDef",
     method: "get",
     params: data,
   });

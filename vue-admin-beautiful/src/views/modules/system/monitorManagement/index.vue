@@ -381,6 +381,8 @@
     },
     methods: {
       async fetchData() {
+        this.listLoading = true;
+
         const { data } = await getSystemInfo(this.queryForm);
         if (!isNull(data)) {
           this.cpuInfo = data.cpuInfo;
@@ -391,12 +393,12 @@
           this.chartMem.series[0].data[0].value = data.memInfo.usage;
           this.chartJVM.series[0].data[0].value = data.JVMInfo.usage;
           this.SysFilesInfoTableData = data.sysFileInfo;
-          setTimeout(() => {
-            this.listLoading = false;
-          }, 150);
         }
-        this.listLoading = true;
-        this.loadingData = false;
+
+        setTimeout(() => {
+          this.listLoading = false;
+          this.loadingData = false;
+        }, 150);
       },
       async cpuData() {
         const { data } = await getCpuInfo(this.queryForm);

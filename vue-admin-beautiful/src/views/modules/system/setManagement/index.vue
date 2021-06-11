@@ -811,12 +811,11 @@
           )
             ? this.baseData.storage_upyun_password.optionValue
             : ''
-
-
-          setTimeout(() => {
-            this.loadingData = false;
-          }, 300);
         }
+
+        setTimeout(() => {
+          this.loadingData = false;
+        }, 300);
       },
     },
   };

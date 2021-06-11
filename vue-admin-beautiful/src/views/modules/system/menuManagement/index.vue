@@ -23,11 +23,10 @@
           :data="data"
           :element-loading-text="elementLoadingText"
           row-key="id"
-          border
           :default-expand-all="false"
           lazy
           :load="loadNode"
-          :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
+          :tree-props="defaultProps"
         >
 
           <el-table-column
@@ -112,18 +111,13 @@
           </el-table-column>
 
           <el-table-column
+            fixed="right"
             show-overflow-tooltip
             label="操作"
-            width="200"
+            width="130"
             v-if="$perms('system_menu_insert') || $perms('system_menu_update') || $perms('system_menu_delete')"
           >
             <template v-slot="scope">
-              <!-- 添加下级 只有上级为 菜单是才可以 -->
-              <el-button
-                v-if="$perms('system_menu_insert') && scope.row.type === '1' "
-                type="text"
-                @click="handleInsertByParent(scope.row)"
-              > 添加下级 </el-button>
 
               <el-button
                 v-if="$perms('system_menu_update')"
@@ -131,11 +125,29 @@
                 @click="handleUpdate(scope.row)"
               > 编辑 </el-button>
 
-              <el-button
-                v-if="$perms('system_menu_delete')"
-                type="text"
-                @click="handleDelete(scope.row)"
-              > 删除 </el-button>
+              <el-divider direction="vertical"></el-divider>
+
+              <el-dropdown trigger="click">
+                <span class="el-dropdown-link">
+                  更多
+                  <i class="el-icon-arrow-down el-icon--right"></i>
+                </span>
+                <el-dropdown-menu
+                  slot="dropdown"
+                >
+                  <!-- 添加下级 只有上级为 菜单是才可以 -->
+                  <el-dropdown-item
+                    v-if="$perms('system_menu_insert') && scope.row.type === '1' "
+                    @click.native="handleInsertByParent(scope.row)"
+                  >添加下级</el-dropdown-item>
+
+                  <el-dropdown-item
+                    v-if="$perms('system_menu_delete')"
+                    @click.native="handleDelete(scope.row)"
+                  >删除</el-dropdown-item>
+
+                </el-dropdown-menu>
+              </el-dropdown>
 
             </template>
           </el-table-column>
@@ -166,7 +178,8 @@
         tmpTreeData: {},
         data: [],
         defaultProps: {
-          children: "children",
+          children: 'children',
+          hasChildren: 'hasChildren',
           label: "menuName",
         },
         queryForm: {
@@ -188,8 +201,6 @@
       handleInsertByParent(row) {
         if (row.id) {
           let rowTmp = {};
-          // 上上级Id
-          rowTmp.genParentId = row.parentId;
           // 上级Id
           rowTmp.parentId = row.id;
           // 上级名称
@@ -198,7 +209,9 @@
         }
       },
       handleUpdate(row) {
+        if(row){
           this.$refs["edit"].showEdit(row);
+        }
       },
       handleDelete(row) {
         if (row.id) {
@@ -219,8 +232,6 @@
           this.forArr(this.data, this.isExpand)
         })
       },
-
-
 
       // 获得菜单数据
       async fetchData() {
@@ -249,6 +260,12 @@
       async loadNode(tree, treeNode, resolve) {
         // 获得树数据
         const { data } = await getTreeLazy({parentId: tree.id});
+        // 2021-06-07 暂时先重载所有路由 来解决数据冲突问题
+        if(!data || data.length === 0){
+          // 重载所有路由
+          this.$baseEventBus.$emit("reloadRouterView");
+          return;
+        }
         this.tmpTreeData[tree.id] = {tree, treeNode, resolve};
         resolve(data);
       },

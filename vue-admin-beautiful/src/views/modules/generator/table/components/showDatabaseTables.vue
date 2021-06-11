@@ -115,10 +115,11 @@ import { doImportTables, getTables} from "@/api/generator/tableManagement";
         const { data } = await getTables(this.queryForm);
         if(!isNull(data)){
           this.list = data;
-          setTimeout(() => {
-            this.listLoading = false;
-          }, 300);
         }
+
+        setTimeout(() => {
+          this.listLoading = false;
+        }, 300);
       },
     },
   };

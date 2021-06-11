@@ -374,11 +374,11 @@
               this.frontendTabs.active = frontendData[0].fileName;
             }
           }
-
-          setTimeout(() => {
-            this.listLoading = false;
-          }, 300);
         }
+
+        setTimeout(() => {
+          this.listLoading = false;
+        }, 300);
       },
 
     },
