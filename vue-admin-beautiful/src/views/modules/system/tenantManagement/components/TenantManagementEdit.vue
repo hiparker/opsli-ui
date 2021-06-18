@@ -31,6 +31,7 @@
 
 <script>
   import { doInsert, doUpdate } from "@/api/system/tenant/tenantManagement";
+  import { isNull } from "@/utils/validate";
   import { validatorRule } from "@/utils/validateRlue";
 
   export default {
