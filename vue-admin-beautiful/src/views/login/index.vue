@@ -107,8 +107,6 @@
       },
     },
     data() {
-      // UUID
-      const currUUID = uuid();
 
       return {
         nodeEnv: process.env.NODE_ENV,
@@ -117,7 +115,7 @@
           username: "",
           password: "",
           captcha: "",
-          uuid: currUUID,
+          uuid: "",
         },
         rules: {
           username: [
@@ -135,7 +133,7 @@
         loading: false,
         passwordType: "password",
         redirect: undefined,
-        captchaImg: captcha(currUUID),
+        captchaImg: "",
       };
     },
     watch: {
@@ -148,6 +146,8 @@
     },
     created() {
       document.body.style.overflow = "hidden";
+      this.form.uuid = uuid();
+      this.captchaImg = captcha(this.form.uuid);
     },
     beforeDestroy() {
       document.body.style.overflow = "auto";
