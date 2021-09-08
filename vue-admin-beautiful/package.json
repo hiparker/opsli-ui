@@ -52,7 +52,7 @@
     "echarts": "^4.9.0",
     "echarts-wordcloud": "^1.1.3",
     "element-resize-detector": "^1.2.2",
-    "element-ui": "^2.13.2",
+    "element-ui": "2.13.2",
     "file-saver": "^2.0.2",
     "js-cookie": "^2.2.1",
     "jsencrypt": "3.0.0-rc.1",
