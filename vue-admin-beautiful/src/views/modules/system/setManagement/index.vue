@@ -779,10 +779,10 @@
           )
             ? this.baseData.storage_local_domain.optionValue
             : ''
-          this.storage.storage_local.form.storage_local_domain = !isNull(
-            this.baseData.storage_local_domain
+          this.storage.storage_local.form.storage_local_path_prefix = !isNull(
+            this.baseData.storage_local_path_prefix
           )
-            ? this.baseData.storage_local_domain.optionValue
+            ? this.baseData.storage_local_path_prefix.optionValue
             : ''
 
           // 又拍云存储
@@ -811,12 +811,11 @@
           )
             ? this.baseData.storage_upyun_password.optionValue
             : ''
-
-
-          setTimeout(() => {
-            this.loadingData = false;
-          }, 300);
         }
+
+        setTimeout(() => {
+          this.loadingData = false;
+        }, 300);
       },
     },
   };

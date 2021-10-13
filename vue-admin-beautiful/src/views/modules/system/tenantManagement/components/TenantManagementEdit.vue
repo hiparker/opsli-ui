@@ -31,6 +31,7 @@
 
 <script>
   import { doInsert, doUpdate } from "@/api/system/tenant/tenantManagement";
+  import { isNull } from "@/utils/validate";
   import { validatorRule } from "@/utils/validateRlue";
 
   export default {
@@ -39,7 +40,7 @@
 
       return {
         form: {
-          izUsable: '0',
+          enable: '0',
           // 设置默认值
           version: 0
         },
