@@ -1358,6 +1358,44 @@
             timestamp: "2021-06-03",
           },
 
+          {
+            content: "前端：修复头像可能存在跨域问题 无法显示",
+            timestamp: "2021-06-04",
+          },
+
+          {
+            content: "前端：修复Form表单验证无法通过bug",
+            timestamp: "2021-06-09",
+          },
+          {
+            content: "前端：修复TenantManagementEdit缺少isNull 验证",
+            timestamp: "2021-06-18",
+          },
+          {
+            content: "前端：修复退出后再次登录验证码失效问题",
+            timestamp: "2021-06-22",
+          },
+          {
+            content: "后端：修复菜单无法加载根节点问题",
+            timestamp: "2021-06-25",
+          },
+          {
+            content: "前端：修复本地存储回显问题",
+            timestamp: "2021-07-30",
+          },
+          {
+            content: "前端：修复TenantManagementEdit中“是否启用”的字段错误",
+              timestamp: "2021-09-03",
+          },
+          {
+            content: "前端：Element-ui 锁包, 打包异常",
+            timestamp: "2021-09-08",
+          },
+          {
+            content: "发布1.4.1 BUG修复版",
+            timestamp: "2021-10-13",
+          },
+
         ];
         data.map((item, index) => {
           if (index === data.length - 1) {
