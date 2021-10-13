@@ -1385,7 +1385,7 @@
           },
           {
             content: "前端：修复TenantManagementEdit中“是否启用”的字段错误",
-              timestamp: "2021-09-03",
+            timestamp: "2021-09-03",
           },
           {
             content: "前端：Element-ui 锁包, 打包异常",
