@@ -64,6 +64,14 @@ export function getRoleIdsByUserId(data) {
   });
 }
 
+export function doGetRoles(data) {
+  return request({
+    url: "/api/v1/system/user/roles/getRoles",
+    method: "get",
+    params: data,
+  });
+}
+
 export function doSetRoles(data) {
   return request({
     url: "/api/v1/system/user/roles/setRoles",

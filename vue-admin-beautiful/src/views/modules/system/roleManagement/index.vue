@@ -10,14 +10,6 @@
         > 添加 </el-button>
 
         <el-button
-          v-if="$perms('system_role_setPerms')"
-          :disabled="selectRows.length !== 1"
-          icon="el-icon-menu"
-          type="success"
-          @click="setPerms"
-        > 设置权限 </el-button>
-
-        <el-button
           v-if="$perms('system_role_delete')"
           :disabled="!selectRows.length > 0"
           icon="el-icon-delete"
@@ -97,6 +89,18 @@
 
       <el-table-column
         show-overflow-tooltip
+        prop="dataScope"
+        label="数据范围"
+      >
+        <template slot-scope="scope">
+              <span>
+                {{ $getDictNameByValue('role_data_scope', scope.row.dataScope) }}
+              </span>
+        </template>
+      </el-table-column>
+
+      <el-table-column
+        show-overflow-tooltip
         prop="remark"
         label="备注"
       ></el-table-column>
@@ -117,11 +121,26 @@
 
           <el-divider direction="vertical"></el-divider>
 
-          <el-button
-            v-if="$perms('system_role_delete')"
-            type="text"
-            @click="handleDelete(scope.row)"
-          > 删除 </el-button>
+          <el-dropdown trigger="click">
+            <span class="el-dropdown-link">
+              更多
+              <i class="el-icon-arrow-down el-icon--right"></i>
+            </span>
+            <el-dropdown-menu
+              slot="dropdown"
+            >
+              <el-dropdown-item
+                v-if="$perms('system_role_setMenuPerms')"
+                @click.native="setPerms(scope.row)"
+              >授权菜单权限</el-dropdown-item>
+
+              <el-dropdown-item
+                v-if="$perms('system_role_delete')"
+                @click.native="handleDelete(scope.row)"
+              >删除</el-dropdown-item>
+
+            </el-dropdown-menu>
+          </el-dropdown>
         </template>
 
       </el-table-column>
@@ -136,19 +155,19 @@
       @current-change="handleCurrentChange"
     ></el-pagination>
     <edit ref="edit" @fetchData="fetchData"></edit>
-    <perms ref="perms"></perms>
+    <menu-perms ref="perms"></menu-perms>
   </div>
 </template>
 
 <script>
   import { getList, doDelete, doDeleteAll } from "@/api/system/role/roleManagement";
   import Edit from "./components/RoleManagementEdit";
-  import Perms from "./components/RoleManagementPerms";
+  import MenuPerms from "./components/RoleManagementMenuPerms";
   import {isNull} from "@/utils/validate";
 
   export default {
     name: "RoleManagement",
-    components: { Edit,Perms },
+    components: { Edit, MenuPerms },
     data() {
       return {
         list: null,
@@ -170,8 +189,10 @@
     },
     methods: {
       // 设置权限
-      setPerms(){
-        let row = this.selectRows[0];
+      setPerms(row){
+        if(!row){
+          this.$baseMessage("请选择操作用户", "error");
+        }
         this.$refs["perms"].showPerms(row);
       },
       setSelectRows(val) {

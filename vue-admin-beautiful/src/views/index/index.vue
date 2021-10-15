@@ -1395,7 +1395,18 @@
             content: "发布1.4.1 BUG修复版",
             timestamp: "2021-10-13",
           },
-
+          {
+            content: "优化组织机构",
+            timestamp: "2021-10-16",
+          },
+          {
+            content: "新增数据权限",
+            timestamp: "2021-10-16",
+          },
+          {
+            content: "发布1.5.0 正式版",
+            timestamp: "2021-10-16",
+          },
         ];
         data.map((item, index) => {
           if (index === data.length - 1) {

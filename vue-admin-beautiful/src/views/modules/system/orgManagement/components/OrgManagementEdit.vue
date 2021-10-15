@@ -18,9 +18,10 @@
               autocomplete="off"
               @click.native="showParentOrg"
             ></el-input>
+
+            <!-- :disabled="formStatus && (edenOldParentId != null && edenOldParentId !== '')" -->
             <el-button type="primary" icon="el-icon-search"
-                       :disabled="formStatus &&
-                       (edenOldParentId != null && edenOldParentId !== '')"
+                      :disabled="true"
                        class="input-btn-choose" @click="showParentOrg"></el-button>
           </el-form-item>
         </el-col>
@@ -167,6 +168,9 @@
       },
       // 选择上级机构
       showParentOrg(){
+        return;
+
+        // TODO 因为逻辑问题 不允许更换上级机构
         if(this.edenOldParentId && this.formStatus){
           return;
         }

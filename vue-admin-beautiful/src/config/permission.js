@@ -18,7 +18,6 @@ import {
 import { constantRoutes } from "@/router/defaultRouter.js";
 import { isNull } from "@/utils/validate";
 
-
 VabProgress.configure({
   easing: "ease",
   speed: 500,
@@ -40,8 +39,7 @@ router.beforeResolve(async (to, from, next) => {
       if (progressBar) VabProgress.done();
     } else {
       const hasPermissions =
-        store.getters["user/permissions"] &&
-        store.getters["user/permissions"].length > 0;
+        store.getters["user/perms"] && store.getters["user/perms"].length > 0;
       if (hasPermissions) {
         next();
       } else {
@@ -54,7 +52,6 @@ router.beforeResolve(async (to, from, next) => {
           } else {
             permissions = await store.dispatch("user/getUserInfo");
           }
-
           let accessRoutes = [];
           if (authentication === "intelligence") {
             accessRoutes = await store.dispatch(

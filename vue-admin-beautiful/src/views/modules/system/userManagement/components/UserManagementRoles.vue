@@ -4,7 +4,7 @@
     :visible.sync="dialogVisible"
     :destroy-on-close="true"
     :close-on-click-modal="false"
-    width="650px"
+    width="750px"
     class="role-management-perms"
     @close="close"
   >
@@ -69,9 +69,49 @@
 
           <el-table-column
             show-overflow-tooltip
+            prop="dataScope"
+            label="数据范围"
+          >
+            <template slot-scope="scope">
+              <span>
+                {{ $getDictNameByValue('role_data_scope', scope.row.dataScope) }}
+              </span>
+            </template>
+          </el-table-column>
+
+          <el-table-column show-overflow-tooltip label="是否默认">
+            <template slot-scope="scope">
+              <span>
+                <el-tag v-if="defRoleId === scope.row.id" type="success">
+                  {{ $getDictNameByValue('no_yes', '1') }}
+                </el-tag>
+                <el-tag v-if="defRoleId !== scope.row.id" type="warning">
+                  {{ $getDictNameByValue('no_yes', '0') }}
+                </el-tag>
+              </span>
+            </template>
+          </el-table-column>
+
+          <el-table-column
+            show-overflow-tooltip
             prop="remark"
             label="备注"
           ></el-table-column>
+
+          <el-table-column
+            show-overflow-tooltip
+            fixed="right"
+            label="操作"
+            width="130"
+          >
+            <template v-slot="scope">
+              <el-button
+                type="text"
+                :disabled="defRoleId === scope.row.id || !isSelected(scope.row.id)"
+                @click="handleSetDef(scope.row.id)"
+              > 设为默认 </el-button>
+            </template>
+          </el-table-column>
         </el-table>
 
         <el-pagination
@@ -96,6 +136,7 @@
   import { getList } from "@/api/system/role/roleManagement";
   import { isNull } from "@/utils/validate";
   import { getRoleIdsByUserId, doSetRoles } from "@/api/system/user/userManagement";
+  import {doGetRoles} from "../../../../../api/system/user/userManagement";
 
   export default {
     name: "UserManagementRoles",
@@ -103,6 +144,7 @@
     data() {
       return {
         userId: "",
+        defRoleId: "",
         list: [],
         listLoading: true,
         defaultCheckedKeys: [],
@@ -133,10 +175,46 @@
         this.dialogVisible = false;
         this.userId = "";
         this.list = [];
+        this.defRoleId = "";
         this.defaultCheckedKeys = [];
         this.tmpCheckedKeys = {};
       },
+      // 设为默认
+      handleSetDef(rowId){
+        // 临时 存储选择状态
+        this.defRoleId = rowId;
+      },
+      // 检测是否选中
+      isSelected(id){
+        // 合并数据 - 当前操作数据 + 默认数据
+        let roleIds = [];
+        for (let key in this.tmpCheckedKeys) {
+          // 如果删除了默认选中参数 则执行删除操作
+          for (let i = 0; i < this.tmpCheckedKeys[key].remove.length; i++) {
+            this.removeByValue(
+              this.defaultCheckedKeys,
+              this.tmpCheckedKeys[key].remove[i].id
+            );
+          }
+
+          // 合并 save 数据
+          for (let i = 0; i < this.tmpCheckedKeys[key].save.length; i++) {
+            roleIds.push(this.tmpCheckedKeys[key].save[i].id);
+          }
+        }
+
+        // 合并默认数据
+        for (let i = 0; i < this.defaultCheckedKeys.length; i++) {
+          roleIds.push(this.defaultCheckedKeys[i]);
+        }
+        return roleIds.includes(id);
+      },
       async save() {
+        if(!this.defRoleId){
+          this.$baseMessage("请设置默认角色", "error");
+          return;
+        }
+
         // 合并数据 - 当前操作数据 + 默认数据
         let roleIds = [];
 
@@ -164,6 +242,7 @@
         const { success, msg } = await doSetRoles({
           userId: this.userId,
           roleIds: this.unique(roleIds),
+          defRoleId: this.defRoleId,
         });
 
         if (success) {
@@ -219,9 +298,15 @@
           }, 300);
         }
 
-        const roles = await getRoleIdsByUserId({ userId: this.userId });
-        if (!isNull(roles)) {
-          this.defaultCheckedKeys = roles.data;
+        const getRoles = await doGetRoles({ userId: this.userId });
+        if (!isNull(getRoles)) {
+          const {roleIds, defRoleId} = getRoles.data;
+          if (!isNull(roleIds)) {
+            this.defaultCheckedKeys = roleIds;
+          }
+          if(isNull(this.defRoleId)){
+            this.defRoleId = defRoleId;
+          }
         }
 
         // 设置当前页选中数据

@@ -36,21 +36,34 @@
         </el-col>
 
         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-          <el-form-item label="备注" prop="remark">
-            <el-input type="textarea" v-model="form.remark" autocomplete="off"></el-input>
+          <el-form-item label="数据范围" prop="dataScope">
+            <el-select v-model="form.dataScope" placeholder="请选择" style="width: 100%">
+              <el-option
+                v-for="item in dict.role_data_scope"
+                :key="item.dictValue"
+                :label="item.dictName"
+                :value="item.dictValue"
+              ></el-option>
+            </el-select>
           </el-form-item>
         </el-col>
-      </el-row>
 
-      <!-- 如果是超级管理员 可以设置租户 -->
-      <el-row v-if="userInfo != null && (userInfo.izSuperAdmin || $perms('system_user_tenant'))" >
-        <el-col :span="12">
+        <!-- 如果是超级管理员 可以设置租户 -->
+        <el-col v-if="userInfo != null && (userInfo.izSuperAdmin || $perms('system_user_tenant'))"
+                :xs="24" :sm="24" :md="24" :lg="12" :xl="12" >
           <el-form-item label="租户ID" prop="icon">
             <el-input v-model="form.tenantId" autocomplete="off" readonly ></el-input>
             <el-button type="primary" icon="el-icon-search"
                        class="input-btn-choose" @click="showTenant"></el-button>
           </el-form-item>
         </el-col>
+
+        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+          <el-form-item label="备注" prop="remark">
+            <el-input type="textarea" v-model="form.remark" autocomplete="off"></el-input>
+          </el-form-item>
+        </el-col>
+
       </el-row>
 
     </el-form>
@@ -87,6 +100,7 @@
         form: {
           tenantId:"",
           izLock: '0',
+          dataScope: '0',
           // 设置默认值
           version: 0
         },
@@ -110,7 +124,8 @@
     },
     mounted() {
       // 如果不是每次开启时查询 在created中 有可能会短暂查不到
-      this.dict.no_yes =  this.$getDictList("no_yes")
+      this.dict.no_yes =  this.$getDictList("no_yes");
+      this.dict.role_data_scope = this.$getDictList("role_data_scope");
     },
     methods: {
       // 展示租户
