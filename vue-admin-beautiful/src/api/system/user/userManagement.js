@@ -16,6 +16,14 @@ export function getList(data) {
   });
 }
 
+export function getListByTenant(data) {
+  return request({
+    url: "/api/v1/system/user/findPageByTenant",
+    method: "get",
+    params: data,
+  });
+}
+
 export function doInsert(data) {
   return request({
     url: "/api/v1/system/user/insert",

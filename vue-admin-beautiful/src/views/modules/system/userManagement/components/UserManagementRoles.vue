@@ -4,6 +4,7 @@
     :visible.sync="dialogVisible"
     :destroy-on-close="true"
     :close-on-click-modal="false"
+    append-to-body
     width="750px"
     class="role-management-perms"
     @close="close"

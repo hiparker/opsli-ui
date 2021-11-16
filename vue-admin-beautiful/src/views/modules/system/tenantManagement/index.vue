@@ -109,11 +109,27 @@
 
           <el-divider direction="vertical"></el-divider>
 
-          <el-button
-            v-if="$perms('system_tenant_delete')"
-            type="text"
-            @click="handleDelete(scope.row)"
-          > 删除 </el-button>
+          <el-dropdown trigger="click">
+                <span class="el-dropdown-link">
+                  更多
+                  <i class="el-icon-arrow-down el-icon--right"></i>
+                </span>
+            <el-dropdown-menu
+              slot="dropdown"
+            >
+              <el-dropdown-item
+                v-if="$perms('system_set_tenant_admin')"
+                @click.native="setAdmin(scope.row)"
+              >分配管理员</el-dropdown-item>
+
+              <el-dropdown-item
+                v-if="$perms('system_tenant_delete')"
+                @click.native="handleDelete(scope.row)"
+              >删除</el-dropdown-item>
+
+            </el-dropdown-menu>
+          </el-dropdown>
+
         </template>
 
       </el-table-column>
@@ -129,17 +145,20 @@
     ></el-pagination>
 
     <edit ref="edit" @fetchData="fetchData"></edit>
+    <user-manage ref="user-manage"></user-manage>
   </div>
 </template>
 
 <script>
   import { getList, doDelete, doDeleteAll, doEnableTenant } from "@/api/system/tenant/tenantManagement";
   import Edit from "./components/TenantManagementEdit";
+  import UserManage from "./components/UserManage";
+
   import {isNull} from "@/utils/validate";
 
   export default {
     name: "TenantManagement",
-    components: { Edit },
+    components: { Edit, UserManage },
     data() {
       return {
         list: null,
@@ -160,6 +179,9 @@
       this.fetchData();
     },
     methods: {
+      setAdmin(row){
+        this.$refs["user-manage"].show(row);
+      },
       setSelectRows(val) {
         this.selectRows = val;
       },
@@ -209,6 +231,7 @@
           this.$baseMessage("未选中任何行", "error");
         }
       },
+
       handleSizeChange(val) {
         this.queryForm.pageSize = val;
         this.fetchData();

@@ -3,6 +3,7 @@
     :title="title"
     :visible.sync="dialogFormVisible"
     :close-on-click-modal="false"
+    append-to-body
     width="800px"
     @close="close"
   >
@@ -70,17 +71,6 @@
           <el-form-item label="签名" prop="sign">
             <el-input type="textarea" v-model="form.sign" autocomplete="off"></el-input>
           </el-form-item>
-        </el-col>
-
-        <!-- 如果是超级管理员 可以设置租户 -->
-        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12"
-                v-if="userInfo != null && (userInfo.izSuperAdmin || $perms('system_user_tenant'))"
-          >
-            <el-form-item label="租户ID" prop="icon">
-              <el-input v-model="form.tenantId" autocomplete="off" readonly ></el-input>
-              <el-button type="primary" icon="el-icon-search"
-                         class="input-btn-choose" @click="showTenant"></el-button>
-            </el-form-item>
         </el-col>
 
         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12" >
@@ -184,7 +174,7 @@
       closeTenant(val){
         this.form.tenantId = val.id;
       },
-      showEdit(row) {
+      showEdit(row, args) {
         if (!row) {
           this.title = "添加";
         } else {
@@ -192,6 +182,16 @@
           this.formStatus = false;
           this.form = Object.assign({}, row);
         }
+
+        // 参数默认赋值
+        if(!isNull(args)){
+          for(let key in args){
+            if (args.hasOwnProperty(key)) {
+              this.form[key] = args[key];
+            }
+          }
+        }
+
         this.dialogFormVisible = true;
       },
       close() {

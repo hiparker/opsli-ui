@@ -3,6 +3,7 @@
     :title="title"
     :visible.sync="dialogFormVisible"
     :close-on-click-modal="false"
+    append-to-body
     width="500px"
     @close="close"
   >
