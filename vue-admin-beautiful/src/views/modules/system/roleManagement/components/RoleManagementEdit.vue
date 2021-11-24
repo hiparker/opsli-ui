@@ -48,16 +48,6 @@
           </el-form-item>
         </el-col>
 
-        <!-- 如果是超级管理员 可以设置租户 -->
-        <el-col v-if="userInfo != null && (userInfo.izSuperAdmin || $perms('system_user_tenant'))"
-                :xs="24" :sm="24" :md="24" :lg="12" :xl="12" >
-          <el-form-item label="租户ID" prop="icon">
-            <el-input v-model="form.tenantId" autocomplete="off" readonly ></el-input>
-            <el-button type="primary" icon="el-icon-search"
-                       class="input-btn-choose" @click="showTenant"></el-button>
-          </el-form-item>
-        </el-col>
-
         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
           <el-form-item label="备注" prop="remark">
             <el-input type="textarea" v-model="form.remark" autocomplete="off"></el-input>

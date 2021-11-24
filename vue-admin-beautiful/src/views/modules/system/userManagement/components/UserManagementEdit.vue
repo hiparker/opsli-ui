@@ -3,6 +3,7 @@
     :title="title"
     :visible.sync="dialogFormVisible"
     :close-on-click-modal="false"
+    append-to-body
     width="800px"
     @close="close"
   >
@@ -217,7 +218,7 @@
       closeTenant(val){
         this.form.tenantId = val.id;
       },
-      showEdit(row) {
+      showEdit(row, args) {
         if (!row) {
           this.title = "添加";
         } else {
@@ -225,6 +226,16 @@
           this.formStatus = false;
           this.form = Object.assign({}, row);
         }
+
+        // 参数默认赋值
+        if(!isNull(args)){
+          for(let key in args){
+            if (args.hasOwnProperty(key)) {
+              this.form[key] = args[key];
+            }
+          }
+        }
+
         this.dialogFormVisible = true;
       },
       close() {
