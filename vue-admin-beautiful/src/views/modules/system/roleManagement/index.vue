@@ -1,5 +1,18 @@
 <template>
   <div class="roleManagement-container">
+    <el-tabs
+      v-if="this.userInfo.tenantId === '0'"
+      v-model="activeName"
+      @tab-click="tagClick"
+    >
+      <el-tab-pane
+        v-for="item in $getDictList('menu_role_label')"
+        :key="item.dictValue"
+        :label="item.dictName"
+        :name="item.dictValue"
+      ></el-tab-pane>
+    </el-tabs>
+
     <vab-query-form>
       <vab-query-form-left-panel :span="12">
         <el-button
@@ -161,6 +174,8 @@
 
 <script>
   import { getList, doDelete, doDeleteAll } from "@/api/system/role/roleManagement";
+  import { getAccessToken } from "@/utils/accessToken"
+  import { getUserInfo } from "@/api/user"
   import Edit from "./components/RoleManagementEdit";
   import MenuPerms from "./components/RoleManagementMenuPerms";
   import {isNull} from "@/utils/validate";
@@ -170,6 +185,10 @@
     components: { Edit, MenuPerms },
     data() {
       return {
+        activeName: "1",
+        userInfo: {
+          tenantId: null
+        },
         list: null,
         listLoading: true,
         layout: "total, sizes, prev, pager, next, jumper",
@@ -181,29 +200,38 @@
           pageSize: 10,
           roleCode_EQ: "",
           roleName_LIKE: "",
+          label_EQ: "",
         },
       };
     },
     created() {
+      this.queryForm.label_EQ = this.activeName;
+      this.getCurrUser();
       this.fetchData();
     },
     methods: {
+      // Tag 点击
+      tagClick(tab, event){
+        this.queryForm.label_EQ = this.activeName;
+        this.fetchData();
+      },
+
       // 设置权限
       setPerms(row){
         if(!row){
           this.$baseMessage("请选择操作用户", "error");
         }
-        this.$refs["perms"].showPerms(row);
+        this.$refs["perms"].showPerms(row, this.activeName);
       },
       setSelectRows(val) {
         this.selectRows = val;
       },
       handleInsert() {
-        this.$refs["edit"].showEdit();
+        this.$refs["edit"].showEdit(null, this.activeName);
       },
       handleUpdate(row) {
         if (row.id) {
-          this.$refs["edit"].showEdit(row);
+          this.$refs["edit"].showEdit(row, this.activeName);
         }
       },
       handleDelete(row) {
@@ -250,6 +278,18 @@
         setTimeout(() => {
           this.listLoading = false;
         }, 300);
+      },
+      // 获取当前登录用户数据
+      async getCurrUser() {
+        this.listLoading = true;
+        let accessToken = getAccessToken();
+        const { data } = await getUserInfo(accessToken);
+        if (!isNull(data)) {
+          this.userInfo = Object.assign({}, data);
+          setTimeout(() => {
+            this.listLoading = false;
+          }, 300)
+        }
       },
     },
   };

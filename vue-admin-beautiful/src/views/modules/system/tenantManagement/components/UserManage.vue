@@ -248,6 +248,7 @@
     },
     data() {
       return {
+        activeName: "1",
         title: "",
         tenantId: "",
         userManageVisible: false,
@@ -287,6 +288,7 @@
       },
       close(){
         this.list = null;
+        this.activeName = "";
         this.title = "";
         this.tenantId = "";
         this.queryForm.tenantId_EQ = "";
@@ -297,7 +299,7 @@
         if(!row){
           this.$baseMessage("请选择操作用户", "error");
         }
-        this.$refs["roles"].showRole(row);
+        this.$refs["roles"].showRole(row, this.activeName);
       },
       // 修改密码
       updatePassword(row) {

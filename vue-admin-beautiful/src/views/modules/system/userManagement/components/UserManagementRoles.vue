@@ -157,6 +157,7 @@
         queryForm: {
           pageNo: 1,
           pageSize: 10,
+          label_EQ: '',
           roleCode_EQ: "",
           roleName_LIKE: "",
         },
@@ -166,8 +167,12 @@
     },
     created() {},
     methods: {
-      showRole(row) {
+      showRole(row, activeName) {
         this.userId = row.id;
+
+        // 初始化 查询标签
+        this.queryForm.label_EQ = activeName;
+
         // 加载数据
         this.fetchData();
         this.dialogVisible = true;
@@ -176,6 +181,7 @@
         this.dialogVisible = false;
         this.userId = "";
         this.list = [];
+        this.queryForm.label_EQ = ''
         this.defRoleId = "";
         this.defaultCheckedKeys = [];
         this.tmpCheckedKeys = {};

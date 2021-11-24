@@ -254,6 +254,8 @@
   import { getList, doDelete, doDeleteAll, doResetPasswordById,
     doEnableAccount, doSetOrg, getOrgByUserId } from "@/api/system/user/userManagement";
   import { getTreeByDefWithUserToLike } from "@/api/system/org/orgManagement";
+  import { getAccessToken } from '@/utils/accessToken'
+  import { getUserInfo } from '@/api/user'
   import Edit from "./components/UserManagementEdit";
   import Roles from "./components/UserManagementRoles";
   import UpdatePassword from "./components/UserManagementPassword";
@@ -267,6 +269,10 @@
     },
     data() {
       return {
+        activeName: "1",
+        userInfo: {
+          tenantId: null
+        },
         isGen: false,
         list: null,
         listLoading: true,
@@ -296,6 +302,7 @@
       };
     },
     created() {
+      this.getCurrUser();
       this.fetchOrgData();
       this.fetchData();
     },
@@ -348,7 +355,12 @@
         if(!row){
           this.$baseMessage("请选择操作用户", "error");
         }
-        this.$refs["roles"].showRole(row);
+
+        // 默认 activeName 为功能菜单， 如果是系统级用户 则 为系统菜单
+        if('0' === this.userInfo.tenantId){
+          this.activeName = '0';
+        }
+        this.$refs['roles'].showRole(row, this.activeName)
       },
       // 修改密码
       updatePassword(row) {
@@ -491,6 +503,19 @@
         return data.orgName.indexOf(value) !== -1;
       },
 
+
+      // 获取当前登录用户数据
+      async getCurrUser() {
+        this.listLoading = true;
+        let accessToken = getAccessToken();
+        const { data } = await getUserInfo(accessToken);
+        if (!isNull(data)) {
+          this.userInfo = Object.assign({}, data);
+          setTimeout(() => {
+            this.listLoading = false;
+          }, 300)
+        }
+      },
     },
   };
 </script>

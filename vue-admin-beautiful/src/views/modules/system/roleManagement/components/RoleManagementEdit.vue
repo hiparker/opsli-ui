@@ -26,7 +26,7 @@
           <el-form-item label="是否内置" prop="izLock">
             <el-select v-model="form.izLock" placeholder="请选择" style="width: 100%">
               <el-option
-                v-for="item in dict.no_yes"
+                v-for="item in $getDictList('no_yes')"
                 :key="item.dictValue"
                 :label="item.dictName"
                 :value="item.dictValue"
@@ -39,7 +39,7 @@
           <el-form-item label="数据范围" prop="dataScope">
             <el-select v-model="form.dataScope" placeholder="请选择" style="width: 100%">
               <el-option
-                v-for="item in dict.role_data_scope"
+                v-for="item in $getDictList('role_data_scope')"
                 :key="item.dictValue"
                 :label="item.dictName"
                 :value="item.dictValue"
@@ -62,11 +62,6 @@
       <el-button type="primary" @click="save">确 定</el-button>
     </div>
 
-    <tenant
-      v-on:tenant="closeTenant"
-      ref="tenant"
-    ></tenant>
-
   </el-dialog>
 </template>
 
@@ -77,17 +72,17 @@
 
   import { getAccessToken } from "@/utils/accessToken";
   import { getUserInfo } from "@/api/user";
-  import Tenant from "@/components/opsli/tenant/tenant";
 
   export default {
     name: "RoleManagementEdit",
-    components: { Tenant },
+    components: { },
     data() {
 
       return {
         formStatus: true,
         userInfo: null,
         form: {
+          label: "",
           tenantId:"",
           izLock: '0',
           dataScope: '0',
@@ -112,21 +107,8 @@
     created() {
       this.getUser();
     },
-    mounted() {
-      // 如果不是每次开启时查询 在created中 有可能会短暂查不到
-      this.dict.no_yes =  this.$getDictList("no_yes");
-      this.dict.role_data_scope = this.$getDictList("role_data_scope");
-    },
     methods: {
-      // 展示租户
-      showTenant(){
-        this.$refs["tenant"].show();
-      },
-      // 租户关闭
-      closeTenant(val){
-        this.form.tenantId = val.id;
-      },
-      showEdit(row) {
+      showEdit(row, activeName) {
         if (!row) {
           this.title = "添加";
         } else {
@@ -134,6 +116,7 @@
           this.formStatus = false;
           this.form = Object.assign({}, row);
         }
+        this.form.label = activeName;
         this.dialogFormVisible = true;
       },
       close() {

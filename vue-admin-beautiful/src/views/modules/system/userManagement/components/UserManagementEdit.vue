@@ -73,18 +73,7 @@
           </el-form-item>
         </el-col>
 
-        <!-- 如果是超级管理员 可以设置租户 -->
-        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12"
-                v-if="userInfo != null && (userInfo.izSuperAdmin || $perms('system_user_tenant'))"
-          >
-            <el-form-item label="租户ID" prop="icon">
-              <el-input v-model="form.tenantId" autocomplete="off" readonly ></el-input>
-              <el-button type="primary" icon="el-icon-search"
-                         class="input-btn-choose" @click="showTenant"></el-button>
-            </el-form-item>
-        </el-col>
-
-        <!-- 如果是超级管理员 可以设置租户 -->
+        <!-- 如果是超级管理员 可以设置系统用户切换租户 -->
         <el-col
           v-if="
             userInfo != null &&
@@ -97,11 +86,11 @@
           :xl="12"
         >
           <el-form-item
-            label="切换运营商"
+            label="切换租户"
             prop="enableChangeOperator"
           >
             <el-select
-              v-model="form.enableChangeOperator"
+              v-model="form.enableSwitchTenant"
               :popper-append-to-body="false"
               placeholder="请选择"
               style="width: 100%"
@@ -130,11 +119,6 @@
       <el-button type="primary" @click="save">确 定</el-button>
     </div>
 
-    <tenant
-      v-on:tenant="closeTenant"
-      ref="tenant"
-    ></tenant>
-
   </el-dialog>
 </template>
 
@@ -142,13 +126,12 @@
   import { doInsert, doUpdate } from "@/api/system/user/userManagement";
   import { getAccessToken } from "@/utils/accessToken";
   import { getUserInfo } from "@/api/user";
-  import Tenant from "@/components/opsli/tenant/tenant";
   import { isNull } from "@/utils/validate";
   import { validatorRule } from "@/utils/validateRlue";
 
   export default {
     name: "UserManagementEdit",
-    components: { Tenant },
+    components: { },
     data() {
 
       const validateVerifyPassword = (rule, value, callback) => {
@@ -164,7 +147,7 @@
         dict: {},
         formStatus: true,
         form: {
-          enableChangeOperator: '',
+          enableSwitchTenant: '',
           tenantId:"",
           locked: '0',
           // 设置默认值
@@ -205,15 +188,7 @@
     created() {
       this.getUser();
     },
-    mounted() {
-      // 如果不是每次开启时查询 在created中 有可能会短暂查不到
-      this.dict.no_yes =  this.$getDictList("no_yes")
-    },
     methods: {
-      // 展示租户
-      showTenant(){
-        this.$refs["tenant"].show();
-      },
       // 租户关闭
       closeTenant(val){
         this.form.tenantId = val.id;

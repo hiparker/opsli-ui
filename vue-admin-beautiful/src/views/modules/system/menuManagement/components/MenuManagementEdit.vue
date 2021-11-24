@@ -37,11 +37,11 @@
                        @change="menuTypeChange"
                        style="width: 100%" >
               <el-option
-                v-for="item in dict.menu_type"
+                v-for="item in $getDictList('menu_type')"
                 :key="item.dictValue"
                 :label="item.dictName"
                 :value="item.dictValue"
-              ></el-option>
+              />
             </el-select>
           </el-form-item>
         </el-col>
@@ -75,7 +75,7 @@
               :disabled="!(form.type === '1' || form.type === '3')"
               placeholder="请选择" style="width: 100%">
               <el-option
-                v-for="item in dict.no_yes"
+                v-for="item in $getDictList('no_yes')"
                 :key="item.dictValue"
                 :label="item.dictName"
                 :value="item.dictValue"
@@ -91,7 +91,7 @@
               :disabled="!(form.type === '1')"
               placeholder="请选择" style="width: 100%">
               <el-option
-                v-for="item in dict.no_yes"
+                v-for="item in $getDictList('no_yes')"
                 :key="item.dictValue"
                 :label="item.dictName"
                 :value="item.dictValue"
@@ -154,6 +154,35 @@
                        class="input-btn-choose" @click="showIcon"></el-button>
           </el-form-item>
         </el-col>
+
+        <el-col
+          :xs="24"
+          :sm="24"
+          :md="24"
+          :lg="12"
+          :xl="12"
+        >
+          <el-form-item
+            label="标签"
+            prop="label"
+          >
+            <el-select
+              v-model="form.label"
+              :popper-append-to-body="false"
+              multiple
+              placeholder="请选择"
+              style="width: 100%"
+            >
+              <el-option
+                v-for="item in $getDictList('menu_role_label')"
+                :key="item.dictValue"
+                :label="item.dictName"
+                :value="item.dictValue"
+              />
+            </el-select>
+          </el-form-item>
+        </el-col>
+
       </el-row>
 
     </el-form>
@@ -212,6 +241,7 @@
           hidden: "0",
           alwaysShow: "0",
           parentId: "0",
+          label: '',
           sortNo: 1,
           version: 0,
         },
@@ -228,17 +258,13 @@
           type: [{ required: true, trigger: "blur", message: "请选择是否类型" }],
           hidden: [{ required: true, trigger: "blur", message: "请选择是否隐藏" }],
           alwaysShow: [{ required: true, trigger: "blur", message: "请选择是否总是显示" }],
+          label: [{ required: true, trigger: 'blur', message: '请选择标签' }],
         },
         title: "",
         dialogFormVisible: false,
       };
     },
     created() {
-    },
-    mounted() {
-      // 如果不是每次开启时查询 在created中 有可能会短暂查不到
-      this.dict.no_yes =  this.$getDictList("no_yes")
-      this.dict.menu_type =  this.$getDictList("menu_type")
     },
     methods: {
       menuChoose(node){
@@ -273,6 +299,10 @@
           this.title = "编辑";
           this.formStatus = false;
           this.form = Object.assign({}, row);
+          // 处理标签
+          if(!isNull(this.form.label)){
+            this.form.label = this.form.label.split(",");
+          }
         }
 
         this.oldParentId = this.form.parentId;
@@ -295,6 +325,11 @@
           if (valid) {
             // 字段数据
             let tmpForm = deepClone(this.form);
+
+            // 处理 标签
+            if(!isNull(tmpForm.label)){
+              tmpForm.label = tmpForm.label.join(",");
+            }
 
             // 修改
             if (!isNull(tmpForm.id)) {

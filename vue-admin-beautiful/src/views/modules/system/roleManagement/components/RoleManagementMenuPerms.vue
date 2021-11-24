@@ -54,6 +54,7 @@
     name: "RoleManagementMenuPerms",
     data() {
       return {
+        activeName: "",
         roleId: "",
         permsData: [],
         filterText: "",
@@ -88,15 +89,17 @@
           }
         });
       },
-      showPerms(row) {
+      showPerms(row, activeName) {
         this.dialogVisible = true;
         this.roleId = row.id;
+        this.activeName = activeName;
         // 加载数据
         this.fetchData();
       },
       close() {
         this.dialogVisible = false;
         this.roleId = "";
+        this.activeName = "";
         this.permsData = [];
         this.defaultCheckedKeys = [];
       },
@@ -123,8 +126,12 @@
           that.loading();
           that.listLoading = true;
 
-          const { data } = await getMenuAndPermsTree();
-          const checkedData = await doGetPerms({roleId: this.roleId})
+          const { data } = await getMenuAndPermsTree({
+            label: this.activeName
+          });
+          const checkedData = await doGetPerms({
+            roleId: this.roleId
+          });
           that.permsData = data;
 
           // 设置选中数据 原理 选中叶子节点 自动勾选父节点
