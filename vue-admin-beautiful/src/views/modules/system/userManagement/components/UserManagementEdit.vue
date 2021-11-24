@@ -83,6 +83,38 @@
             </el-form-item>
         </el-col>
 
+        <!-- 如果是超级管理员 可以设置租户 -->
+        <el-col
+          v-if="
+            userInfo != null &&
+              (userInfo.izSuperAdmin || $perms('system_user_tenant'))
+          "
+          :xs="24"
+          :sm="24"
+          :md="24"
+          :lg="12"
+          :xl="12"
+        >
+          <el-form-item
+            label="切换运营商"
+            prop="enableChangeOperator"
+          >
+            <el-select
+              v-model="form.enableChangeOperator"
+              :popper-append-to-body="false"
+              placeholder="请选择"
+              style="width: 100%"
+            >
+              <el-option
+                v-for="item in $getDictList('no_yes')"
+                :key="item.dictValue"
+                :label="item.dictName"
+                :value="item.dictValue"
+              />
+            </el-select>
+          </el-form-item>
+        </el-col>
+
         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12" >
           <el-form-item label="备注" prop="remark">
             <el-input type="textarea" v-model="form.remark" autocomplete="off"></el-input>
@@ -131,6 +163,7 @@
         dict: {},
         formStatus: true,
         form: {
+          enableChangeOperator: '',
           tenantId:"",
           locked: '0',
           // 设置默认值
