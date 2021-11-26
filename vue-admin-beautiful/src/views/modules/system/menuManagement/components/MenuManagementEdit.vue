@@ -233,6 +233,7 @@
         parentMenu: {},
         genParentId: "",
         edenOldParentId: "",
+        edenOldLabel: "",
         oldParentId: "",
         form: {
           icon:"",
@@ -301,6 +302,7 @@
           this.form = Object.assign({}, row);
           // 处理标签
           if(!isNull(this.form.label)){
+            this.edenOldLabel = this.form.label;
             this.form.label = this.form.label.split(",");
           }
         }
@@ -317,6 +319,7 @@
         this.$refs["form"].resetFields();
         this.form = this.$options.data().form;
         this.edenOldParentId = "";
+        this.edenOldLabel = "";
         this.oldParentId = "";
         this.genParentId = "";
       },
@@ -344,15 +347,21 @@
               }
             }
 
-            // 刷新标签
-            if(!isNull(this.oldParentId)){
-              this.$emit("refreshNodeBy", this.oldParentId);
+            // 如果 更换上级菜单 或者 变更标签 则刷新全部 菜单数据
+            if(this.oldParentId !== tmpForm.parentId ||
+                this.edenOldLabel !== tmpForm.label){
+              // 全部刷新
+              this.$emit("refreshNodeBy", this.form.parentId, true);
+            }else {
+              // 刷新标签
+              if(!isNull(this.oldParentId)){
+                this.$emit("refreshNodeBy", this.oldParentId);
+              }
+              if(!isNull(this.parentMenu.parentId)){
+                this.$emit("refreshNodeBy", this.parentMenu.parentId);
+              }
+              this.$emit("refreshNodeBy", this.form.parentId);
             }
-            if(!isNull(this.parentMenu.parentId)){
-              this.$emit("refreshNodeBy", this.parentMenu.parentId);
-            }
-            this.$emit("refreshNodeBy", this.form.parentId);
-
             this.close();
           } else {
             return false;

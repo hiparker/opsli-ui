@@ -19,6 +19,7 @@
 
         <el-table
           ref="tableTreeData"
+          v-if="isShow"
           v-loading="listLoading"
           :data="data"
           :element-loading-text="elementLoadingText"
@@ -65,10 +66,7 @@
           <el-table-column show-overflow-tooltip label="是否隐藏">
             <template slot-scope="scope">
               <span>
-                <el-tag v-if="scope.row.hidden === '0' " type="success">
-                  {{ $getDictNameByValue('no_yes', scope.row.hidden) }}
-                </el-tag>
-                <el-tag v-if="scope.row.hidden === '1' " type="warning">
+                <el-tag :type="scope.row.hidden === '0'?'success':'warning'">
                   {{ $getDictNameByValue('no_yes', scope.row.hidden) }}
                 </el-tag>
               </span>
@@ -100,6 +98,23 @@
             prop="redirect"
             label="重定向"
           ></el-table-column>
+
+          <el-table-column show-overflow-tooltip label="标签" width="180">
+            <template slot-scope="scope">
+              <span>
+                <el-tag
+                  v-for="label in (scope.row.label!==null&&scope.row.label!==undefined
+                               ?scope.row.label
+                               :'').split(',')
+                  "
+                  :key="label"
+                  :type="label==='0'?'info':'warning'"
+                  >
+                  {{ $getDictNameByValue('menu_role_label', label) }}
+                </el-tag>
+              </span>
+            </template>
+          </el-table-column>
 
           <el-table-column show-overflow-tooltip label="图标">
             <template slot-scope="scope">
@@ -169,6 +184,7 @@
     components: { Edit },
     data() {
       return {
+        isShow: true,
         dict: {
           menu_type: this.$getDictList("menu_type"),
           no_yes: this.$getDictList("no_yes"),
@@ -244,15 +260,29 @@
       },
 
       //  刷新数据
-      refreshNodeBy(id){
-        if(isNull(this.tmpTreeData[id])){
+      refreshNodeBy(id, isReLoad){
+        if(!isNull(isReLoad)){
+          if(isReLoad === true){
+            this.isShow = false;
+            this.data = [];
+            this.tmpTreeData = {};
+            setTimeout(() => {
+              this.isShow = true;
+              this.fetchData();
+            }, 20);
+            return;
+          }
+        }
+
+        const cache = this.tmpTreeData[id];
+        if(isNull(cache)){
           this.fetchData();
         }else{
           // 通过节点id找到对应树节点对象
-          let tree = this.tmpTreeData[id].tree;
-          let treeNode = this.tmpTreeData[id].treeNode;
-          let resolve = this.tmpTreeData[id].resolve;
-          this.loadNode(tree, treeNode, resolve)
+          let tree = cache.tree;
+          let treeNode = cache.treeNode;
+          let resolve = cache.resolve;
+          this.loadNode(tree, treeNode, resolve);
         }
       },
 

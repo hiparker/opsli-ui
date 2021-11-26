@@ -62,21 +62,6 @@
           </el-form-item>
         </el-col>
 
-        <!-- 如果是最顶级类型 切是超级管理员的话 可以设置当前机构对应租户 -->
-        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12"
-          v-if="
-          ((form.id != null && form.id !== '' && form.orgType === '1') ||
-          parentOrg.id === '0') &&
-          userInfo != null && userInfo.izSuperAdmin
-          "
-        >
-          <el-form-item label="租户ID" prop="icon">
-            <el-input v-model="form.tenantId" autocomplete="off" readonly ></el-input>
-            <el-button type="primary" icon="el-icon-search"
-                       class="input-btn-choose" @click="showTenant"></el-button>
-          </el-form-item>
-        </el-col>
-
       </el-row>
 
     </el-form>
@@ -103,20 +88,16 @@
   import { deepClone } from "@/utils/clone";
   import { isNull } from "@/utils/validate";
   import { validatorRule } from "@/utils/validateRlue";
-  import { getAccessToken } from "@/utils/accessToken";
-  import { getUserInfo } from "@/api/user";
 
   import OrgSingleChoose from "@/components/opsli/org/OrgSingleChoose";
-  import Tenant from "@/components/opsli/tenant/tenant";
 
   export default {
     name: "OrgManagementEdit",
-    components: {Tenant, OrgSingleChoose },
+    components: {OrgSingleChoose },
     data() {
 
       return {
         codeTip: false,
-        userInfo: null,
         formStatus: true,
         genParentId: "",
         edenOldParentId: "",
@@ -146,11 +127,6 @@
       };
     },
     created() {
-      this.getUser();
-    },
-    mounted() {
-      // 如果不是每次开启时查询 在created中 有可能会短暂查不到
-      this.dict.no_yes =  this.$getDictList("no_yes")
     },
     methods: {
       // 展示租户
@@ -268,14 +244,6 @@
         setTimeout(() => {
           this.formLoading = false;
         }, 300);
-      },
-      // 获取当前登录用户数据
-      async getUser() {
-        let accessToken = getAccessToken();
-        const { data } = await getUserInfo(accessToken);
-        if(!isNull(data)){
-          this.userInfo = Object.assign({}, data);
-        }
       },
     },
   };
