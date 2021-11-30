@@ -2,7 +2,7 @@ import request from "@/utils/request";
 
 export function getRouterList(data) {
   return request({
-    url: "/api/v1/system/menu/findMenuTree",
+    url: "/api/system/menu/v1/findMenuTree",
     method: "post",
     data,
   });

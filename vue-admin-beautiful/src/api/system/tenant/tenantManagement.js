@@ -2,7 +2,7 @@ import request from "@/utils/request";
 
 export function getList(data) {
   return request({
-    url: "/api/v1/system/tenant/findPage",
+    url: "/api/system/tenant/v1/findPage",
     method: "get",
     params: data,
   });
@@ -10,7 +10,7 @@ export function getList(data) {
 
 export function doInsert(data) {
   return request({
-    url: "/api/v1/system/tenant/insert",
+    url: "/api/system/tenant/v1/insert",
     method: "post",
     data,
   });
@@ -18,7 +18,7 @@ export function doInsert(data) {
 
 export function doUpdate(data) {
   return request({
-    url: "/api/v1/system/tenant/update",
+    url: "/api/system/tenant/v1/update",
     method: "post",
     data,
   });
@@ -26,7 +26,7 @@ export function doUpdate(data) {
 
 export function doDelete(data) {
   return request({
-    url: "/api/v1/system/tenant/del",
+    url: "/api/system/tenant/v1/del",
     method: "post",
     params: data,
   });
@@ -34,7 +34,7 @@ export function doDelete(data) {
 
 export function doDeleteAll(data) {
   return request({
-    url: "/api/v1/system/tenant/delAll",
+    url: "/api/system/tenant/v1/delAll",
     method: "post",
     params: data,
   });
@@ -42,7 +42,7 @@ export function doDeleteAll(data) {
 
 export function doEnableTenant(data) {
   return request({
-    url: "/api/v1/system/tenant/enableTenant",
+    url: "/api/system/tenant/v1/enableTenant",
     method: "post",
     params: data,
   });

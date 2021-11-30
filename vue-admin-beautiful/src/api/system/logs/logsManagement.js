@@ -2,7 +2,7 @@ import request from "@/utils/request";
 
 export function getList(data) {
   return request({
-    url: "/api/v1/system/logs/findPage",
+    url: "/api/system/logs/v1/findPage",
     method: "get",
     params: data,
   });
@@ -10,7 +10,7 @@ export function getList(data) {
 
 export function doDelete(data) {
   return request({
-    url: "/api/v1/system/logs/emptyByOneMonth",
+    url: "/api/system/logs/v1/emptyByOneMonth",
     method: "post",
   });
 }

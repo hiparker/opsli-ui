@@ -3,7 +3,7 @@ import { downloadFileByData } from "@/utils/download";
 
 export function getList(data) {
   return request({
-    url: "/api/v1/test/findPage",
+    url: "/api/test/v1/findPage",
     method: "get",
     params: data,
   });
@@ -11,7 +11,7 @@ export function getList(data) {
 
 export function doInsert(data) {
   return request({
-    url: "/api/v1/test/insert",
+    url: "/api/test/v1/insert",
     method: "post",
     data,
   });
@@ -19,7 +19,7 @@ export function doInsert(data) {
 
 export function doUpdate(data) {
   return request({
-    url: "/api/v1/test/update",
+    url: "/api/test/v1/update",
     method: "post",
     data,
   });
@@ -27,7 +27,7 @@ export function doUpdate(data) {
 
 export function doDelete(data) {
   return request({
-    url: "/api/v1/test/del",
+    url: "/api/test/v1/del",
     method: "post",
     params: data,
   });
@@ -35,7 +35,7 @@ export function doDelete(data) {
 
 export function doDeleteAll(data) {
   return request({
-    url: "/api/v1/test/delAll",
+    url: "/api/test/v1/delAll",
     method: "post",
     params: data,
   });
@@ -47,7 +47,7 @@ export function doDeleteAll(data) {
  */
 export function doDownloadTemplate() {
   let data = {};
-  let requestURL = "/api/v1/test/importExcel/template";
+  let requestURL = "/api/test/v1/importExcel/template";
   // 下载文件
   downloadFileByData(requestURL, data);
 }
@@ -58,7 +58,7 @@ export function doDownloadTemplate() {
  * @returns file
  */
 export function doExportExcel(data) {
-  let requestURL = "/api/v1/test/exportExcel";
+  let requestURL = "/api/test/v1/exportExcel";
   // 下载文件
   downloadFileByData(requestURL, data);
 }
@@ -69,7 +69,7 @@ export function doExportExcel(data) {
  */
 export function doImportExcel(data) {
   return request({
-    url: "/api/v1/test/importExcel",
+    url: "/api/test/v1/importExcel",
     method: "post",
     // 最长超时时间 50秒
     timeout: 50000,

@@ -9,28 +9,28 @@ import request from "@/utils/request";
 
 export function getSystemInfo(data) {
   return request({
-    url: "/api/v1/system/monitor/getSystemInfo",
+    url: "/api/system/monitor/v1/getSystemInfo",
     method: "get",
     params: data,
   });
 }
 export function getCpuInfo(data) {
   return request({
-    url: "/api/v1/system/monitor/getCpuInfo",
+    url: "/api/system/monitor/v1/getCpuInfo",
     method: "get",
     params: data,
   });
 }
 export function getMemInfo(data) {
   return request({
-    url: "/api/v1/system/monitor/getMemInfo",
+    url: "/api/system/monitor/v1/getMemInfo",
     method: "get",
     params: data,
   });
 }
 export function getJVMInfo(data) {
   return request({
-    url: "/api/v1/system/monitor/getJVMInfo",
+    url: "/api/system/monitor/v1/getJVMInfo",
     method: "get",
     params: data,
   });

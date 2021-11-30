@@ -2,7 +2,7 @@ import request from "@/utils/request";
 
 export function getTree(data) {
   return request({
-    url: "/api/v1/system/area/findTree",
+    url: "/api/system/area/v1/findTree",
     method: "get",
     params: data,
   });
@@ -10,7 +10,7 @@ export function getTree(data) {
 
 export function doInsert(data) {
   return request({
-    url: "/api/v1/system/area/insert",
+    url: "/api/system/area/v1/insert",
     method: "post",
     data,
   });
@@ -18,7 +18,7 @@ export function doInsert(data) {
 
 export function doUpdate(data) {
   return request({
-    url: "/api/v1/system/area/update",
+    url: "/api/system/area/v1/update",
     method: "post",
     data,
   });
@@ -26,7 +26,7 @@ export function doUpdate(data) {
 
 export function doDelete(data) {
   return request({
-    url: "/api/v1/system/area/del",
+    url: "/api/system/area/v1/del",
     method: "post",
     params: data,
   });

@@ -29,7 +29,7 @@ export function getSlipCount(data) {
 
 export function getUserInfo(accessToken) {
   return request({
-    url: "/api/v1/system/user/getInfo",
+    url: "/api/system/user/v1/getInfo",
     method: "get",
     headers: {
       [tokenName]: accessToken,
@@ -39,7 +39,7 @@ export function getUserInfo(accessToken) {
 
 export function getUserOrg(accessToken) {
   return request({
-    url: "/api/v1/system/user/getOrg",
+    url: "/api/system/user/v1/getOrg",
     method: "get",
     headers: {
       [tokenName]: accessToken,
