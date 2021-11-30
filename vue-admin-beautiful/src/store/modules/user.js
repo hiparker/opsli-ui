@@ -94,6 +94,23 @@ const actions = {
       return false;
     }
   },
+  // 刷新用户权限
+  async refreshUserPerms({ commit, state }) {
+    const { data } = await getUserInfo(state.accessToken);
+    if (!data) {
+      Vue.prototype.$baseMessage("验证失败，请重新登录...", "error");
+      return false;
+    }
+    let { roles, perms } = data;
+    if (roles && Array.isArray(roles)) {
+      commit("setPermissions", roles);
+      commit("setPerms", perms);
+      return true;
+    } else {
+      Vue.prototype.$baseMessage("用户信息接口异常", "error");
+      return false;
+    }
+  },
   async logout({ dispatch }) {
     await logout(state.accessToken);
     await dispatch("resetAccessToken");

@@ -1,7 +1,8 @@
 <template>
   <div class="roleManagement-container">
     <el-tabs
-      v-if="this.userInfo.tenantId === '0'"
+      v-if="null != userInfo && null === this.userInfo.switchTenantId &&
+            this.userInfo.tenantId === '0'"
       v-model="activeName"
       @tab-click="tagClick"
     >
@@ -80,25 +81,6 @@
         prop="roleName"
         label="角色名称"
       ></el-table-column>
-
-      <el-table-column
-        show-overflow-tooltip
-        prop="izLock"
-        label="是否内置"
-      >
-
-        <template slot-scope="scope">
-          <span>
-            <el-tag v-if="scope.row.izLock === '0' " type="success">
-              {{ $getDictNameByValue('no_yes', scope.row.izLock) }}
-            </el-tag>
-            <el-tag v-if="scope.row.izLock === '1' " type="info">
-              {{ $getDictNameByValue('no_yes', scope.row.izLock) }}
-            </el-tag>
-          </span>
-        </template>
-
-      </el-table-column>
 
       <el-table-column
         show-overflow-tooltip
@@ -186,9 +168,7 @@
     data() {
       return {
         activeName: "1",
-        userInfo: {
-          tenantId: null
-        },
+        userInfo: {},
         list: null,
         listLoading: true,
         layout: "total, sizes, prev, pager, next, jumper",
@@ -207,6 +187,7 @@
     created() {
       this.queryForm.label_EQ = this.activeName;
       this.getCurrUser();
+
       this.fetchData();
     },
     methods: {
@@ -286,6 +267,8 @@
         const { data } = await getUserInfo(accessToken);
         if (!isNull(data)) {
           this.userInfo = Object.assign({}, data);
+
+          console.log(this.userInfo, "角色")
           setTimeout(() => {
             this.listLoading = false;
           }, 300)

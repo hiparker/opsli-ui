@@ -255,6 +255,8 @@
         if (success) {
           this.$baseMessage(msg, "success");
         }
+
+        await this.$emit("fetchData");
         this.close();
       },
       // row 操作

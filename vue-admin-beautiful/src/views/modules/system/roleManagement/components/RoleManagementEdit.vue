@@ -23,19 +23,6 @@
         </el-col>
 
         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-          <el-form-item label="是否内置" prop="izLock">
-            <el-select v-model="form.izLock" placeholder="请选择" style="width: 100%">
-              <el-option
-                v-for="item in $getDictList('no_yes')"
-                :key="item.dictValue"
-                :label="item.dictName"
-                :value="item.dictValue"
-              ></el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-
-        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
           <el-form-item label="数据范围" prop="dataScope">
             <el-select v-model="form.dataScope" placeholder="请选择" style="width: 100%">
               <el-option

@@ -146,3 +146,28 @@ export function doUpdateAvatar(data) {
     data,
   });
 }
+
+/**
+ * 切换运营商
+ * @param params
+ * @returns {*}
+ */
+export function switchTenant(params) {
+  return request({
+    url: "/api/v1/system/user/switchTenant",
+    method: "post",
+    params,
+  });
+}
+
+/**
+ * 切换切换回自己账户
+ * @param params
+ * @returns {*}
+ */
+export function switchOneself(params) {
+  return request({
+    url: "/api/v1/system/user/switchOneself",
+    method: "post",
+  });
+}

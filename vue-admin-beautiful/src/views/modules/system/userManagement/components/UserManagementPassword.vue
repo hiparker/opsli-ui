@@ -9,15 +9,6 @@
   >
     <el-form ref="form" :model="form" :rules="rules" label-width="80px" class="update-password-container">
 
-      <el-form-item label="旧密码" prop="oldPassword">
-        <el-input
-          type="password"
-          v-model.trim="form.oldPassword"
-          autocomplete="off"
-          show-password
-        ></el-input>
-      </el-form-item>
-
       <el-form-item label="新密码" prop="newPassword">
         <el-input
           type="password"
@@ -64,14 +55,10 @@
       return {
         form: {
           userId: "",
-          oldPassword: "",
           newPassword: "",
           verifyPassword: "",
         },
         rules: {
-          oldPassword: [
-            { required: true, trigger: "blur", message: "请输入旧密码" },
-          ],
           newPassword: [
             { required: true, trigger: "blur", message: "请输入密码" },
             { required: true, trigger: "blur", validator: validatorRule.IS_SECURITY_PASSWORD },
@@ -94,10 +81,7 @@
       },
       close() {
         this.dialogFormVisible = false;
-        this.form.userId = "";
-        this.form.oldPassword = "";
-        this.form.newPassword = "";
-        this.form.verifyPassword = "";
+        this.form = this.$options.data().form;
       },
       save() {
         this.$refs["form"].validate(async (valid) => {

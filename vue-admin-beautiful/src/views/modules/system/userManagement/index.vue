@@ -139,6 +139,13 @@
 
           <el-table-column
             show-overflow-tooltip
+            prop="roleNames"
+            label="角色"
+            width="120"
+          ></el-table-column>
+
+          <el-table-column
+            show-overflow-tooltip
             prop="no"
             label="工号"
             width="95"
@@ -237,8 +244,8 @@
         ></el-pagination>
 
         <edit ref="edit" @fetchData="fetchData"></edit>
-        <roles ref="roles"></roles>
         <update-password ref="update-password"></update-password>
+        <roles ref="roles" @fetchData="fetchData"></roles>
         <user-management-set-org
           ref="user-management-set-org"
           :is-gen="isGen"

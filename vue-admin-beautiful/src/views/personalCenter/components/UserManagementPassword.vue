@@ -90,10 +90,8 @@
         this.dialogFormVisible = true;
       },
       close() {
-        this.form.oldPassword = "";
-        this.form.newPassword = "";
-        this.form.verifyPassword = "";
         this.dialogFormVisible = false;
+        this.form = this.$options.data().form;
       },
       save() {
         this.$refs["form"].validate(async (valid) => {

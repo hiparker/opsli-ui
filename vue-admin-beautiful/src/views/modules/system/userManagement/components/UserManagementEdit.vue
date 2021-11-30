@@ -75,9 +75,8 @@
 
         <!-- 如果是超级管理员 可以设置系统用户切换租户 -->
         <el-col
-          v-if="
-            userInfo != null &&
-              (userInfo.izSuperAdmin || $perms('system_user_tenant'))
+          v-if="null != userInfo && null === userInfo.switchTenantId &&
+            (userInfo.izSuperAdmin || $perms('system_user_tenant'))
           "
           :xs="24"
           :sm="24"
@@ -143,13 +142,13 @@
       };
 
       return {
-        userInfo: null,
+        userInfo: {},
         dict: {},
         formStatus: true,
         form: {
-          enableSwitchTenant: '',
+          enableSwitchTenant: "0",
           tenantId:"",
-          locked: '0',
+          locked: "0",
           // 设置默认值
           version: 0
         },
