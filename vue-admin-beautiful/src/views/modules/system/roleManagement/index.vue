@@ -267,8 +267,6 @@
         const { data } = await getUserInfo(accessToken);
         if (!isNull(data)) {
           this.userInfo = Object.assign({}, data);
-
-          console.log(this.userInfo, "角色")
           setTimeout(() => {
             this.listLoading = false;
           }, 300)

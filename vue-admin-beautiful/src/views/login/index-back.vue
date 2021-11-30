@@ -89,9 +89,6 @@
         </el-form>
       </el-col>
     </el-row>
-
-    <login-tips ref="login-tips" @tipsClick="tipsClick"></login-tips>
-
   </div>
 </template>
 
@@ -100,10 +97,6 @@
   import { isNull } from "@/utils/valiargs";
   import { validatorRule } from "@/utils/validateRlue";
   import { captcha } from "@/api/user";
-
-  // TODO 演示专用 开发记得删除
-  import LoginTips from "./components/LoginTips";
-
   export default {
     name: "Login",
     directives: {
@@ -113,7 +106,6 @@
         },
       },
     },
-    components: { LoginTips },
     data() {
 
       return {
@@ -160,18 +152,7 @@
     beforeDestroy() {
       document.body.style.overflow = "auto";
     },
-    mounted() {
-      // TODO 演示使用 开发手动删除
-      this.$refs["login-tips"].show();
-    },
     methods: {
-      // TODO 演示使用 开发手动删除
-      tipsClick(ret){
-        // 点击登录
-        this.form.username = ret.username;
-        this.form.password = ret.password;
-        this.handleLogin();
-      },
       // 获得新验证码
       getCaptcha() {
         this.captchaImg = captcha(this.form.uuid);
