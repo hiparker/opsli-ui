@@ -6,7 +6,9 @@
           <vab-query-form-left-panel :span="12">
 
             <el-button
-              v-if="$perms('system_org_insert')"
+              v-if="$perms('system_org_insert')
+                && null != userInfo && '4' === userInfo.dataScope
+              "
               icon="el-icon-plus"
               type="primary"
               @click="handleInsert"
@@ -100,6 +102,9 @@
 
 <script>
   import { getTreeLazy, doDelete } from "@/api/system/org/orgManagement";
+  import { getAccessToken } from "@/utils/accessToken";
+  import { getUserInfo } from "@/api/user";
+
   import Edit from "./components/OrgManagementEdit";
   import {isNull} from "@/utils/validate";
 
@@ -108,6 +113,7 @@
     components: { Edit },
     data() {
       return {
+        userInfo: {},
         dict: {
           org_type: this.$getDictList("org_type"),
           no_yes: this.$getDictList("no_yes"),
@@ -131,6 +137,8 @@
       };
     },
     async created() {
+      // 获得当前用户
+      await this.getCurrUser();
       // 获得树数据
       await this.fetchData();
     },
@@ -227,6 +235,18 @@
       },
       handleNodeClick(data) {
         this.fetchData();
+      },
+      // 获取当前登录用户数据
+      async getCurrUser() {
+        this.listLoading = true;
+        let accessToken = getAccessToken();
+        const { data } = await getUserInfo(accessToken);
+        if (!isNull(data)) {
+          this.userInfo = Object.assign({}, data);
+          setTimeout(() => {
+            this.listLoading = false;
+          }, 300)
+        }
       },
     },
   };

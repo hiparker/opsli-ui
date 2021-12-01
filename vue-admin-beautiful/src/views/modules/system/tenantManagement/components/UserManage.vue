@@ -288,7 +288,6 @@
       },
       close(){
         this.list = null;
-        this.activeName = "";
         this.title = "";
         this.tenantId = "";
         this.queryForm.tenantId_EQ = "";

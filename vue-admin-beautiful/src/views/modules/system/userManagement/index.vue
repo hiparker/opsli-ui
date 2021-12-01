@@ -280,6 +280,7 @@
         userInfo: {
           tenantId: null
         },
+        orgNode: null,
         isGen: false,
         list: null,
         listLoading: true,
@@ -325,7 +326,7 @@
           this.$baseMessage("请选择操作用户", "error");
         }
 
-        // 执行 设置角色
+        // 执行 设置组织
         const {success, msg} = await doSetOrg({
           userId: row.id,
           defModel: result.defOrg,
@@ -364,7 +365,8 @@
         }
 
         // 默认 activeName 为功能菜单， 如果是系统级用户 则 为系统菜单
-        if('0' === this.userInfo.tenantId){
+        if('0' === this.userInfo.tenantId &&
+            isNull(this.userInfo.switchTenantId) ){
           this.activeName = '0';
         }
         this.$refs['roles'].showRole(row, this.activeName)
@@ -402,9 +404,10 @@
       },
       handleEdit(row) {
         if (row.id) {
-          this.$refs["edit"].showEdit(row);
+          this.$refs["edit"].showEdit(row, null);
         } else {
-          this.$refs["edit"].showEdit();
+          // 新增和绑定组织
+          this.$refs["edit"].showInsertAndBindOrg(this.orgNode);
         }
       },
       handleDelete(row) {
@@ -494,9 +497,11 @@
           const nodeId = nodeData.id;
           // 针对 非 全部 未分组 特殊处理
           if("org_all" !== nodeId && "org_null" !== nodeId){
-            this.queryForm.orgIdGroup = nodeData.parentIds+","+nodeId;
+            this.queryForm.orgIdGroup = nodeData.parentIds + "," + nodeId;
+            this.orgNode = nodeData;
           }else {
             this.queryForm.orgIdGroup = nodeId;
+            this.orgNode = null;
           }
         }
         // 查询数据

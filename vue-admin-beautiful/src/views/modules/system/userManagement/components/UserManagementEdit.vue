@@ -75,7 +75,7 @@
 
         <!-- 如果是超级管理员 可以设置系统用户切换租户 -->
         <el-col
-          v-if="null != userInfo && null === userInfo.switchTenantId &&
+          v-if="null != userInfo && null === userInfo.switchTenantId && null === args &&
             (userInfo.izSuperAdmin || $perms('system_user_tenant'))
           "
           :xs="24"
@@ -122,7 +122,7 @@
 </template>
 
 <script>
-  import { doInsert, doUpdate } from "@/api/system/user/userManagement";
+  import { doInsert, doUpdate, doSetOrg } from "@/api/system/user/userManagement";
   import { getAccessToken } from "@/utils/accessToken";
   import { getUserInfo } from "@/api/user";
   import { isNull } from "@/utils/validate";
@@ -145,6 +145,10 @@
         userInfo: {},
         dict: {},
         formStatus: true,
+        // 用于判断 租户管理员 编辑界面 是否允许切换运营商 按钮显示问题
+        args: null,
+        // 组织节点
+        orgNode: null,
         form: {
           enableSwitchTenant: "0",
           tenantId:"",
@@ -188,9 +192,10 @@
       this.getUser();
     },
     methods: {
-      // 租户关闭
-      closeTenant(val){
-        this.form.tenantId = val.id;
+      showInsertAndBindOrg(orgNode) {
+        this.title = "添加";
+        this.orgNode = orgNode;
+        this.dialogFormVisible = true;
       },
       showEdit(row, args) {
         if (!row) {
@@ -203,6 +208,7 @@
 
         // 参数默认赋值
         if(!isNull(args)){
+          this.args = args;
           for(let key in args){
             if (args.hasOwnProperty(key)) {
               this.form[key] = args[key];
@@ -214,9 +220,14 @@
       },
       close() {
         this.dialogFormVisible = false;
-        this.$refs["form"].resetFields();
-        this.formStatus = true;
-        this.form = this.$options.data().form;
+        // 防止出现幻影 延时清空数据
+        setTimeout(()=>{
+          this.$refs["form"].resetFields();
+          this.orgNode = null;
+          this.formStatus = true;
+          this.args = null;
+          this.form = this.$options.data().form;
+        }, 100)
       },
       save() {
         this.$refs["form"].validate(async (valid) => {
@@ -228,8 +239,18 @@
                 this.$baseMessage(msg, "success");
               }
             } else {
-              const { success, msg } = await doInsert(this.form);
+              const { success, msg, data } = await doInsert(this.form);
               if(success){
+                // 如果组织 不为空 则帮助用户绑定组织
+                if(data && this.orgNode){
+                  // 执行 设置组织
+                  await doSetOrg({
+                    userId: data.id,
+                    defModel: this.orgNode,
+                    orgModelList: [this.orgNode],
+                  })
+                }
+
                 this.$baseMessage(msg, "success");
               }
             }
