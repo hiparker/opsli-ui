@@ -275,7 +275,7 @@
               <td>enjoy版本</td>
               <td>4.9.03</td>
               <td>hutool版本</td>
-              <td>5.6.3</td>
+              <td>5.7.14</td>
             </tr>
           </table>
         </el-card>
@@ -1406,6 +1406,50 @@
           {
             content: "发布1.5.0 正式版",
             timestamp: "2021-10-16",
+          },
+          {
+            content: "后端：优化线程池处理工具",
+            timestamp: "2021-11-03",
+          },
+          {
+            content: "后端：修复租户管理员不能显示全部组织BUG",
+            timestamp: "2021-11-17",
+          },
+          {
+            content: "后端：修复数据权限死循环问题",
+            timestamp: "2021-11-23",
+          },
+          {
+            content: "后端：修复Redisson 解锁异常问题",
+            timestamp: "2021-11-23",
+          },
+          {
+            content: "后端：优化数据权限自身查询效率",
+            timestamp: "2021-11-24",
+          },
+          {
+            content: "新增菜单标签，可区分 系统菜单 和 功能菜单(针对租户)",
+            timestamp: "2021-11-26",
+          },
+          {
+            content: "系统用户可由超级管理员分配是否有切换租户的能力",
+            timestamp: "2021-11-29",
+          },
+          {
+            content: "新增API版本控制",
+            timestamp: "2021-11-30",
+          },
+          {
+            content: "修复组织机构 用户数据权限过滤不生效问题",
+            timestamp: "2021-12-01",
+          },
+          {
+            content: "前端：优化新增用户时，如果选中组织 则默认将用户绑定在该组织下",
+            timestamp: "2021-12-01",
+          },
+          {
+            content: "发布1.6.0 正式版",
+            timestamp: "2021-12-01",
           },
         ];
         data.map((item, index) => {
