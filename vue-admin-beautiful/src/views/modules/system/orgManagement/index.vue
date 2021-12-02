@@ -7,7 +7,7 @@
 
             <el-button
               v-if="$perms('system_org_insert')
-                && null != userInfo && '4' === userInfo.dataScope
+                && null != userInfo && '3' === userInfo.dataScope
               "
               icon="el-icon-plus"
               type="primary"
