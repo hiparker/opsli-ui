@@ -11,7 +11,9 @@ import {
   setAccessToken,
 } from "@/utils/accessToken";
 import { resetRouter } from "@/router";
-import { title, tokenName } from "@/config/settings";
+import { title, tokenName, loginRSA } from "@/config/settings";
+import { decryptedDes } from "@/utils/crypto/encrypt-des";
+
 const state = {
   accessToken: getAccessToken(),
   username: "",
@@ -50,7 +52,17 @@ const actions = {
   },
   async login({ commit }, userInfo) {
     const { data } = await login(userInfo);
-    const accessToken = data["token"];
+    let tmpData = data;
+    if (loginRSA) {
+      // 获得公钥
+      let publicKey = Vue.prototype.$getPublicKey();
+      // 解密数据
+      let decryptedStr = decryptedDes(tmpData, publicKey);
+      // 转换为Json
+      tmpData = JSON.parse(decryptedStr);
+    }
+
+    const accessToken = tmpData["token"];
     if (accessToken) {
       commit("setAccessToken", accessToken);
       const hour = new Date().getHours();
