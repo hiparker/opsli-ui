@@ -1451,6 +1451,42 @@
             content: "发布1.6.0 正式版",
             timestamp: "2021-12-01",
           },
+          {
+            content: "后端：修复 用户角色名称重复问题",
+            timestamp: "2021-12-04",
+          },
+          {
+            content: "后端：修复 树结构工具类BUG",
+            timestamp: "2021-12-04",
+          },
+          {
+            content: "后端：修复 组织超级管理员添加权限问题",
+            timestamp: "2021-12-04",
+          },
+          {
+            content: "后端：删除多余代码",
+            timestamp: "2021-12-05",
+          },
+          {
+            content: "后端：修复当前用户 组织为空或关联表CreateBy 报错问题",
+            timestamp: "2021-12-05",
+          },
+          {
+            content: "后端：修复设置用户组织时 每次会多出来一条垃圾数据问题",
+            timestamp: "2021-12-05",
+          },
+          {
+            content: "后端：修复超级管理员只能看自己数据BUG",
+            timestamp: "2021-12-05",
+          },
+          {
+            content: "前端：修复组织新增按钮不显示BUG",
+            timestamp: "2021-12-05",
+          },
+          {
+            content: "发布1.6.1 BUG修复版",
+            timestamp: "2021-12-05",
+          },
         ];
         data.map((item, index) => {
           if (index === data.length - 1) {
