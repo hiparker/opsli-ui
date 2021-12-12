@@ -2,7 +2,7 @@ import request from "@/utils/request";
 
 export function getUserInfo(data) {
   return request({
-    url: "/api/system/user/v1/getInfoById",
+    url: "/api/v1/system/user/getInfoById",
     method: "get",
     params: data,
   });
@@ -10,7 +10,7 @@ export function getUserInfo(data) {
 
 export function getList(data) {
   return request({
-    url: "/api/system/user/v1/findPage",
+    url: "/api/v1/system/user/findPage",
     method: "get",
     params: data,
   });
@@ -18,7 +18,7 @@ export function getList(data) {
 
 export function getListByTenant(data) {
   return request({
-    url: "/api/system/user/v1/findPageByTenant",
+    url: "/api/v1/system/user/findPageByTenant",
     method: "get",
     params: data,
   });
@@ -26,7 +26,7 @@ export function getListByTenant(data) {
 
 export function doInsert(data) {
   return request({
-    url: "/api/system/user/v1/insert",
+    url: "/api/v1/system/user/insert",
     method: "post",
     data,
   });
@@ -34,7 +34,7 @@ export function doInsert(data) {
 
 export function doUpdate(data) {
   return request({
-    url: "/api/system/user/v1/update",
+    url: "/api/v1/system/user/update",
     method: "post",
     data,
   });
@@ -42,7 +42,7 @@ export function doUpdate(data) {
 
 export function doUpdateSelf(data) {
   return request({
-    url: "/api/system/user/v1/updateSelf",
+    url: "/api/v1/system/user/updateSelf",
     method: "post",
     data,
   });
@@ -50,7 +50,7 @@ export function doUpdateSelf(data) {
 
 export function doDelete(data) {
   return request({
-    url: "/api/system/user/v1/del",
+    url: "/api/v1/system/user/del",
     method: "post",
     params: data,
   });
@@ -58,7 +58,7 @@ export function doDelete(data) {
 
 export function doDeleteAll(data) {
   return request({
-    url: "/api/system/user/v1/delAll",
+    url: "/api/v1/system/user/delAll",
     method: "post",
     params: data,
   });
@@ -66,7 +66,7 @@ export function doDeleteAll(data) {
 
 export function getRoleIdsByUserId(data) {
   return request({
-    url: "/api/system/user/v1/getRoleIdsByUserId",
+    url: "/api/v1/system/user/getRoleIdsByUserId",
     method: "get",
     params: data,
   });
@@ -74,7 +74,7 @@ export function getRoleIdsByUserId(data) {
 
 export function doGetRoles(data) {
   return request({
-    url: "/api/system/user/roles/v1/getRoles",
+    url: "/api/v1/system/user/roles/getRoles",
     method: "get",
     params: data,
   });
@@ -82,7 +82,7 @@ export function doGetRoles(data) {
 
 export function doSetRoles(data) {
   return request({
-    url: "/api/system/user/roles/v1/setRoles",
+    url: "/api/v1/system/user/roles/setRoles",
     method: "post",
     data,
   });
@@ -90,7 +90,7 @@ export function doSetRoles(data) {
 
 export function getOrgByUserId(data) {
   return request({
-    url: "/api/system/user/v1/getOrgByUserId",
+    url: "/api/v1/system/user/getOrgByUserId",
     method: "get",
     params: data,
   });
@@ -98,7 +98,7 @@ export function getOrgByUserId(data) {
 
 export function doSetOrg(data) {
   return request({
-    url: "/api/system/user/org/v1/setOrg",
+    url: "/api/v1/system/user/org/setOrg",
     method: "post",
     data,
   });
@@ -106,7 +106,7 @@ export function doSetOrg(data) {
 
 export function doUpdatePasswordById(data) {
   return request({
-    url: "/api/system/user/v1/updatePasswordById",
+    url: "/api/v1/system/user/updatePasswordById",
     method: "post",
     data,
   });
@@ -114,7 +114,7 @@ export function doUpdatePasswordById(data) {
 
 export function doResetPasswordById(data) {
   return request({
-    url: "/api/system/user/v1/resetPasswordById",
+    url: "/api/v1/system/user/resetPasswordById",
     method: "post",
     params: data,
   });
@@ -122,7 +122,7 @@ export function doResetPasswordById(data) {
 
 export function doEnableAccount(data) {
   return request({
-    url: "/api/system/user/v1/enableAccount",
+    url: "/api/v1/system/user/enableAccount",
     method: "post",
     params: data,
   });
@@ -130,7 +130,7 @@ export function doEnableAccount(data) {
 
 export function doUpdatePassword(data) {
   return request({
-    url: "/api/system/user/v1/updatePassword",
+    url: "/api/v1/system/user/updatePassword",
     method: "post",
     data,
   });
@@ -138,7 +138,7 @@ export function doUpdatePassword(data) {
 
 export function doUpdateAvatar(data) {
   return request({
-    url: "/api/system/user/v1/updateAvatar",
+    url: "/api/v1/system/user/updateAvatar",
     method: "post",
     headers: {
       "Content-Type": "multipart/form-data",
@@ -154,7 +154,7 @@ export function doUpdateAvatar(data) {
  */
 export function switchTenant(params) {
   return request({
-    url: "/api/system/user/v1/switchTenant",
+    url: "/api/v1/system/user/switchTenant",
     method: "post",
     params,
   });
@@ -167,7 +167,7 @@ export function switchTenant(params) {
  */
 export function switchOneself(params) {
   return request({
-    url: "/api/system/user/v1/switchOneself",
+    url: "/api/v1/system/user/switchOneself",
     method: "post",
   });
 }

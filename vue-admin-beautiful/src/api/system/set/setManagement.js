@@ -2,7 +2,7 @@ import request from "@/utils/request";
 
 export function getAllOptions(data) {
   return request({
-    url: "/api/system/options/v1/findAllOptions",
+    url: "/api/v1/system/options/findAllOptions",
     method: "get",
     params: data,
   });
@@ -10,7 +10,7 @@ export function getAllOptions(data) {
 
 export function doUpdateOptions(data) {
   return request({
-    url: "/api/system/options/v1/updateOptions",
+    url: "/api/v1/system/options/updateOptions",
     method: "post",
     data,
   });
@@ -18,7 +18,7 @@ export function doUpdateOptions(data) {
 
 export function doTestSend(data) {
   return request({
-    url: "/api/tools/email/v1/testSend",
+    url: "/api/v1/tools/email/testSend",
     method: "post",
     data,
   });
@@ -33,7 +33,7 @@ export function doTestSend(data) {
  */
 export function doCreateCrypto(type) {
   return request({
-    url: "/api/system/options/v1/createCrypto",
+    url: "/api/v1/system/options/createCrypto",
     method: "post",
     params: {
       type: type,

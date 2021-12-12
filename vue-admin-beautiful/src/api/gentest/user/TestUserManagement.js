@@ -3,7 +3,7 @@ import { downloadFileByData } from "@/utils/download";
 
 export function getList(data) {
   return request({
-    url: "/api/gentest/user/v1/findPage",
+    url: "/api/v1/gentest/user/findPage",
     method: "get",
     params: data,
   });
@@ -11,7 +11,7 @@ export function getList(data) {
 
 export function doInsert(data) {
   return request({
-    url: "/api/gentest/user/v1/insert",
+    url: "/api/v1/gentest/user/insert",
     method: "post",
     data,
   });
@@ -19,7 +19,7 @@ export function doInsert(data) {
 
 export function doUpdate(data) {
   return request({
-    url: "/api/gentest/user/v1/update",
+    url: "/api/v1/gentest/user/update",
     method: "post",
     data,
   });
@@ -27,7 +27,7 @@ export function doUpdate(data) {
 
 export function doDelete(data) {
   return request({
-    url: "/api/gentest/user/v1/del",
+    url: "/api/v1/gentest/user/del",
     method: "post",
     params: data,
   });
@@ -35,7 +35,7 @@ export function doDelete(data) {
 
 export function doDeleteAll(data) {
   return request({
-    url: "/api/gentest/user/v1/delAll",
+    url: "/api/v1/gentest/user/delAll",
     method: "post",
     params: data,
   });
@@ -47,7 +47,7 @@ export function doDeleteAll(data) {
  * @returns file
  */
 export function doExportExcel(data) {
-  let requestURL = "/api/gentest/user/v1/exportExcel";
+  let requestURL = "/api/v1/gentest/user/exportExcel";
   // 下载文件
   downloadFileByData(requestURL, data);
 }
@@ -58,7 +58,7 @@ export function doExportExcel(data) {
  */
 export function doDownloadTemplate() {
   let data = {};
-  let requestURL = "/api/gentest/user/v1/importExcel/template";
+  let requestURL = "/api/v1/gentest/user/importExcel/template";
   // 下载文件
   downloadFileByData(requestURL, data);
 }
@@ -69,7 +69,7 @@ export function doDownloadTemplate() {
  */
 export function doImportExcel(data) {
   return request({
-    url: "/api/gentest/user/v1/importExcel",
+    url: "/api/v1/gentest/user/importExcel",
     method: "post",
     // 最长超时时间 3分钟
     timeout: 180000,

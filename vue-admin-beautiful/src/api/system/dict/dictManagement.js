@@ -2,7 +2,7 @@ import request from "@/utils/request";
 
 export function getList(data) {
   return request({
-    url: "/api/system/dict/v1/findPage",
+    url: "/api/v1/system/dict/findPage",
     method: "get",
     params: data,
   });
@@ -10,7 +10,7 @@ export function getList(data) {
 
 export function doInsert(data) {
   return request({
-    url: "/api/system/dict/v1/insert",
+    url: "/api/v1/system/dict/insert",
     method: "post",
     data,
   });
@@ -18,7 +18,7 @@ export function doInsert(data) {
 
 export function doUpdate(data) {
   return request({
-    url: "/api/system/dict/v1/update",
+    url: "/api/v1/system/dict/update",
     method: "post",
     data,
   });
@@ -26,7 +26,7 @@ export function doUpdate(data) {
 
 export function doDelete(data) {
   return request({
-    url: "/api/system/dict/v1/del",
+    url: "/api/v1/system/dict/del",
     method: "post",
     params: data,
   });
@@ -34,7 +34,7 @@ export function doDelete(data) {
 
 export function doDeleteAll(data) {
   return request({
-    url: "/api/system/dict/v1/delAll",
+    url: "/api/v1/system/dict/delAll",
     method: "post",
     params: data,
   });
@@ -42,7 +42,7 @@ export function doDeleteAll(data) {
 
 export function getDictListByCodeParams(data) {
   return {
-    url: "/api/system/dict/v1/getDictListByCode",
+    url: "/api/v1/system/dict/getDictListByCode",
     method: "get",
     params: data,
   };
@@ -50,7 +50,7 @@ export function getDictListByCodeParams(data) {
 
 export function getDictListByCode(data) {
   return request({
-    url: "/api/system/dict/v1/getDictListByCode",
+    url: "/api/v1/system/dict/getDictListByCode",
     method: "get",
     params: data,
   });
