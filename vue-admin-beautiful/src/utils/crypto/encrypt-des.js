@@ -32,7 +32,7 @@ export const decryptedDes = (ciphertext, key) => {
     keyHex,
     {
       mode: CryptoJS.mode.ECB,
-      padding: CryptoJS.pad.Iso10126,
+      padding: CryptoJS.pad.Pkcs7,
     }
   );
 
