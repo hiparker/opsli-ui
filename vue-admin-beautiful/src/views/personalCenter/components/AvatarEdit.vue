@@ -94,9 +94,11 @@
         confirmLoading: false,
         options: {
           img: "",
+          imgName: "",
           info: true,
           size: 1,
-          outputType: 'jpeg',
+          outputType: 'image/jpeg',
+          suffixName: '.jpg',
           canScale: false,
           autoCrop: true,
           // 只有自动截图开启 宽度高度才生效
@@ -133,6 +135,7 @@
       close() {
         this.id = null;
         this.options.img = "";
+        this.options.imgName = "";
         this.dialogVisible = false;
       },
       turnLeft() {
@@ -149,14 +152,21 @@
         this.$refs.cropper.getCropBlob(data => {
           let blobObject = new Blob([data]);
 
-          let formData = new window.FormData()
-          formData.append("file", blobObject);
+          let fileTemp = new window.File(
+            [blobObject],
+            this.options.imgName,
+            {type: this.options.outputType}
+          );
 
-          this.doUpdateAvatarAsync(formData);
+          this.doUpdateAvatarAsync(fileTemp);
         });
       },
-      async doUpdateAvatarAsync(formData){
+      async doUpdateAvatarAsync(file){
         this.confirmLoading = true
+
+        let formData = new window.FormData()
+        formData.append("file", file);
+
         const { success, msg} = await doUpdateAvatar(formData);
         if( success ){
           // 刷新用户信息
@@ -176,6 +186,10 @@
           this.$baseMessage("图片类型必须是.gif,jpeg,jpg,png,bmp中的一种", "error");
           return false;
         }
+
+        // 去掉默认后缀名 统一后缀名
+        this.options.imgName = file.name.split('.')[0] + this.options.suffixName;
+
         let reader = new FileReader();
         reader.onload = e => {
           let data;
@@ -217,7 +231,7 @@
         let ctx = canvas.getContext("2d");
         ctx.drawImage(image, 0, 0, image.width, image.height);
         // 可选其他值 image/jpeg
-        return canvas.toDataURL("image/png");
+        return canvas.toDataURL(this.options.outputType);
       },
     }
   };

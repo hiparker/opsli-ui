@@ -1,13 +1,16 @@
 import request from "@/utils/request";
 import { urlAddArgsByData } from "@/utils";
 const { baseURL } = require("@/config/settings");
-import { encryptedData } from "@/utils/encrypt";
+import { encryptedRsa } from "@/utils/crypto/encrypt-rsa";
 import { loginRSA, tokenName } from "@/config/settings";
+import Vue from "vue";
 
 export async function login(data) {
   if (loginRSA) {
+    // 获得公钥
+    let publicKey = Vue.prototype.$getPublicKey();
     // 加密数据
-    let encrypted = await encryptedData(data);
+    let encrypted = encryptedRsa(data, publicKey);
     data = {
       encryptData: encrypted,
     };
@@ -29,7 +32,7 @@ export function getSlipCount(data) {
 
 export function getUserInfo(accessToken) {
   return request({
-    url: "/api/system/user/v1/getInfo",
+    url: "/api/v1/system/user/getInfo",
     method: "get",
     headers: {
       [tokenName]: accessToken,
@@ -39,7 +42,7 @@ export function getUserInfo(accessToken) {
 
 export function getUserOrg(accessToken) {
   return request({
-    url: "/api/system/user/v1/getOrg",
+    url: "/api/v1/system/user/getOrg",
     method: "get",
     headers: {
       [tokenName]: accessToken,
