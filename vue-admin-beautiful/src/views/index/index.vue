@@ -1487,6 +1487,26 @@
             content: "发布1.6.1 BUG修复版",
             timestamp: "2021-12-05",
           },
+          {
+            content: "后端：优化缓存存储机构（主要）",
+            timestamp: "2021-12-10",
+          },
+          {
+            content: "前/后端：优化头像上传",
+            timestamp: "2021-12-11",
+          },
+          {
+            content: "前/后端：优化登录加解密",
+            timestamp: "2021-12-12",
+          },
+          {
+            content: "前/后端：优化API 版本控制（调整回原来的api接口 /api/v1/xxxx）",
+            timestamp: "2021-12-12",
+          },
+          {
+            content: "发布1.6.2 系统优化版",
+            timestamp: "2022-01-06",
+          },
         ];
         data.map((item, index) => {
           if (index === data.length - 1) {
