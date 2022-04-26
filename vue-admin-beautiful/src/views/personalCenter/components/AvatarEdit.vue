@@ -74,6 +74,7 @@
 <script>
   import { VueCropper } from 'vue-cropper'
   import { doUpdateAvatar } from '@/api/system/user/userManagement'
+  import { doUpload } from '@/api/tool/ossTool'
   import axios from "axios";
   import {baseURL, requestTimeout } from "@/config/settings";
   import store from "@/store";
@@ -167,15 +168,21 @@
         let formData = new window.FormData()
         formData.append("file", file);
 
-        const { success, msg} = await doUpdateAvatar(formData);
-        if( success ){
-          // 刷新用户信息
-          await store.dispatch("user/getUserInfo");
-          // 刷新父类信息
-          await this.$emit("fetchData");
-          this.confirmLoading = false
-          this.close()
-          this.$baseMessage( msg, "success");
+        const { data} = await doUpload(formData);
+        if(data){
+          const { success, msg } = await doUpdateAvatar({
+            imgUrl: data.fileStoragePath
+          });
+
+          if(success){
+            // 刷新用户信息
+            await store.dispatch("user/getUserInfo");
+            // 刷新父类信息
+            await this.$emit("fetchData");
+            this.confirmLoading = false
+            this.close()
+            this.$baseMessage( msg, "success");
+          }
         }
       },
       uploadImg(e) {

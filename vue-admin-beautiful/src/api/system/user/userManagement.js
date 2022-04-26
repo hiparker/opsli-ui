@@ -140,9 +140,6 @@ export function doUpdateAvatar(data) {
   return request({
     url: "/api/v1/system/user/updateAvatar",
     method: "post",
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
     data,
   });
 }

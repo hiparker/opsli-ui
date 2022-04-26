@@ -1,17 +1,10 @@
 <template>
   <div class="logsManagement-container">
     <vab-query-form>
-      <vab-query-form-left-panel :span="6">
-
-        <el-button
-          v-if="$perms('devops_logs_delete')"
-          icon="el-icon-delete"
-          type="danger"
-          @click="handleDelete"
-        > 清空一个月前日志 </el-button>
+      <vab-query-form-left-panel :span="24">
 
       </vab-query-form-left-panel>
-      <vab-query-form-right-panel :span="18">
+      <vab-query-form-right-panel :span="24">
         <el-form :inline="true" :model="queryForm" @submit.native.prevent>
 
           <el-form-item>
@@ -120,13 +113,6 @@
 
       <el-table-column
         show-overflow-tooltip
-        prop="timeout"
-        label="执行时间(ms)"
-        width="160"
-      ></el-table-column>
-
-      <el-table-column
-        show-overflow-tooltip
         prop="createTime"
         label="创建时间"
         width="160"
@@ -147,7 +133,7 @@
 </template>
 
 <script>
-  import { getList, doDelete } from "@/api/system/logs/logsManagement";
+  import { getList } from "@/api/system/logs/logsManagement";
   import { isNull } from "@/utils/validate";
   import { formateDate } from "@/utils/format";
 
@@ -215,33 +201,6 @@
     methods: {
       setSelectRows(val) {
         this.selectRows = val;
-      },
-      handleDelete(row) {
-        // if (row.id) {
-        //   this.$baseConfirm("你确定要删除当前项吗", null, async () => {
-        //     const { msg } = await doDelete({ id: row.id });
-        //     this.$baseMessage(msg, "success");
-        //     await this.fetchData();
-        //   });
-        // } else {
-        //   if (this.selectRows.length > 0) {
-        //     const ids = this.selectRows.map((item) => item.id).join();
-        //     this.$baseConfirm("你确定要删除选中项吗", null, async () => {
-        //       const { msg } = await doDeleteAll({ ids });
-        //       this.$baseMessage(msg, "success");
-        //       await this.fetchData();
-        //     });
-        //   } else {
-        //     this.$baseMessage("未选中任何行", "error");
-        //     return false;
-        //   }
-        // }
-
-        this.$baseConfirm("你确定要清空一个月之前的日志吗", null, async () => {
-          const { msg } = await doDelete();
-          this.$baseMessage(msg, "success");
-          await this.fetchData();
-        });
       },
       handleSizeChange(val) {
         this.queryForm.pageSize = val;
