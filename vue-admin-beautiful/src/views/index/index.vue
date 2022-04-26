@@ -1507,6 +1507,66 @@
             content: "发布1.6.2 系统优化版",
             timestamp: "2022-01-06",
           },
+          {
+            content: "后端：移除华为OBS log4j风险",
+            timestamp: "2022-01-06",
+          },
+          {
+            content: "后端：修复查询默认组织sql in 和 not in为空问题",
+            timestamp: "2022-02-11",
+          },
+          {
+            content: "后端：修复可能会导致分页异常的因素",
+            timestamp: "2022-03-07",
+          },
+          {
+            content: "后端：修复用户数据权限为全部数据，无组织无法查看数据问",
+            timestamp: "2022-03-10",
+          },
+          {
+            content: "后端：优化用户登录Token获取方式",
+            timestamp: "2022-03-17",
+          },
+          {
+            content: "前/后端：新增用户登录日志（租户数据隔离）",
+            timestamp: "2022-03-18",
+          },
+          {
+            content: "前/后端：新增用户登录日志（租户数据隔离）",
+            timestamp: "2022-03-18",
+          },
+          {
+            content: "后端：优化系统操作日志为租户数据隔离模式",
+            timestamp: "2022-03-18",
+          },
+          {
+            content: "后端：修复 系统用户 登录时无菜单陷入死循环问",
+            timestamp: "2022-03-28",
+          },
+          {
+            content: "后端：修复 登入日志/操作日志 组织机构为空 默认取 request token 的BUG",
+            timestamp: "2022-03-29",
+          },
+          {
+            content: "后端：修复 锁定账号 数据类型转化失败问题",
+            timestamp: "2022-04-06",
+          },
+          {
+            content: "后端：修复系统管理员无法 分配租户管理员问题",
+            timestamp: "2022-04-19",
+          },
+          {
+            content: "后端：OSS文件存储=>公用存储接口",
+            timestamp: "2022-04-26",
+          },
+          {
+            content: "前/后端：优化头像上传",
+            timestamp: "2022-04-26",
+          },
+          {
+            content: "发布1.6.3",
+            timestamp: "2022-04-26",
+          }
         ];
         data.map((item, index) => {
           if (index === data.length - 1) {
