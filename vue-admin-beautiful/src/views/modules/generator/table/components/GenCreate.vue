@@ -82,7 +82,7 @@
 </template>
 
 <script>
-  import { getGenLogs, doCreateJson} from "@/api/generator/tableManagement";
+  import { getGenLogs, doCreate} from "@/api/generator/tableManagement";
   import { getList } from "@/api/generator/template/GenTemplateManagement";
   import { urlAddArgsByData } from "@/utils";
   import { isNotNull} from "@/utils/valiargs";
@@ -180,27 +180,7 @@
         this.$refs["form"].validate(async (valid) => {
           if (valid) {
             this.$baseNotify(`正在生成，请耐心等待...`, `代码生成`);
-
-            const paramsData = doCreateJson(this.form);
-            paramsData.params[tokenName] = getAccessToken();
-
-            // 转换参数
-            let params = Object.keys(paramsData.params)
-              .map(function (key) {
-                return encodeURIComponent(key) + "=" + encodeURIComponent(paramsData.params[key]);
-              })
-              .join("&");
-
-            let link = document.createElement('a');
-            link.style.display = 'none';
-            link.href = urlAddArgsByData(baseURL+paramsData.url, params);
-            link.setAttribute('target', '_blank');
-
-            document.body.appendChild(link);
-            link.click();
-            //释放URL对象所占资源
-            //用完即删
-            document.body.removeChild(link);
+            doCreate(this.form);
           }
         });
       },

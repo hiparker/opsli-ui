@@ -1,4 +1,5 @@
 import request from "@/utils/request";
+import { downloadFileByData } from "@/utils/download";
 
 export function getList(data) {
   return request({
@@ -83,14 +84,15 @@ export function getGenLogs(data) {
   });
 }
 
+/**
+ * 生成代码
+ * @param data
+ * @returns file
+ */
 export function doCreate(data) {
-  return request({
-    url: "/api/v1/generator/logs/create",
-    method: "post",
-    // 重要
-    responseType: "blob",
-    data,
-  });
+  let requestURL = "/api/v1/generator/logs/create";
+  // 下载文件
+  downloadFileByData(requestURL, data);
 }
 
 export function doCreateMenu(data) {
