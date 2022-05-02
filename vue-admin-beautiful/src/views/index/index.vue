@@ -1566,7 +1566,27 @@
           {
             content: "发布1.6.3",
             timestamp: "2022-04-26",
-          }
+          },
+          {
+            content: "前端：优化代码生成器下载代码模式",
+            timestamp: "2022-04-30",
+          },
+          {
+            content: "后端：修复菜单更换上级时，parent_ids 拼接错误问题",
+            timestamp: "2022-04-30",
+          },
+          {
+            content: "后端：修复代码生成器，生成代码时参数为空问题",
+            timestamp: "2022-04-30",
+          },
+          {
+            content: "前端：修复代码生成器 点击添加报错暂无数据问题",
+            timestamp: "2022-04-30",
+          },
+          {
+            content: "发布1.6.4 代码生成器修复版",
+            timestamp: "2022-05-02",
+          },
         ];
         data.map((item, index) => {
           if (index === data.length - 1) {
