@@ -144,10 +144,10 @@
           this.title = "代码生成 - 编辑";
           this.baseForm = Object.assign({}, row);
           this.queryForm.id = this.baseForm.id;
+          // 加载数据
+          this.fetchData();
         }
         this.dialogFormVisible = true;
-        // 加载数据
-        this.fetchData();
       },
       // 关闭
       close() {
