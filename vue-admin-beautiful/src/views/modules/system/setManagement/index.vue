@@ -665,10 +665,10 @@
       },
       // 非对称加密重置
       async cryptoReset() {
-        const { success, data } = await doCreateCrypto(
+        const { data } = await doCreateCrypto(
           this.crypto.form.crypto_asymmetric
         );
-        if (success && !isNull(data)) {
+        if (!isNull(data)) {
           this.crypto.form.crypto_asymmetric_public_key = data.publicKey;
           this.crypto.form.crypto_asymmetric_private_key = data.privateKey;
           this.$baseMessage("已重置公私钥，保存后生效", "warning");
@@ -732,8 +732,8 @@
       },
       async fetchData() {
         this.loadingData = true;
-        const { success, data } = await getAllOptions(this.queryForm);
-        if (success && !isNull(data)) {
+        const { data } = await getAllOptions(this.queryForm);
+        if (!isNull(data)) {
           this.baseData = data;
 
           // 系统默认配置

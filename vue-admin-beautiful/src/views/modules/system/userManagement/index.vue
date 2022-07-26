@@ -327,15 +327,13 @@
         }
 
         // 执行 设置组织
-        const {success, msg} = await doSetOrg({
+        const {msg} = await doSetOrg({
           userId: row.id,
           defModel: result.defOrg,
           orgModelList: result.orgList,
         });
-        if (success) {
-          this.$baseMessage(msg, "success");
-          await this.fetchData();
-        }
+        this.$baseMessage(msg, "success");
+        await this.fetchData();
       },
       // 选择组织机构
       async showOrg(row){

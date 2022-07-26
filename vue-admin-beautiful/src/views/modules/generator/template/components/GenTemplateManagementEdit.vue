@@ -248,15 +248,11 @@
 
             // 修改
             if (!isNull(tmp.id)) {
-              const {success, msg} = await doUpdate(tmp);
-              if (success) {
-                this.$baseMessage(msg, "success");
-              }
+              const { msg } = await doUpdate(tmp);
+              this.$baseMessage(msg, "success");
             } else {
-              const {success, msg} = await doInsert(tmp);
-              if (success) {
-                this.$baseMessage(msg, "success");
-              }
+              const { msg } = await doInsert(tmp);
+              this.$baseMessage(msg, "success");
             }
 
             await this.$emit("fetchData");
