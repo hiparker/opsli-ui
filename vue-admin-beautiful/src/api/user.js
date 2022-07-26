@@ -16,7 +16,7 @@ export async function login(data) {
     };
   }
   return request({
-    url: "/system/login",
+    url: "/s/login",
     method: "post",
     data,
   });

@@ -87,10 +87,8 @@
         this.$refs["form"].validate(async (valid) => {
           if (valid) {
             // 修改密码
-            const { success, msg } = await doUpdatePasswordById(this.form);
-            if(success){
-              this.$baseMessage(msg, "success");
-            }
+            const { msg } = await doUpdatePasswordById(this.form);
+            this.$baseMessage(msg, "success");
             this.close();
           } else {
             return false;

@@ -232,11 +232,9 @@
       handleDelete(row) {
         if (row.id) {
           this.$baseConfirm("你确定要删除当前项吗", null, async () => {
-            const { success, msg } = await doDelete({ id: row.id });
-            if(success){
-              this.$baseMessage(msg, "success");
-              await this.refreshNodeBy(row.parentId);
-            }
+            const { msg } = await doDelete({ id: row.id });
+            this.$baseMessage(msg, "success");
+            await this.refreshNodeBy(row.parentId);
           });
         }
       },

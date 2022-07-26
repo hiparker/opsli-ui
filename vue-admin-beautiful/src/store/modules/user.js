@@ -62,7 +62,7 @@ const actions = {
       tmpData = JSON.parse(decryptedStr);
     }
 
-    const accessToken = tmpData["token"];
+    const accessToken = tmpData["accessToken"];
     if (accessToken) {
       commit("setAccessToken", accessToken);
       const hour = new Date().getHours();

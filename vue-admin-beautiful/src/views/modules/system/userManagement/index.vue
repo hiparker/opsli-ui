@@ -392,10 +392,8 @@
         this.$baseConfirm("你确定要重置当前用户密码吗", null, async () => {
           doResetPasswordById({ userId : row.id}).then(ret => {
             // 重置密码
-            const { success, msg } = ret;
-            if(success){
-              this.$baseMessage(msg, "success");
-            }
+            const { msg } = ret;
+            this.$baseMessage(msg, "success");
           });
         });
       },

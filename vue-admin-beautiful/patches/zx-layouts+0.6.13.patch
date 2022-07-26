@@ -1,9 +1,9 @@
 diff --git a/node_modules/zx-layouts/Avatar/components/ChooseTenant.vue b/node_modules/zx-layouts/Avatar/components/ChooseTenant.vue
 new file mode 100644
-index 0000000..5157949
+index 0000000..9e8486f
 --- /dev/null
 +++ b/node_modules/zx-layouts/Avatar/components/ChooseTenant.vue
-@@ -0,0 +1,190 @@
+@@ -0,0 +1,186 @@
 +<template>
 +  <el-dialog
 +    :title="title"
@@ -125,14 +125,12 @@ index 0000000..5157949
 +
 +        // 已切换租户 走这里
 +        this.$baseConfirm('你确定要恢复系统管理', null, async () => {
-+          const { success, msg } = await switchOneself();
-+          if(success){
-+            // 刷新当前用户信息
-+            const flag = await store.dispatch("user/refreshUserPerms");
-+            if(flag){
-+              this.$baseMessage(msg, "success");
-+              location.reload();
-+            }
++          const { msg } = await switchOneself();
++          // 刷新当前用户信息
++          const flag = await store.dispatch("user/refreshUserPerms");
++          if(flag){
++            this.$baseMessage(msg, "success");
++            location.reload();
 +          }
 +        })
 +      },
@@ -146,17 +144,15 @@ index 0000000..5157949
 +        const that = this;
 +
 +        this.$baseConfirm("你确定要切换至["+this.selectRow.tenantName+"]吗？", null, async () => {
-+          const { success, msg } = await switchTenant({
++          const { msg } = await switchTenant({
 +            tenantId: this.selectRow.id
 +          });
-+          if(success){
-+            // 刷新当前用户信息
-+            const flag = await store.dispatch("user/refreshUserPerms");
-+            if(flag){
-+              this.$baseMessage(msg, "success");
-+              that.close();
-+              location.reload();
-+            }
++          // 刷新当前用户信息
++          const flag = await store.dispatch("user/refreshUserPerms");
++          if(flag){
++            this.$baseMessage(msg, "success");
++            that.close();
++            location.reload();
 +          }
 +        })
 +      },
@@ -195,10 +191,10 @@ index 0000000..5157949
 +</script>
 +
 diff --git a/node_modules/zx-layouts/Avatar/index.vue b/node_modules/zx-layouts/Avatar/index.vue
-index f63a135..d9f660f 100644
+index f63a135..28bbdf3 100644
 --- a/node_modules/zx-layouts/Avatar/index.vue
 +++ b/node_modules/zx-layouts/Avatar/index.vue
-@@ -1,30 +1,57 @@
+@@ -1,30 +1,50 @@
  <template>
 -  <el-dropdown @command="handleCommand">
 -    <span class="avatar-dropdown">
@@ -222,32 +218,27 @@ index f63a135..d9f660f 100644
 +      </span>
 +
 +      <el-dropdown-menu slot="dropdown">
-+
 +        <el-dropdown-item
 +          v-if="null !== userInfo && !userInfo.switchTenantId"
 +          command="personalCenter"
-+        >
++          >
 +          <vab-icon :icon="['fas', 'user']"></vab-icon>
 +          个人中心
 +        </el-dropdown-item>
-+
 +        <el-dropdown-item
-+          v-if="null !== userInfo && '1' === userInfo.enableSwitchTenant"
-+          command="switchTenant" divided
-+        >
-+          <vab-icon :icon="['fas', 'user-secret']"></vab-icon>
-+          {{ userInfo.switchTenantId ? '恢复系统管理' : '切换租户' }}
++           v-if="null !== userInfo && '1' === userInfo.enableSwitchTenant"
++           command="switchTenant" divided >
++           <vab-icon :icon="['fas', 'user-secret']"></vab-icon>
++           {{ userInfo.switchTenantId ? '恢复系统管理' : '切换租户' }}
 +        </el-dropdown-item>
-+
 +        <el-dropdown-item command="logout" divided>
 +          <vab-icon :icon="['fas', 'sign-out-alt']"></vab-icon>
 +          退出登录
 +        </el-dropdown-item>
-+
 +      </el-dropdown-menu>
 +    </el-dropdown>
 +
-+      <!-- 选择租户 -->
++    <!-- 选择租户 -->
 +    <choose-tenant ref="choose-tenant"></choose-tenant>
 +  </span>
  
@@ -270,20 +261,18 @@ index f63a135..d9f660f 100644
 +  import { getAccessToken } from "@/utils/accessToken";
 +  import { getUserInfo } from "@/api/user";
 +  import ChooseTenant from "./components/ChooseTenant";
-+
 +  import { switchTenant, switchOneself } from "@/api/system/user/userManagement";
-+
  
    export default {
      name: "Avatar",
-@@ -34,6 +61,15 @@
+@@ -34,6 +54,15 @@
          username: "user/username",
        }),
      },
 +    components: { ChooseTenant },
 +    data() {
 +      return {
-+        userInfo: {},
++         userInfo: {},
 +      };
 +    },
 +    created() {
@@ -292,7 +281,7 @@ index f63a135..d9f660f 100644
      methods: {
        handleCommand(command) {
          switch (command) {
-@@ -43,10 +79,18 @@
+@@ -43,10 +72,17 @@
            case "personalCenter":
              this.personalCenter();
              break;
@@ -307,12 +296,11 @@ index f63a135..d9f660f 100644
 +      },
 +      // 切换租户
 +      switchTenant(){
-+        // 选择租户
 +        this.$refs["choose-tenant"].show(this.userInfo.switchTenantId);
        },
        logout() {
          this.$baseConfirm(
-@@ -63,6 +107,14 @@
+@@ -63,6 +99,14 @@
            }
          );
        },

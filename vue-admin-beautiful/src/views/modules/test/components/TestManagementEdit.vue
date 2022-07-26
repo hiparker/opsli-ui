@@ -103,15 +103,11 @@
           if (valid) {
             // 修改
             if (!isNull(this.form.id)) {
-              const { success, msg } = await doUpdate(this.form);
-              if(success){
-                this.$baseMessage(msg, "success");
-              }
+              const { msg } = await doUpdate(this.form);
+              this.$baseMessage(msg, "success");
             } else {
-              const { success, msg } = await doInsert(this.form);
-              if(success){
-                this.$baseMessage(msg, "success");
-              }
+              const { msg } = await doInsert(this.form);
+              this.$baseMessage(msg, "success");
             }
 
             await this.$emit("fetchData");

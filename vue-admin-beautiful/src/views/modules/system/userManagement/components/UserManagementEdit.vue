@@ -234,25 +234,21 @@
           if (valid) {
             // 修改
             if (!isNull(this.form.id)) {
-              const { success, msg } = await doUpdate(this.form);
-              if(success){
-                this.$baseMessage(msg, "success");
-              }
+              const { msg } = await doUpdate(this.form);
+              this.$baseMessage(msg, "success");
             } else {
-              const { success, msg, data } = await doInsert(this.form);
-              if(success){
-                // 如果组织 不为空 则帮助用户绑定组织
-                if(data && this.orgNode){
-                  // 执行 设置组织
-                  await doSetOrg({
-                    userId: data.id,
-                    defModel: this.orgNode,
-                    orgModelList: [this.orgNode],
-                  })
-                }
-
-                this.$baseMessage(msg, "success");
+              const { msg, data } = await doInsert(this.form);
+              // 如果组织 不为空 则帮助用户绑定组织
+              if(data && this.orgNode){
+                // 执行 设置组织
+                await doSetOrg({
+                  userId: data.id,
+                  defModel: this.orgNode,
+                  orgModelList: [this.orgNode],
+                })
               }
+
+              this.$baseMessage(msg, "success");
             }
 
             await this.$emit("fetchData");

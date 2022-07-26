@@ -249,11 +249,9 @@
         this.$refs["baseForm"].validate(async (valid) => {
           if (valid) {
             if (!isNull(this.baseForm.id)) {
-              const { success, msg } = await doUpdateSelf(this.baseForm);
-              if (success) {
-                this.$baseMessage(msg, "success");
-                await this.fetchData()
-              }
+              const { msg } = await doUpdateSelf(this.baseForm);
+              this.$baseMessage(msg, "success");
+              await this.fetchData()
             }
           }
         });

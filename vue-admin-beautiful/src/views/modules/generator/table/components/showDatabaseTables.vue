@@ -82,14 +82,11 @@ import { doImportTables, getTables} from "@/api/generator/tableManagement";
       async save(){
         if (this.selectRows.length > 0) {
           const tableNames = this.selectRows.map((item) => item.tableName).join(",");
-          const { success, msg } = await doImportTables({tableNames: tableNames});
-          if(success){
-            this.$baseMessage(msg, "success");
-            this.$emit("fetchData");
-            this.close();
-          }else{
-            this.$baseMessage(msg, "error");
-          }
+          const { msg } = await doImportTables({tableNames: tableNames});
+          this.$baseMessage(msg, "success");
+          this.$emit("fetchData");
+          this.close();
+
         } else {
           this.$baseMessage("未选中任何行", "error");
           return false;

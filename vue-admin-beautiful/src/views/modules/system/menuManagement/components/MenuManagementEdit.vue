@@ -336,15 +336,11 @@
 
             // 修改
             if (!isNull(tmpForm.id)) {
-              const { success, msg } = await doUpdate(tmpForm);
-              if(success){
-                this.$baseMessage(msg, "success");
-              }
+              const { msg } = await doUpdate(tmpForm);
+              this.$baseMessage(msg, "success");
             } else {
-              const { success, msg } = await doInsert(tmpForm);
-              if(success){
-                this.$baseMessage(msg, "success");
-              }
+              const { msg } = await doInsert(tmpForm);
+              this.$baseMessage(msg, "success");
             }
 
             // 如果 更换上级菜单 或者 变更标签 则刷新全部 菜单数据

@@ -179,9 +179,18 @@
       handleLogin() {
         this.$refs.form.validate((valid) => {
           if (valid) {
+            // 封装数据
+            let loginData = {
+              principal: this.form.username,
+              password: this.form.password,
+              verificationCode: this.form.captcha,
+              uuid: this.form.uuid,
+              loginFrom: "0"
+            }
+
             this.loading = true;
             this.$store
-              .dispatch("user/login", this.form)
+              .dispatch("user/login", loginData)
               .then(() => {
                 const routerPath =
                   this.redirect === "/404" || this.redirect === "/401"

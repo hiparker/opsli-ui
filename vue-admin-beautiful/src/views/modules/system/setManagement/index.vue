@@ -680,17 +680,15 @@
         this.$refs[refs].validate(async (valid) => {
           if (valid) {
             this.loadingTabs = true;
-            const { success, msg } = await doUpdateOptions(data).catch(() => {
+            const { msg } = await doUpdateOptions(data).catch(() => {
               setTimeout(() => {
                 this.loadingTabs = false;
               }, 300);
             });
-            if (success) {
-              this.$baseMessage(msg, "success");
-              setTimeout(() => {
-                this.loadingTabs = false;
-              }, 300);
-            }
+            this.$baseMessage(msg, "success");
+            setTimeout(() => {
+              this.loadingTabs = false;
+            }, 300);
           } else {
             return false;
           }
@@ -702,13 +700,11 @@
       async smtpTestSend() {
         this.$refs["smtp-test-form"].validate(async (valid) => {
           if (valid) {
-            const { success, msg } = await doTestSend(this.emailTest.form);
-            if (success) {
-              this.$baseMessage(msg, "success");
-              setTimeout(() => {
-                this.loadingTabs = false;
-              }, 300);
-            }
+            const { msg } = await doTestSend(this.emailTest.form);
+            this.$baseMessage(msg, "success");
+            setTimeout(() => {
+              this.loadingTabs = false;
+            }, 300);
           } else {
             return false;
           }

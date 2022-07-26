@@ -203,19 +203,15 @@
 
             // 修改
             if (!isNull(tmpForm.id)) {
-              const { success, msg } = await doUpdate(tmpForm);
-              if(success){
-                this.$baseMessage(msg, "success");
-              }
+              const { msg } = await doUpdate(tmpForm);
+              this.$baseMessage(msg, "success");
             } else {
               // 如果上级code不为空 则在新增是 拼上上级code
               if(!isNull(this.parentOrg.orgCode)){
                 tmpForm.orgCode = this.parentOrg.orgCode + "_" + tmpForm.orgCode;
               }
-              const { success, msg } = await doInsert(tmpForm);
-              if(success){
-                this.$baseMessage(msg, "success");
-              }
+              const { msg } = await doInsert(tmpForm);
+              this.$baseMessage(msg, "success");
             }
 
             // 刷新标签
