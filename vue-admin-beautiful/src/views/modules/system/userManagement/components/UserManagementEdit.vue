@@ -7,6 +7,11 @@
     width="800px"
     @close="close"
   >
+    <el-alert
+      title="绑定邮箱/手机 后会替换当前系统内已有改邮箱/手机的用户"
+      style="margin-bottom: 15px"
+      type="warning" :closable="false">
+    </el-alert>
     <el-form ref="form" :model="form" :rules="rules" label-width="105px" class="userManagement-edit-container">
       <el-row :gutter="10" >
 
@@ -178,9 +183,11 @@
             { required: true, trigger: "blur", validator: validatorRule.IS_GENERAL },
           ],
           mobile: [
+            { required: true, trigger: "blur", message: "请输入手机" },
             { required: false, trigger: "blur", validator: validatorRule.IS_MOBILE },
           ],
           email: [
+            { required: true, trigger: "blur", message: "请输入邮箱" },
             { required: false, trigger: "blur", validator: validatorRule.IS_EMAIL },
           ],
         },

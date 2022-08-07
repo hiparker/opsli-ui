@@ -6,16 +6,17 @@
     width="500px"
     @close="close"
   >
-    <el-form ref="form" :model="form" :rules="rules" label-width="80px" class="update-password-container">
+    <!-- 身份认证 -->
+    <auth-verify
+      v-if="!isOk"
+      ref="auth-verify"
+      @update-certificate="updateCertificate"
+    >
+    </auth-verify>
 
-      <el-form-item label="旧密码" prop="oldPassword">
-        <el-input
-          type="password"
-          v-model.trim="form.oldPassword"
-          autocomplete="off"
-          show-password
-        ></el-input>
-      </el-form-item>
+    <el-form ref="form" v-if="isOk"
+             :model="form"
+             :rules="rules" label-width="80px" class="update-password-container">
 
       <el-form-item label="新密码" prop="newPassword">
         <el-input
@@ -35,9 +36,8 @@
         ></el-input>
       </el-form-item>
 
-
     </el-form>
-    <div slot="footer" class="dialog-footer">
+    <div v-if="isOk" slot="footer" class="dialog-footer">
       <el-button @click="close">取 消</el-button>
       <el-button type="primary" @click="save">确 定</el-button>
     </div>
@@ -45,11 +45,13 @@
 </template>
 
 <script>
-  import { doUpdatePassword } from "@/api/system/user/userManagement";
+  import { doUpdatePasswordByForget } from "@/api/system/user/userManagement";
   import { validatorRule } from "@/utils/validateRlue";
+  import AuthVerify from "@/components/opsli/auth/AuthVerify";
 
   export default {
-    name: "UserManagementPassword",
+    name: "UpdatePasswordByForget",
+    components: { AuthVerify },
     data() {
 
       const validateVerifyPassword = (rule, value, callback) => {
@@ -61,15 +63,14 @@
       };
 
       return {
+        isOk: false,
+        baseForm: {},
         form: {
-          oldPassword: "",
-          newPassword: "",
-          verifyPassword: "",
+          email: "",
+          verificationCode: "",
+          certificate: ""
         },
         rules: {
-          oldPassword: [
-            { required: true, trigger: "blur", message: "请输入旧密码" },
-          ],
           newPassword: [
             { required: true, trigger: "blur", message: "请输入密码" },
             { required: true, trigger: "blur", validator: validatorRule.IS_SECURITY_PASSWORD },
@@ -79,30 +80,32 @@
             { required: true, trigger: "blur", validator: validateVerifyPassword },
           ],
         },
-        title: "",
+        title: "忘记密码-修改密码",
         dialogFormVisible: false,
       };
     },
-    created() {},
     methods: {
+      // 回调方法
+      updateCertificate(certificate){
+        this.isOk = true;
+        this.form.certificate = certificate;
+      },
       show() {
-        this.title = "修改密码";
         this.dialogFormVisible = true;
       },
       close() {
         this.dialogFormVisible = false;
+        this.isOk = false;
         this.form = this.$options.data().form;
       },
       save() {
         this.$refs["form"].validate(async (valid) => {
           if (valid) {
             // 修改密码
-            const { msg } = await doUpdatePassword(this.form);
+            const { msg } = await doUpdatePasswordByForget(this.form);
             this.$baseMessage(msg, "success");
             await this.$emit("fetchData");
             this.close();
-          } else {
-            return false;
           }
         });
       },

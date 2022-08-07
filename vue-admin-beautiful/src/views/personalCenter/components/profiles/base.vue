@@ -60,18 +60,6 @@
               </el-form-item>
             </el-col>
 
-            <el-col :span="24" class="line">
-              <el-form-item label="手机：" prop="mobile" style="font-weight: bold">
-                <el-input v-model.trim="baseForm.mobile" autocomplete="off"></el-input>
-              </el-form-item>
-            </el-col>
-
-            <el-col :span="24" class="line">
-              <el-form-item label="邮箱：" prop="email" style="font-weight: bold">
-                <el-input v-model.trim="baseForm.email" autocomplete="off"></el-input>
-              </el-form-item>
-            </el-col>
-
             <el-col :span="24" style="padding-left: 20px" class="line">
               <el-button type="primary" @click="saveUser"> 保存 </el-button>
             </el-col>
@@ -119,17 +107,6 @@
             </el-form-item>
           </el-col>
 
-          <el-col :span="24" class="line">
-            <el-form-item label="手机：" prop="mobile" style="font-weight: bold">
-              <el-input v-model.trim="baseForm.mobile" autocomplete="off"></el-input>
-            </el-form-item>
-          </el-col>
-
-          <el-col :span="24" class="line">
-            <el-form-item label="邮箱：" prop="email" style="font-weight: bold">
-              <el-input v-model.trim="baseForm.email" autocomplete="off"></el-input>
-            </el-form-item>
-          </el-col>
 
           <el-col :span="24" style="padding-left: 20px" class="line">
             <el-button type="primary" @click="saveUser"> 保存 </el-button>
@@ -214,12 +191,6 @@
         baseRules: {
           realName: [
             {required: true, trigger: "blur", validator: validateRealName},
-          ],
-          mobile: [
-            {required: false, trigger: "blur", validator: validateMobile},
-          ],
-          email: [
-            {required: false, trigger: "blur", validator: validateEmail},
           ],
         },
         // cropper

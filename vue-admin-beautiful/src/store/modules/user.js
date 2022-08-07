@@ -4,14 +4,22 @@
  */
 
 import Vue from "vue";
-import { getSlipCount, getUserInfo, login, logout } from "@/api/user";
+import {
+  getSlipCount,
+  getUserInfo,
+  login,
+  loginByCode,
+  logout,
+  sendEmailCode,
+  sendMobileCode,
+} from "@/api/user";
 import {
   getAccessToken,
   removeAccessToken,
   setAccessToken,
 } from "@/utils/accessToken";
 import { resetRouter } from "@/router";
-import { title, tokenName, loginRSA } from "@/config/settings";
+import { title, tokenName, encryptRSA } from "@/config/settings";
 import { decryptedDes } from "@/utils/crypto/encrypt-des";
 
 const state = {
@@ -50,10 +58,52 @@ const actions = {
   setPermissions({ commit }, permissions) {
     commit("setPermissions", permissions);
   },
+  async sendEmailCode({ commit }, form) {
+    const { msg } = await sendEmailCode(form);
+    Vue.prototype.$baseMessage(msg, "success");
+  },
+  async sendMobileCode({ commit }, form) {
+    const { msg } = await sendMobileCode(form);
+    Vue.prototype.$baseMessage(msg, "success");
+  },
   async login({ commit }, userInfo) {
     const { data } = await login(userInfo);
     let tmpData = data;
-    if (loginRSA) {
+    if (encryptRSA) {
+      // 获得公钥
+      let publicKey = Vue.prototype.$getPublicKey();
+      // 解密数据
+      let decryptedStr = decryptedDes(tmpData, publicKey);
+      // 转换为Json
+      tmpData = JSON.parse(decryptedStr);
+    }
+
+    const accessToken = tmpData["accessToken"];
+    if (accessToken) {
+      commit("setAccessToken", accessToken);
+      const hour = new Date().getHours();
+      const thisTime =
+        hour < 8
+          ? "早上好"
+          : hour <= 11
+          ? "上午好"
+          : hour <= 13
+          ? "中午好"
+          : hour < 18
+          ? "下午好"
+          : "晚上好";
+      Vue.prototype.$baseNotify(`欢迎登录${title}`, `${thisTime}！`);
+    } else {
+      Vue.prototype.$baseMessage(
+        `登录接口异常，未正确返回${tokenName}...`,
+        "error"
+      );
+    }
+  },
+  async loginByCode({ commit }, form) {
+    const { data } = await loginByCode(form);
+    let tmpData = data;
+    if (encryptRSA) {
       // 获得公钥
       let publicKey = Vue.prototype.$getPublicKey();
       // 解密数据

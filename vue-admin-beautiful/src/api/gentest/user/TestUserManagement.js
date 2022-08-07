@@ -43,24 +43,38 @@ export function doDeleteAll(data) {
 
 /**
  * 导出Excel 目前只支持一层参数传递
- * @param data
+ * @param params 参数
  * @returns file
  */
-export function doExportExcel(data) {
-  let requestURL = "/api/v1/gentest/user/exportExcel";
-  // 下载文件
-  downloadFileByData(requestURL, data);
+export async function doExportExcel(params) {
+  // 认证
+  const { data } = await request({
+    url: "/api/v1/gentest/user/excel/auth/export",
+    method: "get",
+    params: params,
+  });
+
+  if (data) {
+    // 下载文件
+    downloadFileByData("/api/v1/gentest/user/excel/export/" + data, params);
+  }
 }
 
 /**
  * 下载模版
  * @returns file
  */
-export function doDownloadTemplate() {
-  let data = {};
-  let requestURL = "/api/v1/gentest/user/importExcel/template";
-  // 下载文件
-  downloadFileByData(requestURL, data);
+export async function doDownloadTemplate() {
+  // 认证
+  const { data } = await request({
+    url: "/api/v1/gentest/user/excel/auth/import-template-export",
+    method: "get",
+  });
+
+  if (data) {
+    // 下载文件
+    downloadFileByData("/api/v1/gentest/user/excel/export/" + data, {});
+  }
 }
 
 /**

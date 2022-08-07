@@ -28,7 +28,7 @@
             <el-input
               v-model.trim="form.username"
               v-focus
-              placeholder="请输入用户名"
+              placeholder="用户名/手机号/邮箱"
               tabindex="1"
               type="text"
             />
@@ -119,7 +119,7 @@
         },
         rules: {
           username: [
-            { required: true, trigger: "blur", message: "请输入用户名" },
+            { required: true, trigger: "blur", message: "请输入用户名/手机号/邮箱" },
           ],
           password: [
             { required: true, trigger: "blur", message: "请输入密码" },
