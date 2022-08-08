@@ -26,15 +26,15 @@
 ### 后端版本
 > 单机版
 
-| 名称             | 版本号  |      | 名称           | 版本号         |
-| ---------------- | ------- | ---- | -------------- | -------------- |
-| jdk版本          | ^1.8    |      | springboot版本 | ^2.3.3.RELEASE |
-| mybatis-plus版本 | ^3.4.0  |      | pagehelper版本 | ^1.1.0         |
-| druid版本        | ^1.1.17 |      | dynamic版本    | ^2.5.4         |
-| shiro-redis版本  | ^3.3.1  |      | jwt版本        | ^3.10.3        |
-| ehcache版本      | ^3.9.0  |      | easyexcel版本  | ^2.2.6         |
-| kaptcha版本      | ^0.0.9  |      | guava版本      | ^29.0-jre      |
-| enjoy版本        | ^4.9.03 |      | hutool版本     | ^5.6.3         |
+| 名称             | 版本号 |      | 名称           | 版本号          |
+| ---------------- |---| ---- | -------------- |--------------|
+| jdk版本          | 1.8 |      | springboot版本 | 2.5.6        |
+| mybatis-plus版本 | 3.5.2 |      | pagehelper版本 | 1.3.0        |
+| druid版本        | 1.1.17 |      | dynamic版本    | 2.5.4        |
+| fastjson版本  | 1.2.83  |      | transmittable版本        | 2.12.5       |
+| ehcache版本      | 3.9.0 |      | easyexcel版本  | 2.2.6        |
+| captcha版本      | 1.6.2 |      | guava版本      | 30.0-android |
+| enjoy版本        | 4.9.06 |      | hutool版本     | 5.7.14       |
 
 ## 在线演示
 > - 地址：<a href="https://demo.opsli.bedebug.com" target="_blank">https://demo.opsli.bedebug.com</a>
