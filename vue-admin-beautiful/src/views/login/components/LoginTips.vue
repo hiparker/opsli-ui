@@ -70,7 +70,7 @@
     data() {
 
       return {
-        title: "登录Tips",
+        title: "快速登录Tips",
         dialogFormVisible: false,
         loading: false,
         account:{

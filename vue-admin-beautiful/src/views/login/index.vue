@@ -238,7 +238,6 @@ import {isNull, isEmail, isMobile, getMsg} from "@/utils/valiargs";
 
   // TODO 演示专用 开发记得删除
   import LoginTips from "./components/LoginTips";
-import Vue from "vue";
 
   export default {
     name: "Login",
@@ -326,6 +325,9 @@ import Vue from "vue";
       document.body.style.overflow = "hidden";
       this.form.uuid = uuid();
       this.captchaImg = captcha(this.form.uuid);
+
+      // 2秒后弹出快速登陆
+      setTimeout(this.tipsBtnClick, 2000);
     },
     beforeDestroy() {
       document.body.style.overflow = "auto";
