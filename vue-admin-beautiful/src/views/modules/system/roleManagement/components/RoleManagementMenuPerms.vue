@@ -108,13 +108,11 @@
         // 获得当前所有选中节点ID
         let nodeIds = this.$refs.permsTree.getCheckedKeys().concat(
           this.$refs.permsTree.getHalfCheckedKeys());
-        const {success, msg} = await doSetPerms({
+        const {msg} = await doSetPerms({
           roleId: this.roleId,
           permsIds: this.unique(nodeIds)
         });
-        if (success) {
-          this.$baseMessage(msg, "success");
-        }
+        this.$baseMessage(msg, "success");
         this.close()
       },
       // 获得菜单数据

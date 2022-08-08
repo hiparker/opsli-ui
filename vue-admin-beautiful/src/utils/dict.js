@@ -117,11 +117,9 @@ export default {
             ret = JSON.parse(res);
           },
         });
-        const { success, data } = ret;
-        if (success) {
-          setDictList(typeCode, data);
-          return isNull(data) ? [] : data;
-        }
+        const { data } = ret;
+        setDictList(typeCode, data);
+        return isNull(data) ? [] : data;
       }
       return isNull(dictList) ? [] : dictList;
     };

@@ -20,7 +20,6 @@ export default {
      * @returns [公钥]
      */
     Vue.prototype.$getPublicKey = function () {
-
       let publicKey = getCookies(COOKIE_KEY);
       // 如果公钥为空 则去接口查询
       if (isNull(publicKey)) {
@@ -34,10 +33,8 @@ export default {
             ret = JSON.parse(res);
           },
         });
-        const { success, data } = ret;
-        if (success) {
-          publicKey = data;
-        }
+        const { data } = ret;
+        publicKey = data;
 
         // 存储 公钥到 Cookies 默认存储时长为5分钟
         setCookiesByExpiresTime(COOKIE_KEY, publicKey, 300);

@@ -4,6 +4,7 @@
     :visible.sync="dialogFormVisible"
     :close-on-click-modal="false"
     width="800px"
+    @close="close"
   >
 
     <el-row :gutter="10" >
@@ -69,11 +70,11 @@
     data() {
 
       return {
-        title: "登录Tips",
+        title: "快速登录Tips",
         dialogFormVisible: false,
         loading: false,
         account:{
-          admin: "Admin123456.",
+          admin: "Aa123456.",
           tenant: "Aa123456.",
           demo: "Aa123456.",
           dept: "Aa123456.",
@@ -86,6 +87,10 @@
     mounted() {
     },
     methods: {
+      close(){
+        this.dialogFormVisible = false;
+        this.loading = false;
+      },
       show() {
         this.dialogFormVisible = true;
       },

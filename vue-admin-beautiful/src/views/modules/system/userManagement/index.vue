@@ -327,15 +327,13 @@
         }
 
         // 执行 设置组织
-        const {success, msg} = await doSetOrg({
+        const {msg} = await doSetOrg({
           userId: row.id,
           defModel: result.defOrg,
           orgModelList: result.orgList,
         });
-        if (success) {
-          this.$baseMessage(msg, "success");
-          await this.fetchData();
-        }
+        this.$baseMessage(msg, "success");
+        await this.fetchData();
       },
       // 选择组织机构
       async showOrg(row){
@@ -392,10 +390,8 @@
         this.$baseConfirm("你确定要重置当前用户密码吗", null, async () => {
           doResetPasswordById({ userId : row.id}).then(ret => {
             // 重置密码
-            const { success, msg } = ret;
-            if(success){
-              this.$baseMessage(msg, "success");
-            }
+            const { msg } = ret;
+            this.$baseMessage(msg, "success");
           });
         });
       },

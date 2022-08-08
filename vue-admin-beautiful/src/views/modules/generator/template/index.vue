@@ -241,15 +241,13 @@ import {getList, doDelete, doDeleteAll, doCopy, doUpdate} from "@/api/generator/
               },
               inputErrorMessage: "模板名称为空 或 只能为汉字、字母、数字和下划线！",
               callback1: async ({value}) => {
-                const {success, msg} = await doCopy({
+                const {msg} = await doCopy({
                   id: row.id,
                   tempName: value
                 });
-                if (success) {
-                  this.$baseMessage(msg, "success");
-                  // 刷新数据
-                  _this.fetchData();
-                }
+                this.$baseMessage(msg, "success");
+                // 刷新数据
+                _this.fetchData();
               }
           });
         }

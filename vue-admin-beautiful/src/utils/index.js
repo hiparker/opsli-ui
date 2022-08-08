@@ -286,7 +286,7 @@ export function random(m, n) {
 }
 
 // 按钮倒计时锁定
-export function vueButtonClickBan(el, second) {
+export function vueButtonClickBan(el, second, isAddClass) {
   if (
     el !== null &&
     el !== undefined &&
@@ -303,19 +303,21 @@ export function vueButtonClickBan(el, second) {
 
     // 如果按钮对象不为空 则 进行处理
     if (btnEl !== null && btnEl !== undefined) {
-      buttonClickBan(btnEl, second);
+      buttonClickBan(btnEl, second, isAddClass);
     }
   }
 }
 
 // 按钮倒计时锁定
-export function buttonClickBan(el, second) {
+export function buttonClickBan(el, second, isAddClass) {
   if (el === null || el === undefined) {
     return;
   }
 
   // 设置当前按钮禁用
-  el.classList.add("is-disabled");
+  if (isAddClass === undefined || isAddClass) {
+    el.classList.add("is-disabled");
+  }
   el.style["pointer-events"] = "none";
 
   // 获得当前按钮文字
@@ -333,7 +335,9 @@ export function buttonClickBan(el, second) {
           textSpan.innerText = btnText + " (" + (second - i) + ")";
           if (i === second) {
             // 解除按钮
-            el.classList.remove("is-disabled");
+            if (isAddClass === undefined || isAddClass) {
+              el.classList.remove("is-disabled");
+            }
             el.style["pointer-events"] = "auto";
             // 设置按钮倒计时
             textSpan.innerText = btnText;

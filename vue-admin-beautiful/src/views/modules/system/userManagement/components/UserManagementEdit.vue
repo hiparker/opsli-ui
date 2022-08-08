@@ -7,6 +7,11 @@
     width="800px"
     @close="close"
   >
+    <el-alert
+      title="绑定邮箱/手机 后会替换当前系统内已有改邮箱/手机的用户"
+      style="margin-bottom: 15px"
+      type="warning" :closable="false">
+    </el-alert>
     <el-form ref="form" :model="form" :rules="rules" label-width="105px" class="userManagement-edit-container">
       <el-row :gutter="10" >
 
@@ -178,9 +183,11 @@
             { required: true, trigger: "blur", validator: validatorRule.IS_GENERAL },
           ],
           mobile: [
+            { required: true, trigger: "blur", message: "请输入手机" },
             { required: false, trigger: "blur", validator: validatorRule.IS_MOBILE },
           ],
           email: [
+            { required: true, trigger: "blur", message: "请输入邮箱" },
             { required: false, trigger: "blur", validator: validatorRule.IS_EMAIL },
           ],
         },
@@ -234,25 +241,21 @@
           if (valid) {
             // 修改
             if (!isNull(this.form.id)) {
-              const { success, msg } = await doUpdate(this.form);
-              if(success){
-                this.$baseMessage(msg, "success");
-              }
+              const { msg } = await doUpdate(this.form);
+              this.$baseMessage(msg, "success");
             } else {
-              const { success, msg, data } = await doInsert(this.form);
-              if(success){
-                // 如果组织 不为空 则帮助用户绑定组织
-                if(data && this.orgNode){
-                  // 执行 设置组织
-                  await doSetOrg({
-                    userId: data.id,
-                    defModel: this.orgNode,
-                    orgModelList: [this.orgNode],
-                  })
-                }
-
-                this.$baseMessage(msg, "success");
+              const { msg, data } = await doInsert(this.form);
+              // 如果组织 不为空 则帮助用户绑定组织
+              if(data && this.orgNode){
+                // 执行 设置组织
+                await doSetOrg({
+                  userId: data.id,
+                  defModel: this.orgNode,
+                  orgModelList: [this.orgNode],
+                })
               }
+
+              this.$baseMessage(msg, "success");
             }
 
             await this.$emit("fetchData");

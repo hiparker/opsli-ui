@@ -97,15 +97,11 @@
 
             // 修改
             if (!isNull(tmpForm.id)) {
-              const { success, msg } = await doUpdate(tmpForm);
-              if(success){
-                this.$baseMessage(msg, "success");
-              }
+              const { msg } = await doUpdate(tmpForm);
+              this.$baseMessage(msg, "success");
             } else {
-              const { success, msg } = await doInsert(tmpForm);
-              if(success){
-                this.$baseMessage(msg, "success");
-              }
+              const { msg } = await doInsert(tmpForm);
+              this.$baseMessage(msg, "success");
             }
 
             this.close();

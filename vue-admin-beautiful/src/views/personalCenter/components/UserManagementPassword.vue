@@ -85,7 +85,7 @@
     },
     created() {},
     methods: {
-      showUpdatePassword() {
+      show() {
         this.title = "修改密码";
         this.dialogFormVisible = true;
       },
@@ -97,11 +97,9 @@
         this.$refs["form"].validate(async (valid) => {
           if (valid) {
             // 修改密码
-            const { success, msg } = await doUpdatePassword(this.form);
-            if(success){
-              this.$baseMessage(msg, "success");
-              await this.$emit("fetchData");
-            }
+            const { msg } = await doUpdatePassword(this.form);
+            this.$baseMessage(msg, "success");
+            await this.$emit("fetchData");
             this.close();
           } else {
             return false;

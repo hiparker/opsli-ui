@@ -43,7 +43,7 @@ module.exports = {
   //加载时显示文字
   loadingText: "正在加载中...",
   //token名称
-  tokenName: "X-Token",
+  tokenName: "T-Authorization",
   //token在localStorage、sessionStorage、cookie存储的key的名称
   tokenTableName: "opsli-token",
   //token存储位置localStorage sessionStorage cookie
@@ -80,8 +80,8 @@ module.exports = {
   errorLog: ["development", "test"],
   //是否开启登录拦截
   loginInterception: true,
-  //是否开启登录RSA加密
-  loginRSA: true,
+  //部分接口是否开启RSA加密
+  encryptRSA: true,
   //是否依据mock数据生成webstorm HTTP Request请求文件
   httpRequestFile: false,
   //intelligence和all两种方式，前者后端权限只控制permissions不控制view文件的import（前后端配合，减轻后端工作量），all方式完全交给后端前端只负责加载

@@ -106,17 +106,10 @@
           formData.append("file", blobObject);
           const ret = doImportExcel(formData);
           ret.then((v) => {
-            const {success,msg,data} = v;
-            if(success){
+              const {msg,data} = v;
               this.$baseMessage(msg, "success");
               // 成功
               params.onSuccess();
-            }else{
-              // 文件进度 100%
-              this.errorProcess(params.file.uid);
-              // 失败
-              params.onError();
-            }
           }).catch( (e) =>{
             // 失败
             params.onError();

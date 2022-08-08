@@ -170,19 +170,17 @@
 
         const { data} = await doUpload(formData);
         if(data){
-          const { success, msg } = await doUpdateAvatar({
+          const { msg } = await doUpdateAvatar({
             imgUrl: data.fileStoragePath
           });
 
-          if(success){
-            // 刷新用户信息
-            await store.dispatch("user/getUserInfo");
-            // 刷新父类信息
-            await this.$emit("fetchData");
-            this.confirmLoading = false
-            this.close()
-            this.$baseMessage( msg, "success");
-          }
+          // 刷新用户信息
+          await store.dispatch("user/getUserInfo");
+          // 刷新父类信息
+          await this.$emit("fetchData");
+          this.confirmLoading = false
+          this.close()
+          this.$baseMessage( msg, "success");
         }
       },
       uploadImg(e) {

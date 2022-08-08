@@ -12,81 +12,216 @@
         <div style="color: transparent">占位符</div>
       </el-col>
       <el-col :xs="24" :sm="24" :md="12" :lg="8" :xl="8">
-        <el-form
-          ref="form"
-          :model="form"
-          :rules="rules"
-          class="login-form"
-          label-position="left"
-        >
+        <el-row class="login-form">
           <div class="title">hello !</div>
           <div class="title-tips">欢迎来到{{ title }}！</div>
-          <el-form-item style="margin-top: 40px" prop="username">
-            <span class="svg-container svg-container-admin">
-              <vab-icon :icon="['fas', 'user']" />
-            </span>
-            <el-input
-              v-model.trim="form.username"
-              v-focus
-              placeholder="请输入用户名"
-              tabindex="1"
-              type="text"
-            />
-          </el-form-item>
-          <el-form-item prop="password">
-            <span class="svg-container">
-              <vab-icon :icon="['fas', 'lock']" />
-            </span>
-            <el-input
-              :key="passwordType"
-              ref="password"
-              v-model.trim="form.password"
-              :type="passwordType"
-              tabindex="2"
-              placeholder="请输入密码"
-              show-password
-              @keyup.enter.native="handleLogin"
-            />
-          </el-form-item>
+          <br>
+          <el-tabs active-name="account" >
+            <el-tab-pane label="账号密码" name="account">
+              <el-form
+                ref="form"
+                :model="form"
+                :rules="rules"
+                label-position="left"
+              >
+                <el-form-item style="margin-top: 40px" prop="username">
+                  <span class="svg-container svg-container-admin">
+                    <vab-icon :icon="['fas', 'user']" />
+                  </span>
+                  <el-input
+                    v-model.trim="form.username"
+                    v-focus
+                    placeholder="用户名/手机号/邮箱"
+                    tabindex="1"
+                    type="text"
+                  />
+                </el-form-item>
+                <el-form-item prop="password">
+                  <span class="svg-container">
+                    <vab-icon :icon="['fas', 'lock']" />
+                  </span>
+                  <el-input
+                    :key="passwordType"
+                    ref="password"
+                    v-model.trim="form.password"
+                    :type="passwordType"
+                    tabindex="2"
+                    placeholder="请输入密码"
+                    show-password
+                    @keyup.enter.native="handleLogin"
+                  />
+                </el-form-item>
 
-          <el-form-item v-if="captchaFlag" prop="captcha">
-            <span class="svg-container">
-              <i class="el-icon-warning" />
-            </span>
-            <el-input
-              ref="captcha"
-              v-model.trim="form.captcha"
-              placeholder="请输入验证码"
-              name="captcha"
-              type="text"
-              tabindex="1"
-              autocomplete="on"
-              maxlength="10"
-              style="width: calc(100% - 200px)"
-              @keyup.enter.native="handleLogin"
-            />
-            <img
-              class="captcha"
-              style="float: right"
-              title="看不起，换一张"
-              alt="验证码"
-              :src="captchaImg"
-              @click="getCaptcha"
-            />
-          </el-form-item>
+                <el-form-item v-if="captchaFlag" prop="captcha">
+                  <span class="svg-container">
+                    <i class="el-icon-warning" />
+                  </span>
+                  <el-input
+                    ref="captcha"
+                    v-model.trim="form.captcha"
+                    placeholder="请输入验证码"
+                    name="captcha"
+                    type="text"
+                    tabindex="1"
+                    autocomplete="on"
+                    maxlength="10"
+                    style="width: calc(100% - 200px)"
+                    @keyup.enter.native="handleLogin"
+                  />
+                  <img
+                    class="captcha"
+                    style="float: right"
+                    title="看不起，换一张"
+                    alt="验证码"
+                    :src="captchaImg"
+                    @click="getCaptcha"
+                  />
+                </el-form-item>
 
-          <el-button
-            :loading="loading"
-            class="login-btn"
-            type="primary"
-            @click="handleLogin"
-          >
-            登录
-          </el-button>
-          <!--          <router-link to="/register">-->
-          <!--            <div style="margin-top: 20px">注册</div>-->
-          <!--          </router-link>-->
-        </el-form>
+                <el-button
+                  :loading="loading"
+                  class="login-btn"
+                  type="primary"
+                  @click="handleLogin()"
+                >
+                  登录
+                </el-button>
+
+                <el-button
+                  :loading="loading"
+                  class="login-btn"
+                  type="success"
+                  style="width: 100px"
+                  @click="tipsBtnClick"
+                >
+                  快速登陆
+                </el-button>
+                <!--          <router-link to="/register">-->
+                <!--            <div style="margin-top: 20px">注册</div>-->
+                <!--          </router-link>-->
+              </el-form>
+            </el-tab-pane>
+            <el-tab-pane label="手机验证码" name="mobile">
+              <el-form
+                ref="mobileForm"
+                :model="mobileForm"
+                :rules="mobileRules"
+                label-position="left"
+              >
+                <el-form-item style="margin-top: 40px" prop="principal">
+                  <span class="svg-container svg-container-admin">
+                    <vab-icon :icon="['fas', 'user']" />
+                  </span>
+                  <el-input
+                    v-model.trim="mobileForm.principal"
+                    v-focus
+                    placeholder="请输入手机号"
+                    tabindex="1"
+                    type="text"
+                  />
+                </el-form-item>
+
+
+                <el-form-item prop="verificationCode">
+                  <span class="svg-container">
+                    <i class="el-icon-warning" />
+                  </span>
+                  <el-input
+                    ref="verificationCode"
+                    v-model.trim="mobileForm.verificationCode"
+                    placeholder="请输入验证码"
+                    name="verificationCode"
+                    type="text"
+                    tabindex="1"
+                    autocomplete="on"
+                    maxlength="10"
+                    style="width: calc(100% - 128px) !important;"
+                    @keyup.enter.native="handleLoginByCode('mobileForm', mobileForm)"
+                  />
+
+                  <el-button
+                    plain native-type="button"
+                    class="other-btn"
+                    style="margin-left: 10px"
+                    @click="handleSendMobileCode">
+                    获取验证码
+                  </el-button>
+
+                </el-form-item>
+
+                <el-button
+                  :loading="loading"
+                  class="login-btn"
+                  type="primary"
+                  @click="handleLoginByCode('mobileForm', mobileForm)"
+                >
+                  登录
+                </el-button>
+              </el-form>
+            </el-tab-pane>
+            <el-tab-pane label="邮箱验证码" name="email">
+              <el-form
+                ref="emailForm"
+                :model="emailForm"
+                :rules="emailRules"
+                label-position="left"
+              >
+                <el-form-item style="margin-top: 40px" prop="principal">
+                  <span class="svg-container svg-container-admin">
+                    <vab-icon :icon="['fas', 'user']" />
+                  </span>
+                  <el-input
+                    v-model.trim="emailForm.principal"
+                    v-focus
+                    placeholder="请输入邮箱"
+                    tabindex="1"
+                    type="text"
+                  />
+                </el-form-item>
+
+
+                <el-form-item prop="verificationCode">
+                  <span class="svg-container">
+                    <i class="el-icon-warning" />
+                  </span>
+                  <el-input
+                    ref="verificationCode"
+                    v-model.trim="emailForm.verificationCode"
+                    placeholder="请输入验证码"
+                    name="verificationCode"
+                    type="text"
+                    tabindex="1"
+                    autocomplete="on"
+                    maxlength="10"
+                    style="width: calc(100% - 128px) !important;"
+                    @keyup.enter.native="handleLoginByCode('emailForm', emailForm)"
+                  />
+
+                  <el-button
+                    plain native-type="button"
+                    class="other-btn"
+                    style="margin-left: 10px"
+                    @click="handleSendEmailCode">
+                    获取验证码
+                  </el-button>
+
+                </el-form-item>
+
+                <el-button
+                  :loading="loading"
+                  class="login-btn"
+                  type="primary"
+                  @click="handleLoginByCode('emailForm', emailForm)"
+                >
+                  登录
+                </el-button>
+                <!--          <router-link to="/register">-->
+                <!--            <div style="margin-top: 20px">注册</div>-->
+                <!--          </router-link>-->
+              </el-form>
+            </el-tab-pane>
+          </el-tabs>
+        </el-row>
       </el-col>
     </el-row>
 
@@ -96,8 +231,8 @@
 </template>
 
 <script>
-  import { uuid } from "@/utils";
-  import { isNull } from "@/utils/valiargs";
+import {uuid, vueButtonClickBan} from "@/utils";
+import {isNull, isEmail, isMobile, getMsg} from "@/utils/valiargs";
   import { validatorRule } from "@/utils/validateRlue";
   import { captcha } from "@/api/user";
 
@@ -119,6 +254,10 @@
       return {
         nodeEnv: process.env.NODE_ENV,
         title: this.$baseTitle,
+
+        // 验证码类型 0==登陆认证
+        codeType: "0",
+
         form: {
           username: "",
           password: "",
@@ -127,13 +266,43 @@
         },
         rules: {
           username: [
-            { required: true, trigger: "blur", message: "请输入用户名" },
+            { required: true, trigger: "blur", message: "请输入用户名/手机号/邮箱" },
           ],
           password: [
             { required: true, trigger: "blur", message: "请输入密码" },
             { required: true, trigger: "blur", validator: validatorRule.IS_SECURITY_PASSWORD },
           ],
           captcha: [
+            { required: true, trigger: "blur", message: "请输入验证码" },
+          ],
+        },
+
+
+        mobileForm: {
+          principal: "",
+          verificationCode: "",
+          loginFrom: "0"
+        },
+        mobileRules: {
+          principal: [
+            { required: true, trigger: "blur", message: "请输入手机号" },
+            { required: true, trigger: "blur", validator: validatorRule.IS_MOBILE },
+          ],
+          verificationCode: [
+            { required: true, trigger: "blur", message: "请输入验证码" },
+          ],
+        },
+        emailForm: {
+          principal: "",
+          verificationCode: "",
+          loginFrom: "0"
+        },
+        emailRules: {
+          principal: [
+            { required: true, trigger: "blur", message: "请输入邮箱" },
+            { required: true, trigger: "blur", validator: validatorRule.IS_EMAIL },
+          ],
+          verificationCode: [
             { required: true, trigger: "blur", message: "请输入验证码" },
           ],
         },
@@ -156,15 +325,19 @@
       document.body.style.overflow = "hidden";
       this.form.uuid = uuid();
       this.captchaImg = captcha(this.form.uuid);
+
+      // 2秒后弹出快速登陆
+      setTimeout(this.tipsBtnClick, 2000);
     },
     beforeDestroy() {
       document.body.style.overflow = "auto";
     },
-    mounted() {
-      // TODO 演示使用 开发手动删除
-      this.$refs["login-tips"].show();
-    },
     methods: {
+      // TODO 演示使用 开发手动删除
+      tipsBtnClick(){
+        // TODO 演示使用 开发手动删除
+        this.$refs["login-tips"].show();
+      },
       // TODO 演示使用 开发手动删除
       tipsClick(ret){
         // 点击登录
@@ -179,9 +352,18 @@
       handleLogin() {
         this.$refs.form.validate((valid) => {
           if (valid) {
+            // 封装数据
+            let loginData = {
+              principal: this.form.username,
+              password: this.form.password,
+              verificationCode: this.form.captcha,
+              uuid: this.form.uuid,
+              loginFrom: "0"
+            }
+
             this.loading = true;
             this.$store
-              .dispatch("user/login", this.form)
+              .dispatch("user/login", loginData)
               .then(() => {
                 const routerPath =
                   this.redirect === "/404" || this.redirect === "/401"
@@ -211,6 +393,73 @@
           }
         });
       },
+
+      // 发送手机验证码
+      handleSendMobileCode(el) {
+        if(isNull(this.mobileForm.principal)){
+          this.$baseMessage("请输入手机号", "error");
+          return;
+        }
+        if(!isMobile(this.mobileForm.principal)){
+          this.$baseMessage(getMsg("isMobile"), "error");
+          return;
+        }
+
+        // 导出按钮防抖处理 默认限制为60秒
+        vueButtonClickBan(el, 60);
+
+        const tmpForm = {
+          mobile: this.mobileForm.principal,
+          type: this.codeType
+        }
+        this.$store.dispatch("user/sendMobileCode", tmpForm);
+      },
+
+      // 发送邮箱验证码
+      handleSendEmailCode(el) {
+        if(isNull(this.emailForm.principal)){
+          this.$baseMessage("请输入邮箱", "error");
+          return;
+        }
+        if(!isEmail(this.emailForm.principal)){
+          this.$baseMessage(getMsg("isEmail"), "error");
+          return;
+        }
+
+        // 导出按钮防抖处理 默认限制为60秒
+        vueButtonClickBan(el, 60);
+
+        const tmpForm = {
+          email: this.emailForm.principal,
+          type: this.codeType
+        }
+        this.$store.dispatch("user/sendEmailCode", tmpForm);
+      },
+
+      // 验证码登陆
+      handleLoginByCode(ref, rForm) {
+        this.$refs[ref].validate((valid) => {
+          if (valid) {
+            this.loading = true;
+            this.$store
+              .dispatch("user/loginByCode", rForm)
+              .then(() => {
+                const routerPath =
+                  this.redirect === "/404" || this.redirect === "/401"
+                    ? "/"
+                    : this.redirect;
+                this.$router.push(routerPath).catch(() => {});
+                this.loading = false;
+              })
+              .catch(() => {
+                this.loading = false;
+              });
+          } else {
+            return false;
+          }
+        });
+      },
+
     },
   };
 </script>
@@ -238,11 +487,22 @@
     }
 
     .login-btn {
-      display: inherit;
+      //display: inherit;
       width: 220px;
       height: 60px;
       margin-top: 5px;
       border: 0;
+
+      &:hover {
+        opacity: 0.9;
+      }
+    }
+
+    .other-btn {
+      //display: inherit;
+      width: 118px;
+      height: 60px;
+      margin-top: 5px;
 
       &:hover {
         opacity: 0.9;

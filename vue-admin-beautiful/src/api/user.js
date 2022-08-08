@@ -2,11 +2,90 @@ import request from "@/utils/request";
 import { urlAddArgsByData } from "@/utils";
 const { baseURL } = require("@/config/settings");
 import { encryptedRsa } from "@/utils/crypto/encrypt-rsa";
-import { loginRSA, tokenName } from "@/config/settings";
+import { encryptRSA, tokenName } from "@/config/settings";
 import Vue from "vue";
 
+export function sendSelfEmailCode(type) {
+  return request({
+    url: "/api/v1/operation/auth/email/create-code/" + type,
+    method: "post",
+  });
+}
+
+export function checkSelfEmailCode(type, code) {
+  return request({
+    url: "/api/v1/operation/auth/email/check-code/" + type + "/" + code,
+    method: "post",
+  });
+}
+
+export function sendEmailCode(data) {
+  if (encryptRSA) {
+    // 获得公钥
+    let publicKey = Vue.prototype.$getPublicKey();
+    // 加密数据
+    let encrypted = encryptedRsa(data, publicKey);
+    data = {
+      encryptData: encrypted,
+    };
+  }
+  return request({
+    url: "/api/v1/common/email/create-code",
+    method: "post",
+    data,
+  });
+}
+
+export function sendSelfMobileCode(type) {
+  return request({
+    url: "/api/v1/operation/auth/mobile/create-code/" + type,
+    method: "post",
+  });
+}
+
+export function checkSelfMobileCode(type, code) {
+  return request({
+    url: "/api/v1/operation/auth/mobile/check-code/" + type + "/" + code,
+    method: "post",
+  });
+}
+
+export function sendMobileCode(data) {
+  if (encryptRSA) {
+    // 获得公钥
+    let publicKey = Vue.prototype.$getPublicKey();
+    // 加密数据
+    let encrypted = encryptedRsa(data, publicKey);
+    data = {
+      encryptData: encrypted,
+    };
+  }
+  return request({
+    url: "/api/v1/common/mobile/create-code",
+    method: "post",
+    data,
+  });
+}
+
+export async function loginByCode(data) {
+  if (encryptRSA) {
+    // 获得公钥
+    let publicKey = Vue.prototype.$getPublicKey();
+    // 加密数据
+    let encrypted = encryptedRsa(data, publicKey);
+    data = {
+      encryptData: encrypted,
+    };
+  }
+  return request({
+    url: "/system/login-by-code",
+    method: "post",
+    data,
+  });
+}
+
 export async function login(data) {
-  if (loginRSA) {
+  if (encryptRSA) {
     // 获得公钥
     let publicKey = Vue.prototype.$getPublicKey();
     // 加密数据

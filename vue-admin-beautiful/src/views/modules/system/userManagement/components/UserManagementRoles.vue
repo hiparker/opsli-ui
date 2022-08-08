@@ -246,15 +246,13 @@
         }
 
         // 执行 设置角色
-        const { success, msg } = await doSetRoles({
+        const { msg } = await doSetRoles({
           userId: this.userId,
           roleIds: this.unique(roleIds),
           defRoleId: this.defRoleId,
         });
 
-        if (success) {
-          this.$baseMessage(msg, "success");
-        }
+        this.$baseMessage(msg, "success");
 
         await this.$emit("fetchData");
         this.close();

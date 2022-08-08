@@ -1,27 +1,79 @@
 <template>
   <div class="logsManagement-container">
     <vab-query-form>
-      <vab-query-form-left-panel :span="6">
-        <el-radio-group v-model="queryForm.type_EQ" size="small" @change="fetchData">
-          <el-radio-button label="1">登入</el-radio-button>
-          <el-radio-button label="2">登出</el-radio-button>
-        </el-radio-group>
-      </vab-query-form-left-panel>
-      <vab-query-form-right-panel :span="18">
+      <vab-query-form-left-panel :span="24">
         <el-form :inline="true" :model="queryForm" @submit.native.prevent>
+
+          <el-form-item>
+            <el-select
+              v-model="queryForm.logType_EQ"
+              placeholder="日志类型"
+              clearable
+              style="width: 100%"
+            >
+              <el-option
+                v-for="item in $getDictList('log_type')"
+                :key="item.dictValue"
+                :label="item.dictName"
+                :value="item.dictValue"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+
+          <el-form-item>
+            <el-select
+              v-model="queryForm.level_EQ"
+              placeholder="日志等级"
+              clearable
+              style="width: 100%"
+            >
+              <el-option
+                v-for="item in $getDictList('log_level')"
+                :key="item.dictValue"
+                :label="item.dictName"
+                :value="item.dictValue"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+
+          <el-form-item>
+            <el-select
+              v-model="queryForm.operationType_EQ"
+              placeholder="操作类型"
+              clearable
+              style="width: 100%"
+            >
+              <el-option
+                v-for="item in $getDictList('log_operation_type')"
+                :key="item.dictValue"
+                :label="item.dictName"
+                :value="item.dictValue"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+
+          <el-form-item>
+            <el-select
+              v-model="queryForm.moduleId_EQ"
+              placeholder="操作模块"
+              clearable
+              style="width: 100%"
+            >
+              <el-option
+                v-for="item in $getDictList('log_model_type')"
+                :key="item.dictValue"
+                :label="item.dictName"
+                :value="item.dictValue"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+
+
 
           <el-form-item>
             <el-input
               v-model.trim="queryForm.username_EQ"
-              placeholder="请输入用户名"
-              clearable
-            />
-          </el-form-item>
-
-          <el-form-item>
-            <el-input
-              v-model.trim="queryForm.realName_LIKE"
-              placeholder="请输入用户昵称"
+              placeholder="请输入操作人账号"
               clearable
             />
           </el-form-item>
@@ -44,8 +96,9 @@
             </el-button>
           </el-form-item>
         </el-form>
-      </vab-query-form-right-panel>
+      </vab-query-form-left-panel>
     </vab-query-form>
+
 
     <el-table
       v-loading="listLoading"
@@ -53,7 +106,6 @@
       :element-loading-text="elementLoadingText"
       @selection-change="setSelectRows"
     >
-
       <el-table-column show-overflow-tooltip label="序号" width="95">
         <template slot-scope="scope">
           {{(queryForm.pageNo - 1) * queryForm.pageSize + scope.$index + 1}}
@@ -62,52 +114,105 @@
 
       <el-table-column
         show-overflow-tooltip
+        prop="logType"
+        label="日志类型"
+        width="100"
+      >
+
+        <template slot-scope="scope">
+          <span>
+            {{ $getDictNameByValue('log_type', scope.row.logType) }}
+          </span>
+        </template>
+
+      </el-table-column>
+
+      <el-table-column
+        show-overflow-tooltip
+        prop="level"
+        label="日志等级"
+        width="100"
+      >
+
+        <template slot-scope="scope">
+          <span>
+            {{ $getDictNameByValue('log_level', scope.row.level) }}
+          </span>
+        </template>
+
+      </el-table-column>
+
+      <el-table-column
+        show-overflow-tooltip
+        prop="moduleId"
+        label="被操作的系统模块"
+        width="140"
+      >
+
+        <template slot-scope="scope">
+          <span>
+            {{ $getDictNameByValue('log_model_type', scope.row.moduleId) }}
+          </span>
+        </template>
+
+      </el-table-column>
+
+      <el-table-column
+        show-overflow-tooltip
         prop="username"
-        label="用户名"
-        width="120"
+        label="操作人账号"
+        width="110"
       ></el-table-column>
 
       <el-table-column
         show-overflow-tooltip
         prop="realName"
-        label="用户姓名"
-        width="180"
+        label="操作人名称"
+        width="110"
       ></el-table-column>
 
       <el-table-column
         show-overflow-tooltip
-        prop="remoteAddr"
-        label="用户IP"
-        width="150"
-      ></el-table-column>
-
-      <el-table-column
-        show-overflow-tooltip
-        prop="loginFrom"
-        label="登陆来源"
-        width="120"
+        prop="operationType"
+        label="操作类型"
+        width="100"
       >
         <template slot-scope="scope">
-              <span>
-                {{ $getDictNameByValue('login_from', scope.row.loginFrom) }}
-              </span>
+          <span>
+            {{ $getDictNameByValue('log_operation_type', scope.row.operationType) }}
+          </span>
         </template>
       </el-table-column>
 
       <el-table-column
         show-overflow-tooltip
-        prop="userAgent"
-        label="用户代理"
+        prop="runTime"
+        label="运行时间(ms)"
+        width="110"
       ></el-table-column>
 
       <el-table-column
         show-overflow-tooltip
-        prop="createTime"
-        label="创建时间"
-        width="180"
+        prop="description"
+        label="日志描述"
       ></el-table-column>
 
+
+      <el-table-column
+        show-overflow-tooltip
+        label="操作"
+        width="110"
+      >
+        <template v-slot="scope">
+          <el-button
+            type="text"
+            @click="detail(scope.row)"
+          > 详情 </el-button>
+        </template>
+      </el-table-column>
+
     </el-table>
+
     <el-pagination
       background
       :current-page="queryForm.pageNo"
@@ -118,17 +223,21 @@
       @current-change="handleCurrentChange"
     ></el-pagination>
 
+    <operation-detail ref="OperationDetail"></operation-detail>
+
   </div>
 </template>
 
 <script>
-import { getList } from "@/api/system/logs/loginLogsManagement";
+import { getList } from "@/api/system/logs/OperationLogManagementApi";
 import { isNull } from "@/utils/validate";
 import { formateDate } from "@/utils/format";
+import OperationDetail from "./components/OperationDetail";
+
 
 export default {
-  name: "LogsManagement",
-  components: { },
+  name: "OpLoginLogsManagement",
+  components: { OperationDetail },
   data() {
     return {
       list: null,
@@ -140,9 +249,12 @@ export default {
       queryForm: {
         pageNo: 1,
         pageSize: 10,
-        type_EQ: "1",
         username_EQ: "",
         realName_LIKE: "",
+        logType_EQ: "",
+        level_EQ: "",
+        operationType_EQ: "",
+        moduleId_EQ: "",
         createTime_BEGIN: "",
         createTime_END: "",
       },
@@ -180,6 +292,12 @@ export default {
     this.fetchData();
   },
   methods: {
+    detail(row){
+      console.log(row)
+      if (row.id) {
+        this.$refs["OperationDetail"].show(row);
+      }
+    },
     setSelectRows(val) {
       this.selectRows = val;
     },

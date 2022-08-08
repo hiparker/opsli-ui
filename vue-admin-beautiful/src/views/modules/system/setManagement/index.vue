@@ -252,7 +252,7 @@
                     <el-input
                       v-model="email.form.email_account"
                       autocomplete="off"
-                      placeholder="xxxx@xx.com"
+                      placeholder="*****脱敏存储******"
                     ></el-input>
                   </el-form-item>
                 </el-col>
@@ -265,7 +265,7 @@
                       v-model="email.form.email_password"
                       type="password"
                       autocomplete="off"
-                      placeholder="某些邮箱需要为SMTP服务单独设置密码"
+                      placeholder="*****脱敏存储******"
                       show-password
                     ></el-input>
                   </el-form-item>
@@ -461,7 +461,7 @@
                         storage.storage_upyun.form.storage_upyun_password
                       "
                       autocomplete="off"
-                      placeholder=""
+                      placeholder="*****脱敏存储******"
                     ></el-input>
                   </el-form-item>
                 </el-col>
@@ -471,6 +471,80 @@
                 type="primary"
                 style="margin-top: 50px"
                 @click="save('storageUpYunForm', storage.storage_upyun.form)"
+              >
+                保存
+              </el-button>
+            </el-form>
+          </el-tab-pane>
+        </el-tabs>
+      </el-tab-pane>
+
+      <el-tab-pane name="sms" class="tab-pane">
+        <span slot="label">
+          <i class="el-icon-folder-opened"></i>
+          短信服务
+        </span>
+
+        <el-tabs v-model="smsActiveName">
+          <el-tab-pane label="阿里云短信" name="sms-aliyun-config">
+            <el-form
+              ref="smsAliyunForm"
+              :model="sms.aliyun.form"
+              :rules="sms.aliyun.rules"
+              label-width="125px"
+            >
+              <el-row :gutter="10">
+                <el-col :xs="22" :sm="22" :md="22" :lg="8" :xl="8">
+                  <el-form-item label="AccessKey" prop="sms_aliyun_access_key">
+                    <el-input
+                      v-model="sms.aliyun.form.sms_aliyun_access_key"
+                      autocomplete="off"
+                      placeholder="AccessKey"
+                    ></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+
+              <el-row :gutter="10">
+                <el-col :xs="22" :sm="22" :md="22" :lg="8" :xl="8">
+                  <el-form-item label="AccessKeySecret" prop="sms_aliyun_access_key_secret">
+                    <el-input
+                      v-model="sms.aliyun.form.sms_aliyun_access_key_secret"
+                      autocomplete="off"
+                      placeholder="******脱敏存储******"
+                    ></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+
+              <el-row :gutter="10">
+                <el-col :xs="22" :sm="22" :md="22" :lg="8" :xl="8">
+                  <el-form-item label="验证码模版" prop="sms_aliyun_captcha_template_code">
+                    <el-input
+                      v-model="sms.aliyun.form.sms_aliyun_captcha_template_code"
+                      autocomplete="off"
+                      placeholder="请输入验证码短信模版"
+                    ></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+
+              <el-row :gutter="10">
+                <el-col :xs="22" :sm="22" :md="22" :lg="8" :xl="8">
+                  <el-form-item label="验证码签名" prop="sms_aliyun_captcha_sign">
+                    <el-input
+                      v-model="sms.aliyun.form.sms_aliyun_captcha_sign"
+                      autocomplete="off"
+                      placeholder="请输入验证码签名"
+                    ></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+
+              <el-button
+                type="primary"
+                style="margin-top: 50px"
+                @click="save('smsAliyunForm', sms.aliyun.form)"
               >
                 保存
               </el-button>
@@ -504,6 +578,7 @@
         activeName: "def",
         smtpActiveName: "smtp-config",
         storageActiveName: 'local-config',
+        smsActiveName: "sms-aliyun-config",
         dict: {},
         baseData: {},
 
@@ -628,6 +703,30 @@
           },
         },
 
+        sms: {
+          aliyun: {
+            form: {
+              sms_aliyun_access_key: '',
+              sms_aliyun_access_key_secret: '',
+              sms_aliyun_captcha_template_code: '',
+              sms_aliyun_captcha_sign: '',
+            },
+            rules: {
+              sms_aliyun_access_key: [
+                {required: true, trigger: 'blur', message: '请输入AccessKey'},
+              ],
+              sms_aliyun_access_key_secret: [
+                {required: true, trigger: 'blur', message: '请输入AccessKeySecret'},
+              ],
+              sms_aliyun_captcha_template_code: [
+                {required: true, trigger: 'blur', message: '请输入验证码短信模版编号'},
+              ],
+              sms_aliyun_captcha_sign: [
+                {required: true, trigger: 'blur', message: '请输入验证码短信签名'},
+              ],
+            },
+          },
+        },
         smtpRestaurants: [
           { value: "smtp.aliyun.com"},
           { value: "smtp.gmail.com"},
@@ -665,10 +764,10 @@
       },
       // 非对称加密重置
       async cryptoReset() {
-        const { success, data } = await doCreateCrypto(
+        const { data } = await doCreateCrypto(
           this.crypto.form.crypto_asymmetric
         );
-        if (success && !isNull(data)) {
+        if (!isNull(data)) {
           this.crypto.form.crypto_asymmetric_public_key = data.publicKey;
           this.crypto.form.crypto_asymmetric_private_key = data.privateKey;
           this.$baseMessage("已重置公私钥，保存后生效", "warning");
@@ -680,17 +779,15 @@
         this.$refs[refs].validate(async (valid) => {
           if (valid) {
             this.loadingTabs = true;
-            const { success, msg } = await doUpdateOptions(data).catch(() => {
+            const { msg } = await doUpdateOptions(data).catch(() => {
               setTimeout(() => {
                 this.loadingTabs = false;
               }, 300);
             });
-            if (success) {
-              this.$baseMessage(msg, "success");
-              setTimeout(() => {
-                this.loadingTabs = false;
-              }, 300);
-            }
+            this.$baseMessage(msg, "success");
+            setTimeout(() => {
+              this.loadingTabs = false;
+            }, 300);
           } else {
             return false;
           }
@@ -702,13 +799,11 @@
       async smtpTestSend() {
         this.$refs["smtp-test-form"].validate(async (valid) => {
           if (valid) {
-            const { success, msg } = await doTestSend(this.emailTest.form);
-            if (success) {
-              this.$baseMessage(msg, "success");
-              setTimeout(() => {
-                this.loadingTabs = false;
-              }, 300);
-            }
+            const { msg } = await doTestSend(this.emailTest.form);
+            this.$baseMessage(msg, "success");
+            setTimeout(() => {
+              this.loadingTabs = false;
+            }, 300);
           } else {
             return false;
           }
@@ -736,8 +831,8 @@
       },
       async fetchData() {
         this.loadingData = true;
-        const { success, data } = await getAllOptions(this.queryForm);
-        if (success && !isNull(data)) {
+        const { data } = await getAllOptions(this.queryForm);
+        if (!isNull(data)) {
           this.baseData = data;
 
           // 系统默认配置
@@ -766,10 +861,6 @@
             this.baseData.email_port.optionValue:"";
           this.email.form.email_ssl_enable = !isNull(this.baseData.email_ssl_enable)?
             this.baseData.email_ssl_enable.optionValue:"1";
-          this.email.form.email_account = !isNull(this.baseData.email_account)?
-            this.baseData.email_account.optionValue:"";
-          this.email.form.email_password = !isNull(this.baseData.email_password)?
-            this.baseData.email_password.optionValue:"";
           this.email.form.email_addresser = !isNull(this.baseData.email_addresser)?
             this.baseData.email_addresser.optionValue:"";
 
@@ -806,10 +897,22 @@
           )
             ? this.baseData.storage_upyun_username.optionValue
             : ''
-          this.storage.storage_upyun.form.storage_upyun_password = !isNull(
-            this.baseData.storage_upyun_password
+
+          // 阿里云验证码短信
+          this.sms.aliyun.form.sms_aliyun_access_key = !isNull(
+            this.baseData.sms_aliyun_access_key
           )
-            ? this.baseData.storage_upyun_password.optionValue
+            ? this.baseData.sms_aliyun_access_key.optionValue
+            : ''
+          this.sms.aliyun.form.sms_aliyun_captcha_template_code = !isNull(
+            this.baseData.sms_aliyun_captcha_template_code
+          )
+            ? this.baseData.sms_aliyun_captcha_template_code.optionValue
+            : ''
+          this.sms.aliyun.form.sms_aliyun_captcha_sign = !isNull(
+            this.baseData.sms_aliyun_captcha_sign
+          )
+            ? this.baseData.sms_aliyun_captcha_sign.optionValue
             : ''
         }
 

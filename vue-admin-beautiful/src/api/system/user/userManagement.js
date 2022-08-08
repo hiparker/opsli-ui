@@ -1,4 +1,7 @@
 import request from "@/utils/request";
+import { encryptRSA } from "@/config/settings";
+import Vue from "vue";
+import { encryptedRsa } from "@/utils/crypto/encrypt-rsa";
 
 export function getUserInfo(data) {
   return request({
@@ -49,18 +52,36 @@ export function doUpdateSelf(data) {
 }
 
 export function doDelete(data) {
+  if (encryptRSA) {
+    // 获得公钥
+    let publicKey = Vue.prototype.$getPublicKey();
+    // 加密数据
+    let encrypted = encryptedRsa(data, publicKey);
+    data = {
+      encryptData: encrypted,
+    };
+  }
   return request({
     url: "/api/v1/system/user/del",
     method: "post",
-    params: data,
+    data,
   });
 }
 
 export function doDeleteAll(data) {
+  if (encryptRSA) {
+    // 获得公钥
+    let publicKey = Vue.prototype.$getPublicKey();
+    // 加密数据
+    let encrypted = encryptedRsa(data, publicKey);
+    data = {
+      encryptData: encrypted,
+    };
+  }
   return request({
     url: "/api/v1/system/user/delAll",
     method: "post",
-    params: data,
+    data,
   });
 }
 
@@ -105,6 +126,15 @@ export function doSetOrg(data) {
 }
 
 export function doUpdatePasswordById(data) {
+  if (encryptRSA) {
+    // 获得公钥
+    let publicKey = Vue.prototype.$getPublicKey();
+    // 加密数据
+    let encrypted = encryptedRsa(data, publicKey);
+    data = {
+      encryptData: encrypted,
+    };
+  }
   return request({
     url: "/api/v1/system/user/updatePasswordById",
     method: "post",
@@ -113,24 +143,34 @@ export function doUpdatePasswordById(data) {
 }
 
 export function doResetPasswordById(data) {
+  if (encryptRSA) {
+    // 获得公钥
+    let publicKey = Vue.prototype.$getPublicKey();
+    // 加密数据
+    let encrypted = encryptedRsa(data, publicKey);
+    data = {
+      encryptData: encrypted,
+    };
+  }
   return request({
     url: "/api/v1/system/user/resetPasswordById",
     method: "post",
-    params: data,
+    data,
   });
 }
 
 export function doEnableAccount(data) {
+  if (encryptRSA) {
+    // 获得公钥
+    let publicKey = Vue.prototype.$getPublicKey();
+    // 加密数据
+    let encrypted = encryptedRsa(data, publicKey);
+    data = {
+      encryptData: encrypted,
+    };
+  }
   return request({
     url: "/api/v1/system/user/enableAccount",
-    method: "post",
-    params: data,
-  });
-}
-
-export function doUpdatePassword(data) {
-  return request({
-    url: "/api/v1/system/user/updatePassword",
     method: "post",
     data,
   });
@@ -139,6 +179,74 @@ export function doUpdatePassword(data) {
 export function doUpdateAvatar(data) {
   return request({
     url: "/api/v1/system/user/updateAvatar",
+    method: "post",
+    data,
+  });
+}
+
+export function doUpdatePassword(data) {
+  if (encryptRSA) {
+    // 获得公钥
+    let publicKey = Vue.prototype.$getPublicKey();
+    // 加密数据
+    let encrypted = encryptedRsa(data, publicKey);
+    data = {
+      encryptData: encrypted,
+    };
+  }
+  return request({
+    url: "/api/v1/system/user/updatePassword",
+    method: "post",
+    data,
+  });
+}
+
+export function doUpdatePasswordByForget(data) {
+  if (encryptRSA) {
+    // 获得公钥
+    let publicKey = Vue.prototype.$getPublicKey();
+    // 加密数据
+    let encrypted = encryptedRsa(data, publicKey);
+    data = {
+      encryptData: encrypted,
+    };
+  }
+  return request({
+    url: "/api/v1/system/user/updatePasswordByForget",
+    method: "post",
+    data,
+  });
+}
+
+export function doUpdateEmail(data) {
+  if (encryptRSA) {
+    // 获得公钥
+    let publicKey = Vue.prototype.$getPublicKey();
+    // 加密数据
+    let encrypted = encryptedRsa(data, publicKey);
+    data = {
+      encryptData: encrypted,
+    };
+  }
+  return request({
+    url: "/api/v1/system/user/updateEmail",
+    method: "post",
+    data,
+  });
+}
+
+export function doUpdateMobile(data) {
+  if (encryptRSA) {
+    // 获得公钥
+    let publicKey = Vue.prototype.$getPublicKey();
+    // 加密数据
+    let encrypted = encryptedRsa(data, publicKey);
+    data = {
+      encryptData: encrypted,
+    };
+  }
+  return request({
+    url: "/api/v1/system/user/updateMobile",
     method: "post",
     data,
   });
