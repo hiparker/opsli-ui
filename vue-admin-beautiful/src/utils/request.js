@@ -83,6 +83,8 @@ const handleCode = (code, msg) => {
 const instance = axios.create({
   baseURL,
   timeout: requestTimeout,
+  // 关闭 cookies
+  withCredentials: false,
   headers: {
     "Content-Type": contentType,
   },
