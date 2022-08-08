@@ -239,13 +239,13 @@
               <td style="width: 25%">jdk版本</td>
               <td style="width: 25%">1.8</td>
               <td style="width: 25%">springboot版本</td>
-              <td style="width: 25%">2.3.3.RELEASE</td>
+              <td style="width: 25%">2.5.6</td>
             </tr>
             <tr>
               <td>mybatis-plus版本</td>
-              <td>3.4.0</td>
+              <td>3.5.2</td>
               <td>pagehelper版本</td>
-              <td>1.1.0</td>
+              <td>1.3.0</td>
             </tr>
             <tr>
               <td>druid版本</td>
@@ -254,10 +254,10 @@
               <td>2.5.4</td>
             </tr>
             <tr>
-              <td>shiro-redis版本</td>
-              <td>3.3.1</td>
-              <td>jwt版本</td>
-              <td>3.10.3</td>
+              <td>fastjson版本</td>
+              <td>1.2.83</td>
+              <td>transmittable版本</td>
+              <td>2.12.5</td>
             </tr>
             <tr>
               <td>ehcache版本</td>
@@ -269,11 +269,11 @@
               <td>captcha版本</td>
               <td>1.6.2</td>
               <td>guava版本</td>
-              <td>29.0-jre</td>
+              <td>30.0-android</td>
             </tr>
             <tr>
               <td>enjoy版本</td>
-              <td>4.9.03</td>
+              <td>4.9.06</td>
               <td>hutool版本</td>
               <td>5.7.14</td>
             </tr>
@@ -1586,6 +1586,118 @@
           {
             content: "发布1.6.4 代码生成器修复版",
             timestamp: "2022-05-02",
+          },
+          {
+            content: "后端：修复删除角色失败异常",
+            timestamp: "2022-06-07",
+          },
+          {
+            content: "后端：升级 fastjson 版本至 1.2.83 修复 CNVD-2022-40233",
+            timestamp: "2022-06-17",
+          },
+          {
+            content: "后端：修复部分权限不对问题",
+            timestamp: "2022-06-17",
+          },
+          {
+            content: "后端：强制设置代码生成器 为小写模式，保持与生成权限一致",
+            timestamp: "2022-06-17",
+          },
+          {
+            content: "后端：修复 SecurityCache 缓存穿透BUG",
+            timestamp: "2022-07-24",
+          },
+          {
+            content: "后端：SecurityCache 新增安全缓存 指定ttl获取缓存信息",
+            timestamp: "2022-07-25",
+          },
+          {
+            content: "后端：新增EventBus",
+            timestamp: "2022-08-06",
+          },
+          {
+            content: "新增 邮箱、手机、用户名 + 密码登陆",
+            timestamp: "2022-08-06",
+          },
+          {
+            content: "新增 邮箱 + 验证码 登录",
+            timestamp: "2022-08-06",
+          },
+          {
+            content: "新增 手机号 + 验证码 登录",
+            timestamp: "2022-08-06",
+          },
+          {
+            content: "新增 手机号 + 验证码 登录",
+            timestamp: "2022-08-06",
+          },
+          {
+            content: "新增个人修改手机号 前置身份校验",
+            timestamp: "2022-08-06",
+          },
+          {
+            content: "新增个人修改邮箱 前置身份校验",
+            timestamp: "2022-08-06",
+          },
+          {
+            content: "新增个人中心忘记密码 前置身份校验",
+            timestamp: "2022-08-06",
+          },
+          {
+            content: "后端：新增使用ResultWrapper 代替 ResultVo 返回数据",
+            timestamp: "2022-08-06",
+          },
+          {
+            content: "后端：优化接口加密",
+            timestamp: "2022-08-06",
+          },
+          {
+            content: "后端：优化CrudService实现",
+            timestamp: "2022-08-06",
+          },
+          {
+            content: "后端：变更自动日志记录模式到自定义记录",
+            timestamp: "2022-08-06",
+          },
+          {
+            content: "优化导出Excel模式为认证模",
+            timestamp: "2022-08-06",
+          },
+          {
+            content: "移除Shiro，变更使用SpringSecurity 作为权限验证",
+            timestamp: "2022-08-06",
+          },
+          {
+            content: "升级 mybatis-plus 版本至 3.5.2 修复若干CVE",
+            timestamp: "2022-08-06",
+          },
+          {
+            content: "升级 springboot 版本至 2.5.6 修复若干CVE",
+            timestamp: "2022-08-06",
+          },
+          {
+            content: "升级 mysql版本至8.0.28  修复 CVE-2022-21363",
+            timestamp: "2022-08-06",
+          },
+          {
+            content: "升级 guava 版本至 30.0.android 修复 修复 CVE-2020-8908",
+            timestamp: "2022-08-06",
+          },
+          {
+            content: "升级 bouncycastle 版本至 1.69 修复 Cxa9261daf-3755",
+            timestamp: "2022-08-06",
+          },
+          {
+            content: "升级 protobuf-java 版本至 3.18.2 修复 CVE-2021-22569",
+            timestamp: "2022-08-06",
+          },
+          {
+            content: "升级 logback 版本至 1.2.9 修复 CVE-2021-42550",
+            timestamp: "2022-08-06",
+          },
+          {
+            content: "发布2.0.0",
+            timestamp: "2022-08-08",
           },
         ];
         data.map((item, index) => {
