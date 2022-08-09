@@ -372,7 +372,7 @@
         if (row.id) {
             const { msg } = await doEnableAccount({
               userId: row.id,
-              enable: enable
+              enabled: enable
             });
             row.enable = enable;
             this.$baseMessage(msg, "success");
