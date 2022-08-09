@@ -96,6 +96,8 @@ module.exports = {
   providePlugin: { maptalks: "maptalks", "window.maptalks": "maptalks" },
   //npm run build时是否自动生成7z压缩包
   build7z: false,
+  //npm run build时是否自动压缩图片 国内网络不好的情况下可以关闭压缩图片
+  imageCompression: false,
   //代码生成机生成在view下的文件夹名称
   templateFolder: "project",
   //是否显示终端donation打印

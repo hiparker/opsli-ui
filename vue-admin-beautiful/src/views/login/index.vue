@@ -270,7 +270,6 @@ import {isNull, isEmail, isMobile, getMsg} from "@/utils/valiargs";
           ],
           password: [
             { required: true, trigger: "blur", message: "请输入密码" },
-            { required: true, trigger: "blur", validator: validatorRule.IS_SECURITY_PASSWORD },
           ],
           captcha: [
             { required: true, trigger: "blur", message: "请输入验证码" },

@@ -83,6 +83,8 @@ const handleCode = (code, msg) => {
 const instance = axios.create({
   baseURL,
   timeout: requestTimeout,
+  // 关闭 cookies
+  withCredentials: false,
   headers: {
     "Content-Type": contentType,
   },
@@ -93,6 +95,7 @@ instance.interceptors.request.use(
     if (store.getters["user/accessToken"]) {
       config.headers[tokenName] = store.getters["user/accessToken"];
     }
+
     //这里会过滤所有为空、0、false的key，如果不需要请自行注释
     // if (config.data){
     //   config.data = Vue.prototype.$baseLodash.pickBy(

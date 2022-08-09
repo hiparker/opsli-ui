@@ -10,6 +10,7 @@ const {
   devPort,
   providePlugin,
   build7z,
+  imageCompression,
   donation,
 } = require("./src/config/settings");
 const {
@@ -158,14 +159,6 @@ module.exports = {
           },
         ])
         .end();
-      config.module
-        .rule("images")
-        .use("image-webpack-loader")
-        .loader("image-webpack-loader")
-        .options({
-          bypassOnDebug: true,
-        })
-        .end();
     });
 
     if (build7z) {
@@ -185,6 +178,20 @@ module.exports = {
               },
             },
           ])
+          .end();
+      });
+    }
+
+    // 是否压缩图片
+    if (imageCompression) {
+      config.when(process.env.NODE_ENV !== "development", (config) => {
+        config.module
+          .rule("images")
+          .use("image-webpack-loader")
+          .loader("image-webpack-loader")
+          .options({
+            bypassOnDebug: true,
+          })
           .end();
       });
     }
