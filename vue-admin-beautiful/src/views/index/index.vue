@@ -1696,6 +1696,10 @@
             timestamp: "2022-08-06",
           },
           {
+            content: "前端：优化build老大难问题(image-webpack-loader 因国内网络问题无法下载)，现可配置选择是否压缩图片 ",
+            timestamp: "2022-08-08",
+          },
+          {
             content: "发布2.0.0",
             timestamp: "2022-08-08",
           },
