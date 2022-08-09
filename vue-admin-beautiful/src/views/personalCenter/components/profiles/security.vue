@@ -11,7 +11,7 @@
             账户密码
           </div>
           <div class="security-item-content">
-            密码强度：{{ $getDictNameByValue('password_level', baseForm.passwordLevel ) }}
+            密码强度：{{ $getDictNameByValue('password_level', baseForm.passwordLevel)||"-" }}
             <el-button type="text" @click="updatePassword"> 修改 </el-button>
             <el-button type="text" @click="updatePasswordByForget"> 忘记密码 </el-button>
           </div>
@@ -25,7 +25,7 @@
             邮箱
           </div>
           <div class="security-item-content">
-            {{ baseForm.email  }}
+            {{ baseForm.email||"-" }}
             <el-button type="text" @click="updateEmail"> 修改 </el-button>
           </div>
           <el-divider></el-divider>
@@ -38,7 +38,7 @@
             手机号
           </div>
           <div class="security-item-content">
-            {{ baseForm.mobile  }}
+            {{ baseForm.mobile||"-"  }}
             <el-button type="text" @click="updateMobile"> 修改 </el-button>
           </div>
           <el-divider></el-divider>
