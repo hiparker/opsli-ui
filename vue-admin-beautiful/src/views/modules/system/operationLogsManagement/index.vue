@@ -193,6 +193,13 @@
 
       <el-table-column
         show-overflow-tooltip
+        prop="createTime"
+        label="创建时间"
+        width="120"
+      ></el-table-column>
+
+      <el-table-column
+        show-overflow-tooltip
         prop="description"
         label="日志描述"
       ></el-table-column>
