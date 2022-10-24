@@ -21,6 +21,7 @@ yarn-error.log*
 *.sln
 *.sw*
 package-lock.json
+pnpm-lock.yaml
 
 ### script ###
 /git-pull.sh
