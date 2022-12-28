@@ -1,9 +1,9 @@
 diff --git a/node_modules/zx-layouts/Avatar/components/ChooseTenant.vue b/node_modules/zx-layouts/Avatar/components/ChooseTenant.vue
 new file mode 100644
-index 0000000..9e8486f
+index 0000000..836ea53
 --- /dev/null
 +++ b/node_modules/zx-layouts/Avatar/components/ChooseTenant.vue
-@@ -0,0 +1,186 @@
+@@ -0,0 +1,183 @@
 +<template>
 +  <el-dialog
 +    :title="title"
@@ -128,10 +128,9 @@ index 0000000..9e8486f
 +          const { msg } = await switchOneself();
 +          // 刷新当前用户信息
 +          const flag = await store.dispatch("user/refreshUserPerms");
-+          if(flag){
-+            this.$baseMessage(msg, "success");
-+            location.reload();
-+          }
++          this.$baseMessage(msg, "success");
++          that.close();
++          location.reload();
 +        })
 +      },
 +      close(){
@@ -148,12 +147,10 @@ index 0000000..9e8486f
 +            tenantId: this.selectRow.id
 +          });
 +          // 刷新当前用户信息
-+          const flag = await store.dispatch("user/refreshUserPerms");
-+          if(flag){
-+            this.$baseMessage(msg, "success");
-+            that.close();
-+            location.reload();
-+          }
++          await store.dispatch("user/refreshUserPerms");
++          this.$baseMessage(msg, "success");
++          that.close();
++          location.reload();
 +        })
 +      },
 +      setSelectRow(val) {
