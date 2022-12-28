@@ -1720,6 +1720,10 @@
             timestamp: "2022-12-28",
           },
           {
+            content: "前端：修复又是未能成功切换租户问题",
+            timestamp: "2022-12-28",
+          },
+          {
             content: "更新opsli-boot 2.0 README描述",
             timestamp: "2022-12-28",
           },
