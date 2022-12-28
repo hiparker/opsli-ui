@@ -697,7 +697,7 @@
             title: "OPSLI 官方网站"
           },
           {
-            href: "https://wiki.opsli.bedebug.com/docs/opsli/opsli-1c83h9o28e1cm",
+            href: "https://wiki.opsli.bedebug.com/docs/opsliopsli-1e29udgrb4hog/opsli-1c83h9o28e1cm",
             title: "OPSLI 官方文档"
           },
           {
@@ -715,6 +715,10 @@
           {
             href: "https://www.bedebug.com",
             title: "在码圈"
+          },
+          {
+            href: "https://www.elastic.org.cn/",
+            title: "Elastic 开源社区"
           },
         ],
         //其他信息
