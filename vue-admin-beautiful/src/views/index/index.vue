@@ -1703,6 +1703,30 @@
             content: "发布2.0.0",
             timestamp: "2022-08-08",
           },
+          {
+            content: "后端：修复2.0版本 无法续命bug",
+            timestamp: "2022-10-19",
+          },
+          {
+            content: "后端：sql 移除 area_type字段",
+            timestamp: "2022-10-31",
+          },
+          {
+            content: "后端：优化安全缓存 防止 unlock 报错影响主流程",
+            timestamp: "2022-11-29",
+          },
+          {
+            content: "后端：优化WrapperUtil工具类性能，提供分页与Excel导出速度",
+            timestamp: "2022-12-28",
+          },
+          {
+            content: "更新opsli-boot 2.0 README描述",
+            timestamp: "2022-12-28",
+          },
+          {
+            content: "发布2.0.1",
+            timestamp: "2022-12-28",
+          },
         ];
         data.map((item, index) => {
           if (index === data.length - 1) {

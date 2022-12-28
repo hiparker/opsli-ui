@@ -1,9 +1,9 @@
-# OPSLI 快速开发平台 (已开源)
+# OPSLI 快速开发平台 (v2.0)
 <div align="center">
  <img width="500" src="https://gitee.com/hiparker/opsli-ui/raw/master/repository-images/logo.png"/>
  <br/> <br/>
 
-[![AUR](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg)](https://github.com/hiparker/opsli-boot/blob/master/LICENSE) [![spring-boot](https://img.shields.io/badge/spring--boot-2.3.3.RELEASE-green.svg)](http://spring.io/projects/spring-boot) [![mybatis-plus](https://img.shields.io/badge/mybatis--plus-3.4.0-blue.svg)](http://mp.baomidou.com) [![hutool](https://img.shields.io/badge/hutool-5.6.3-blue.svg)](https://www.hutool.cn) [![Stars](https://img.shields.io/github/stars/hiparker/opsli-boot?style=flat-square&label=Stars&logo=github)](https://github.com/hiparker/opsli-boot) [![Forks](https://img.shields.io/github/forks/hiparker/opsli-boot?style=flat-square&label=Forks&logo=github)](https://github.com/hiparker/opsli-boot)
+[![AUR](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg)](https://github.com/hiparker/opsli-boot/blob/master/LICENSE) [![spring-boot](https://img.shields.io/badge/spring--boot-2.5.6.RELEASE-green.svg)](http://spring.io/projects/spring-boot) [![mybatis-plus](https://img.shields.io/badge/mybatis--plus-3.5.2-blue.svg)](http://mp.baomidou.com) [![hutool](https://img.shields.io/badge/hutool-5.7.14-blue.svg)](https://www.hutool.cn) [![Stars](https://img.shields.io/github/stars/hiparker/opsli-boot?style=flat-square&label=Stars&logo=github)](https://github.com/hiparker/opsli-boot) [![Forks](https://img.shields.io/github/forks/hiparker/opsli-boot?style=flat-square&label=Forks&logo=github)](https://github.com/hiparker/opsli-boot)
 </div>
 
 ## 关于
@@ -48,25 +48,25 @@
 
 ## 功能特点
 
-高扩展登录：基于Spring Security 改造的高扩展接口，便于后期支持邮箱、手机、账号密码、第三方等登录
+**高扩展登录**：基于Spring Security 改造的高扩展接口，便于后期支持邮箱、手机、账号密码、第三方等登录
 
-高扩展API管控：自动支持v1-vn 多版本、多终端接口兼容，业务扩展不打架
+**高扩展API管控**：自动支持v1-vn 多版本、多终端接口兼容，业务扩展不打架
 
-代码生成：采用自研的代码生成器+Jfinal Enjoy 模板引擎，在线可视化生成前后端代码，可自定义生成代码模版
+**代码生成**：采用自研的代码生成器+Jfinal Enjoy 模板引擎，在线可视化生成前后端代码，可自定义生成代码模版
 
-多租户功能：采用自研完善的多租户SaaS功能，提供行业SaaS全套解决方案
+**多租户功能**：采用自研完善的多租户SaaS功能，提供行业SaaS全套解决方案
 
-登录安全：登录数据采用双向加密模式，后台一键式切换加密秘钥，保障登录用户隐私安全
+**登录安全**：登录数据采用双向加密模式，后台一键式切换加密秘钥，保障登录用户隐私安全
 
-数据安全：支持自定义注解，一键式加密数据
+**数据安全**：支持自定义注解，一键式加密数据
 
-缓存安全：采用自研的 Security Cache，解决缓存穿透、击穿、雪崩问题
+**缓存安全**：采用自研的 Security Cache，解决缓存穿透、击穿、雪崩问题
 
-身份安全：修改邮箱、手机号或忘记密码时，有独立的身份认证鉴权
+**身份安全**：修改邮箱、手机号或忘记密码时，有独立的身份认证鉴权
 
-在线文档：通过接入Knife4j，实现在线API文档的查看与调试;
+**在线文档**：通过接入Knife4j，实现在线API文档的查看与调试;
 
-业务分离：采用前后端分离的框架设计，前端采用vue-admin-beautiful（开源版本 基于element-ui）
+**业务分离**：采用前后端分离的框架设计，前端采用vue-admin-beautiful（开源版本 基于element-ui）
 
 
 ## 扩展登录
@@ -109,6 +109,7 @@
 ## 版权说明
 
 opsli-boot 采用 Apache License2.0协议
+
 opsli-ui 是对于市面上开源的产品进行的二次开发，请相关开发者遵循对应前端框架的开源协议
 
 代码可用于个人项目等接私活或企业项目脚手架使用，完全免费
