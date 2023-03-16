@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <link rel="icon" href="<%= BASE_URL %>favicon.ico" />
+    <title><%= VUE_APP_TITLE %></title>
+    <meta
+      name="keywords"
+      content="opsli,opsliboot,opsli-boot,opslicloud,opsli-cloud,bedebug,在码圈,无代码,零代码开发,低代码,快速开发平台,快速开发框架,低代码开发平台,低代码开发框架,0代码开发平台,0代码开发框架,零代码开发平台,零代码开发框架,无代码开发平台,无代码开发框架,java开发平台,java开发框架,java快速开发平台,代码生成器,开源开发平台,开源开发框架,敏捷开发平台,敏捷开发框架,前后端分离,SpringBoot,element-ui,mybatis"
+    />
+    <meta
+      name="description"
+      content="<%= VUE_APP_TITLE %>基于springboot、vue、element-ui ，项目采用前后端分离架构，热插拔式业务模块与插件扩展性高 ,代码简洁，功能丰富，开箱即用，提供快速开发平台、快速开发框架、低代码开发平台、低代码开发框架、0代码开发平台、0代码开发框架、零代码开发平台、零代码开发框架、无代码开发平台、无代码开发框架、java开发平台、java开发框架、代码生成器、开源开发平台、开源开发框架、敏捷开发平台、敏捷开发框架等服务 %>"
+    />
+    <meta name="author" content="parker meet.parker@foxmail.com" />
+    <link rel="stylesheet" href="<%= BASE_URL %>static/css/loading.css" />
+  </head>
+  <body>
+    <noscript>
+      非常抱歉鉴于安全考量,您无法查看<%= VUE_APP_TITLE %>
+      源代码，该系统前端基于vue-admin-beautiful开发，后端基于opsli-boot开发
+    </noscript>
+    <div id="vue-admin-beautiful">
+      <div class="first-loading-wrp">
+        <div class="loading-wrp">
+          <span class="dot dot-spin">
+            <i></i>
+            <i></i>
+            <i></i>
+            <i></i>
+          </span>
+        </div>
+        <h1><%= VUE_APP_TITLE %></h1>
+      </div>
+    </div>
+    <script>
+      /^http(s*):\/\//.test(location.href) ||
+        alert("基于vue-admin-better 开发的项目需要部署到服务器下访问");
+    </script>
+    <script>
+      if (window.location.hostname !== 'localhost') {
+        let _hmt;
+        _hmt = _hmt || [];
+        (function() {
+          let hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?e5ae72d8d8fcc80accddd725a9a49aac";
+          let s = document.getElementsByTagName("script")[0];
+          s.parentNode.insertBefore(hm, s);
+        })();
+      }
+    </script>
+  </body>
+</html>
