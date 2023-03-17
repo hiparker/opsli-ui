@@ -286,24 +286,22 @@ export function random(m, n) {
 }
 
 // 按钮倒计时锁定
-export function vueButtonClickBan(el, second, isAddClass) {
-  if (
-    el !== null &&
-    el !== undefined &&
-    el.path !== null &&
-    el.path !== undefined
-  ) {
-    let btnEl = null;
-    for (let i = 0; i < el.path.length; i++) {
-      if ("BUTTON" === el.path[i].nodeName) {
-        btnEl = el.path[i];
+export function vueButtonClickBan(point, second, isAddClass) {
+  let el = document.elementFromPoint(point.clientX, point.clientY);
+  if (el !== null && el !== undefined) {
+    for (let i = 0; i < 5; i++) {
+      if ("BUTTON" === el.nodeName) {
         break;
       }
+      el = el.parentNode;
+    }
+    if ("BUTTON" !== el.nodeName) {
+      el = null;
     }
 
     // 如果按钮对象不为空 则 进行处理
-    if (btnEl !== null && btnEl !== undefined) {
-      buttonClickBan(btnEl, second, isAddClass);
+    if (el) {
+      buttonClickBan(el, second, isAddClass);
     }
   }
 }
