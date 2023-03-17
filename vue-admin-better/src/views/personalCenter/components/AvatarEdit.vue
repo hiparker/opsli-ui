@@ -31,12 +31,19 @@
             ref="cropper"
             :img="options.img"
             :info="true"
+            :outputType="options.outputType"
+            :outputSize="options.size"
             :autoCrop="options.autoCrop"
             :autoCropWidth="options.autoCropWidth"
             :autoCropHeight="options.autoCropHeight"
             :fixedBox="options.fixedBox"
             :maxImgSize="options.maxImgSize"
-            @realTime="realTime"
+            :canScale="options.canScale"
+            :canMove="options.canMove"
+            :canMoveBox="options.canMoveBox"
+            :fixed="options.fixed"
+            :fixedNumber="options.fixedNumber"
+            @real-time="realTime"
           >
           </vue-cropper>
         </div>
@@ -85,7 +92,6 @@
       VueCropper
     },
     data() {
-
       return {
         title: "上传头像",
         instance: null,
@@ -100,13 +106,15 @@
           size: 1,
           outputType: 'image/jpeg',
           suffixName: '.jpg',
-          canScale: false,
+          canScale: true,
+          canMove: true,
+          canMoveBox: true,
           autoCrop: true,
           // 只有自动截图开启 宽度高度才生效
-          autoCropWidth: 150,
-          autoCropHeight: 150,
+          autoCropWidth: 200,
+          autoCropHeight: 200,
           maxImgSize: 1048,
-          fixedBox: true,
+          fixedBox: false,
           // 开启宽度和高度比例
           fixed: true,
           fixedNumber: [1, 1]
@@ -205,7 +213,7 @@
             data = e.target.result;
           }
           this.options.img = data;
-          this.$refs.uploadImg.value = ''
+          this.$refs.uploadImg.value = '';
         };
         // 转化为base64
         //reader.readAsDataURL(file)
@@ -213,7 +221,7 @@
         reader.readAsArrayBuffer(file);
       },
       realTime(data) {
-        this.previews = data
+        this.previews = data;
       },
       // 设置头像base64
       setAvatarBase64(src, callback) {
@@ -222,7 +230,7 @@
         // 处理缓存
         image.src = src + '?v=' + Math.random();
         // 支持跨域图片
-        image.crossOrigin = "*";
+        image.crossOrigin = "anonymous";
         image.onload = function () {
           let base64 = _this.transBase64FromImage(image);
           callback && callback(base64);
@@ -260,6 +268,12 @@
     }
   }
 
+  .avatar-button {
+    .el-button--small.is-round {
+      padding: 9px 12px;
+    }
+  }
+
   /* 裁剪工具 */
   .avatar-cropper {
     width: 325px;
@@ -274,6 +288,8 @@
       overflow: hidden;
       background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQAQMAAAAlPW0iAAAAA3NCSVQICAjb4U/gAAAABlBMVEXMzMz////TjRV2AAAACXBIWXMAAArrAAAK6wGCiw1aAAAAHHRFWHRTb2Z0d2FyZQBBZG9iZSBGaXJld29ya3MgQ1M26LyyjAAAABFJREFUCJlj+M/AgBVhF/0PAH6/D/HkDxOGAAAAAElFTkSuQmCC);
       box-shadow: 0 0 4px #ccc;
+      width: 150px !important;
+      height: 150px !important;
     }
     .preview:first-child{
       margin-bottom: 22px;
