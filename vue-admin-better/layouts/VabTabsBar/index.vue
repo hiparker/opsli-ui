@@ -99,7 +99,7 @@
       },
       handleTabClick(tab) {
         const route = this.visitedRoutes.filter((item, index) => {
-          if (tab.index === index) return item
+          if (tab.index == index) return item
         })[0]
         if (this.$route.path !== route.path) {
           this.$router.push({
