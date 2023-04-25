@@ -178,13 +178,13 @@
               <td style="width: 25%">jdk版本</td>
               <td style="width: 25%">1.8</td>
               <td style="width: 25%">springboot版本</td>
-              <td style="width: 25%">2.5.6</td>
+              <td style="width: 25%">2.7.10</td>
             </tr>
             <tr>
               <td>mybatis-plus版本</td>
               <td>3.5.2</td>
               <td>pagehelper版本</td>
-              <td>1.3.0</td>
+              <td>1.4.6</td>
             </tr>
             <tr>
               <td>druid版本</td>
