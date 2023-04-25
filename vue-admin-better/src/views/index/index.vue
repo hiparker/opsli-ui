@@ -1498,6 +1498,22 @@
             content: "发布2.1.1",
             timestamp: "2023-03-23",
           },
+          {
+            content: "后端：升级springboot版本至 2.7.10",
+            timestamp: "2023-04-24",
+          },
+          {
+            content: "后端：升级pagehelper版本至 1.4.6",
+            timestamp: "2023-04-24",
+          },
+          {
+            content: "后端：修复 CVE-2023-20860",
+            timestamp: "2023-04-24",
+          },
+          {
+            content: "发布2.1.2",
+            timestamp: "2023-03-25",
+          },
         ];
         data.map((item, index) => {
           if (index === data.length - 1) {
