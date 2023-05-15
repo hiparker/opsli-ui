@@ -66,7 +66,5 @@ const setting = {
   templateFolder: "project",
   //是否显示终端donation打印
   donation: false,
-  //是否开启图片压缩
-  imageCompression: true,
 };
 module.exports = setting;

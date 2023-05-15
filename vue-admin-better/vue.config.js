@@ -10,7 +10,6 @@ const {
   devPort,
   providePlugin,
   build7z,
-  imageCompression,
   donation,
 } = require("./src/config");
 const { webpackBarName, webpackBanner, donationConsole } = require("./layouts");
