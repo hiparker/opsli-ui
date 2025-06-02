@@ -176,45 +176,45 @@
           <table class="table">
             <tr>
               <td style="width: 25%">jdk版本</td>
-              <td style="width: 25%">1.8</td>
+              <td style="width: 25%">22</td>
               <td style="width: 25%">springboot版本</td>
-              <td style="width: 25%">2.7.10</td>
+              <td style="width: 25%">3.4.6</td>
             </tr>
             <tr>
               <td>mybatis-plus版本</td>
-              <td>3.5.2</td>
+              <td>3.5.12</td>
               <td>pagehelper版本</td>
-              <td>1.4.6</td>
+              <td>2.1.0</td>
             </tr>
             <tr>
               <td>druid版本</td>
-              <td>1.1.17</td>
+              <td>1.1.25</td>
               <td>dynamic版本</td>
-              <td>2.5.4</td>
+              <td>4.3.1</td>
             </tr>
             <tr>
               <td>fastjson版本</td>
               <td>1.2.83</td>
               <td>transmittable版本</td>
-              <td>2.12.5</td>
+              <td>2.14.5</td>
             </tr>
             <tr>
-              <td>ehcache版本</td>
-              <td>3.9.0</td>
+              <td>hutool版本</td>
+              <td>5.8.38</td>
               <td>easyexcel版本</td>
-              <td>2.2.6</td>
+              <td>4.0.3</td>
             </tr>
             <tr>
               <td>captcha版本</td>
               <td>1.6.2</td>
               <td>guava版本</td>
-              <td>30.0-android</td>
+              <td>33.4.8-jre</td>
             </tr>
             <tr>
               <td>enjoy版本</td>
-              <td>4.9.06</td>
-              <td>hutool版本</td>
-              <td>5.7.14</td>
+              <td>5.2.2</td>
+              <td>caffeine版本</td>
+              <td>3.1.8</td>
             </tr>
           </table>
         </el-card>
@@ -1513,6 +1513,62 @@
           {
             content: "发布2.1.2",
             timestamp: "2023-03-25",
+          },
+          {
+            content: "后端：升级snakeyaml到2.0 修复 CVE-2022-25857",
+            timestamp: "2023-07-12",
+          },
+          {
+            content: "后端：升级guava到31.1-jre 修复 CVE-2020-8908",
+            timestamp: "2023-07-12",
+          },
+          {
+            content: "后端：修复 sql文件携带特殊字符， git无法clone问题",
+            timestamp: "2023-07-12",
+          },
+          {
+            content: "后端：修复 未开放本地上传路径白名单问题",
+            timestamp: "2023-07-12",
+          },
+          {
+            content: "发布2.1.3",
+            timestamp: "2023-07-12",
+          },
+          {
+            content: "后端：修复登录过程中验证Jwt异常后 无法正常拦截问题",
+            timestamp: "2023-07-12",
+          },
+          {
+            content: "发布2.1.4",
+            timestamp: "2023-09-19",
+          },
+          {
+            content: "后端：修复极端情况下CryptoUtil无法init报错",
+            timestamp: "2023-07-12",
+          },
+          {
+            content: "发布2.1.4-fix",
+            timestamp: "2023-09-19",
+          },
+          {
+            content: "前端：合并'瓜瓜'提交的常用字段MR到代码生成器, 支持常用字段生成",
+            timestamp: "2025-03-18",
+          },
+          {
+            content: "后端：修复若干CVE漏洞",
+            timestamp: "2025-05-31",
+          },
+          {
+            content: "后端：升级jdk8=>jdk22",
+            timestamp: "2025-06-01",
+          },
+          {
+            content: "后端：升级springboot2=>springboot3",
+            timestamp: "2025-06-01",
+          },
+          {
+            content: "发布2.2.0",
+            timestamp: "2025-06-02",
           },
         ];
         data.map((item, index) => {

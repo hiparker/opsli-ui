@@ -520,7 +520,7 @@ export default {
             "disabled": false
           },
           {
-            "fieldName": "delectd",
+            "fieldName": "delected",
             "sort": 8,
             "izPk": 0,
             "izNotNull": 1,
