@@ -1570,6 +1570,18 @@
             content: "发布2.2.0",
             timestamp: "2025-06-02",
           },
+          {
+            content: "后端：修复保存用户个人信息时无端清楚了手机和邮箱问题",
+            timestamp: "2025-06-08",
+          },
+          {
+            content: "后端：优化UserController异常返回信息",
+            timestamp: "2025-06-08",
+          },
+          {
+            content: "发布2.2.1",
+            timestamp: "2025-06-08",
+          },
         ];
         data.map((item, index) => {
           if (index === data.length - 1) {
